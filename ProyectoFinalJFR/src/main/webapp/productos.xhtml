@@ -1,0 +1,340 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:cc="http://java.sun.com/jsf/composite">
+<h:head>
+	<title>AltShop</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="keywords"
+		content="Buy_shop Responsive web template, Bootstrap Web Templates, Flat Web Templates, Andriod Compatible web template, 
+Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyErricsson, Motorola web design" />
+	<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+	<link href="css/bootstrap.css" rel='stylesheet' type='text/css' />
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<!-- Custom Theme files -->
+	<link href="css/style.css" rel='stylesheet' type='text/css' />
+	<script src="js/simpleCart.min.js"> </script>
+	<!-- Custom Theme files -->
+	<!--webfont-->
+	<link
+		href='http://fonts.googleapis.com/css?family=Lato:100,200,300,400,500,600,700,800,900'
+		rel='stylesheet' type='text/css' />
+	<script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
+	<!-- start menu -->
+	<link href="css/megamenu.css" rel="stylesheet" type="text/css"
+		media="all" />
+	<script type="text/javascript" src="js/megamenu.js"></script>
+	<script>$(document).ready(function(){$(".megamenu").megamenu();});</script>
+</h:head>
+<body>
+	<f:metadata>
+		<f:viewParam name="productId" value="#{productosManaged.categoriaId}" />
+	</f:metadata>
+	<div class="header_top">
+		<div class="container">
+			<div class="cssmenu">
+				<ul>
+					<li class="active"><a href="login.html">My Account</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="header_bottom men_border">
+		<div class="container">
+			<div class="col-xs-8 header-bottom-left">
+				<div class="col-xs-2 logo">
+					<h1>
+						<p:link outcome="inicio">
+							<span>Alt</span>shop</p:link>
+					</h1>
+				</div>
+				<div class="col-xs-6 menu">
+					<ul class="megamenu skyblue">
+						<li class="active grid"><p:link class="color1"
+								outcome="categorias">Categorias</p:link>
+							<div class="megapanel">
+								<div class="row">
+									<div class="col1">
+										<div class="h_nav">
+											<ul>
+												<ui:repeat var="cat" value="#{categoriasManaged.categorias}">
+													<li value=""><a href="men.html">#{cat.nombre}</a></li>
+												</ui:repeat>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</div></li>
+
+						<li><p:link class="color4" outcome="about">About</p:link></li>
+					</ul>
+				</div>
+			</div>
+			<div class="col-xs-4 header-bottom-right">
+				<div class="box_1-cart">
+					<div class="box_11">
+						<a href="checkout.html">
+							<h4>
+								<p>
+									Cart: <span class="simpleCart_total"></span> (<span
+										id="simpleCart_quantity" class="simpleCart_quantity"></span>
+									items)
+								</p>
+								<img src="images/bag.png" alt="" />
+								<div class="clearfix"></div>
+							</h4>
+						</a>
+					</div>
+					<p class="empty">
+						<a href="javascript:;" class="simpleCart_empty">Empty Cart</a>
+					</p>
+					<div class="clearfix"></div>
+				</div>
+				<div class="search">
+					<input type="text" name="s" class="textbox" value="Search"
+						onfocus="this.value = '';"
+						onblur="if (this.value == '') {this.value = 'Search';}" /><input
+						type="submit" value="Subscribe" id="submit" name="submit" />
+					<div id="response"></div>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="women_main">
+			<div class="col-md-9 w_content">
+				<div class="women">
+					<a href="#"><h4>
+							Enthecwear - <span>4449 itemms</span>
+						</h4></a>
+					<ul class="w_nav">
+						<li>Sort :</li>
+						<li><a class="active" href="#">popular</a></li> |
+						<li><a href="#">new </a></li> |
+						<li><a href="#">discount</a></li> |
+						<li><a href="#">price: Low High </a></li>
+						<div class="clear"></div>
+					</ul>
+					<div class="clearfix"></div>
+				</div>
+				<!-- grids_of_4 -->
+				<c:forEach begin="0" end="#{categoriasManaged.categorias.size()-1}"
+					var="cat4" varStatus="status" step="4">
+					<div class="grids_of_4">
+						<c:forEach begin="#{cat4}" end="#{cat4+3}" var="cat"
+							varStatus="status">
+							<c:if test="#{cat lt categoriasManaged.categorias.size()}">
+								<div class="grid1_of_4 simpleCart_shelfItem">
+									<div class="content_box">
+										<div class="view">
+											<p:link outcome="inicio">
+												<f:param name="catID"
+													value="#{categoriasManaged.categorias.get(cat).idcategorias}" />
+												<p:graphicImage value="#{categoriasManaged.image}"
+													width="100%" height="150px">
+													<f:param name="imageID"
+														value="#{categoriasManaged.categorias.get(cat).idcategorias}" />
+												</p:graphicImage>
+											</p:link>
+										</div>
+										<h5>
+											<p:link outcome="inicio"
+												value="#{categoriasManaged.categorias.get(cat).nombre}">
+												<f:param name="catID"
+													value="#{categoriasManaged.categorias.get(cat).idcategorias}" />
+											</p:link>
+										</h5>
+									</div>
+								</div>
+							</c:if>
+						</c:forEach>
+						<div class="clearfix"></div>
+					</div>
+				</c:forEach>
+				<!-- end grids_of_4 -->
+			</div>
+			<!-- start sidebar -->
+			<div class="col-md-3">
+				<div class="w_sidebar">
+					<div class="w_nav1">
+						<h4>All</h4>
+						<ul>
+							<li><a href="women.html">women</a></li>
+							<li><a href="#">new arrivals</a></li>
+							<li><a href="#">trends</a></li>
+							<li><a href="#">boys</a></li>
+							<li><a href="#">girls</a></li>
+							<li><a href="#">sale</a></li>
+						</ul>
+					</div>
+					<h3>filter by</h3>
+					<section class="sky-form">
+					<h4>catogories</h4>
+					<div class="row1 scroll-pane">
+						<div class="col col-4">
+							<label class="checkbox"><input type="checkbox"
+								name="checkbox" checked="" /><i></i>kurtas</label>
+						</div>
+						<div class="col col-4">
+							<label class="checkbox"><input type="checkbox"
+								name="checkbox" /><i></i>kutis</label> <label class="checkbox"><input
+								type="checkbox" name="checkbox" /><i></i>churidar kurta</label> <label
+								class="checkbox"><input type="checkbox" name="checkbox" /><i></i>salwar</label>
+							<label class="checkbox"><input type="checkbox"
+								name="checkbox" /><i></i>printed sari</label> <label class="checkbox"><input
+								type="checkbox" name="checkbox" /><i></i>shree</label> <label
+								class="checkbox"><input type="checkbox" name="checkbox" /><i></i>Anouk</label>
+							<label class="checkbox"><input type="checkbox"
+								name="checkbox" /><i></i>biba</label> <label class="checkbox"><input
+								type="checkbox" name="checkbox" /><i></i>fashion sari</label> <label
+								class="checkbox"><input type="checkbox" name="checkbox" /><i></i>fashion
+								sari</label> <label class="checkbox"><input type="checkbox"
+								name="checkbox" /><i></i>fashion sari</label> <label class="checkbox"><input
+								type="checkbox" name="checkbox" /><i></i>fashion sari</label> <label
+								class="checkbox"><input type="checkbox" name="checkbox" /><i></i>fashion
+								sari</label> <label class="checkbox"><input type="checkbox"
+								name="checkbox" /><i></i>fashion sari</label> <label class="checkbox"><input
+								type="checkbox" name="checkbox" /><i></i>fashion sari</label> <label
+								class="checkbox"><input type="checkbox" name="checkbox" /><i></i>fashion
+								sari</label>
+						</div>
+					</div>
+					</section>
+					<section class="sky-form">
+					<h4>brand</h4>
+					<div class="row1 scroll-pane">
+						<div class="col col-4">
+							<label class="checkbox"><input type="checkbox"
+								name="checkbox" checked="" /><i></i>shree</label> <label
+								class="checkbox"><input type="checkbox" name="checkbox" /><i></i>Anouk</label>
+							<label class="checkbox"><input type="checkbox"
+								name="checkbox" /><i></i>biba</label>
+						</div>
+						<div class="col col-4">
+							<label class="checkbox"><input type="checkbox"
+								name="checkbox" /><i></i>vishud</label> <label class="checkbox"><input
+								type="checkbox" name="checkbox" /><i></i>amari</label> <label
+								class="checkbox"><input type="checkbox" name="checkbox" /><i></i>shree</label>
+							<label class="checkbox"><input type="checkbox"
+								name="checkbox" /><i></i>Anouk</label> <label class="checkbox"><input
+								type="checkbox" name="checkbox" /><i></i>biba</label> <label
+								class="checkbox"><input type="checkbox" name="checkbox" /><i></i>shree</label>
+							<label class="checkbox"><input type="checkbox"
+								name="checkbox" /><i></i>Anouk</label> <label class="checkbox"><input
+								type="checkbox" name="checkbox" /><i></i>biba</label> <label
+								class="checkbox"><input type="checkbox" name="checkbox" /><i></i>shree</label>
+							<label class="checkbox"><input type="checkbox"
+								name="checkbox" /><i></i>Anouk</label> <label class="checkbox"><input
+								type="checkbox" name="checkbox" /><i></i>biba</label>
+						</div>
+					</div>
+					</section>
+					<section class="sky-form">
+					<h4>colour</h4>
+					<ul class="w_nav2">
+						<li><a class="color1" href="#"></a></li>
+						<li><a class="color2" href="#"></a></li>
+						<li><a class="color3" href="#"></a></li>
+						<li><a class="color4" href="#"></a></li>
+						<li><a class="color5" href="#"></a></li>
+						<li><a class="color6" href="#"></a></li>
+						<li><a class="color7" href="#"></a></li>
+						<li><a class="color8" href="#"></a></li>
+						<li><a class="color9" href="#"></a></li>
+						<li><a class="color10" href="#"></a></li>
+						<li><a class="color12" href="#"></a></li>
+						<li><a class="color13" href="#"></a></li>
+						<li><a class="color14" href="#"></a></li>
+						<li><a class="color15" href="#"></a></li>
+						<li><a class="color5" href="#"></a></li>
+						<li><a class="color6" href="#"></a></li>
+						<li><a class="color7" href="#"></a></li>
+						<li><a class="color8" href="#"></a></li>
+						<li><a class="color9" href="#"></a></li>
+						<li><a class="color10" href="#"></a></li>
+					</ul>
+					</section>
+					<section class="sky-form">
+					<h4>discount</h4>
+					<div class="row1 scroll-pane">
+						<div class="col col-4">
+							<label class="radio"><input type="radio" name="radio"
+								checked="" /><i></i>60 % and above</label> <label class="radio"><input
+								type="radio" name="radio" /><i></i>50 % and above</label> <label
+								class="radio"><input type="radio" name="radio" /><i></i>40
+								% and above</label>
+						</div>
+						<div class="col col-4">
+							<label class="radio"><input type="radio" name="radio" /><i></i>30
+								% and above</label> <label class="radio"><input type="radio"
+								name="radio" /><i></i>20 % and above</label> <label class="radio"><input
+								type="radio" name="radio" /><i></i>10 % and above</label>
+						</div>
+					</div>
+					</section>
+				</div>
+			</div>
+			<!-- start content -->
+			<div class="clearfix"></div>
+			<!-- end content -->
+		</div>
+	</div>
+	<div class="footer">
+		<div class="container">
+			<div class="footer_top">
+				<div class="col-md-4 box_3">
+					<h3>Nuestra Tienda</h3>
+					<address class="address">
+						<p>Calle La Rosaleda 8</p>
+						<dl>
+							<dt></dt>
+							<dd>
+								Movil:<span> 658965420</span>
+							</dd>
+							<dd>
+								Fijo:<span> 958655986</span>
+							</dd>
+							<dd>
+								FAX: <span>958655986</span>
+							</dd>
+							<dd>
+								E-mail:&nbsp; <a href="enjutojose@hotmail.com">enjutojose@hotmail.com</a>
+							</dd>
+						</dl>
+					</address>
+					<ul class="footer_social">
+						<li><a
+							href="https://www.facebook.com/joseantonio.fernandezromero.146?ref=br_rs">
+								<i class="fb"> </i>
+						</a></li>
+						<li><a href="https://twitter.com/enjutojose?lang=es"><i
+								class="tw"> </i> </a></li>
+						<li><a href="https://plus.google.com/104587497418137814045"><i
+								class="google"> </i> </a></li>
+						<li><a href="https://www.instagram.com/enjutojose/"><i
+								class="instagram"> </i> </a></li>
+					</ul>
+				</div>
+				<div class="col-4 col-md-8 box_3">
+					<iframe
+						src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1585.3022360786913!2d-5.948408091737173!3d37.375534776440944!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd126ee40fe353ad%3A0xb6aa57c53acf7f1e!2sColegio+Concertado+Altair!5e0!3m2!1ses!2ses!4v1523144490235"
+						width="100%" height="250" frameborder="0" style="border: 0"></iframe>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+			<div class="footer_bottom">
+				<div class="copy">
+					<p>Copyright © 2018 Enjutojose. All Rights Reserved.</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>AltShop</title>
+	<link rel="shortcut icon" href="https://pbs.twimg.com/profile_images/905769842254520320/SktRHT6V_400x400.jpg" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="keywords"
+		content="Buy_shop Responsive web template, Bootstrap Web Templates, Flat Web Templates, Andriod Compatible web template, 
+Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyErricsson, Motorola web design" />
+	<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+	<link href="css/bootstrap.css" rel='stylesheet' type='text/css' />
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<!-- Custom Theme files -->
+	<link href="css/style.css" rel='stylesheet' type='text/css' />
+	<script src="js/simpleCart.min.js"> </script>
+	<!-- Custom Theme files -->
+	<!--webfont-->
+	<link
+		href='http://fonts.googleapis.com/css?family=Lato:100,200,300,400,500,600,700,800,900'
+		rel='stylesheet' type='text/css' />
+	<script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
+	<!-- start menu -->
+	<link href="css/megamenu.css" rel="stylesheet" type="text/css"
+		media="all" />
+	<script type="text/javascript" src="js/megamenu.js"></script>
+	<script>$(document).ready(function(){$(".megamenu").megamenu();});</script>
+</h:head>
+<body>
+	<div class="header_top">
+		<div class="container">
+			<div class="one-fifth column row_1"></div>
+			<div class="cssmenu">
+				<ul>
+					<li class="active"><p:link class="color1" outcome="log">Mi Cuenta</p:link></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="wrap-box"></div>
+	<div class="header_bottom">
+		<div class="container">
+			<div class="col-xs-8 header-bottom-left">
+				<div class="col-xs-2 logo">
+					<h1>
+						<p:link outcome="inicio"><span>Alt</span>shop</p:link>
+					</h1>
+				</div>
+				<div class="col-xs-6 menu">
+					<ul class="megamenu skyblue">
+						<li><p:link class="color1" outcome="categorias">Categorias</p:link>
+							<div class="megapanel">
+								<div class="row">
+									<div class="col1">
+										<div class="h_nav">
+											<ul>
+												<ui:repeat var="cat" value="#{categoriasManaged.categorias}">
+													<li value=""><a href="men.html">#{cat.nombre}</a></li>
+												</ui:repeat>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</div></li>
+						<li><p:link class="color4" outcome="about">About</p:link></li>
+					</ul>
+				</div>
+			</div>
+			<div class="col-xs-4 header-bottom-right">
+				<div class="box_1-cart">
+					<div class="box_11">
+						<a href="checkout.html">
+							<h4>
+								<p>
+									Cart: <span class="simpleCart_total"></span> (<span
+										id="simpleCart_quantity" class="simpleCart_quantity"></span>
+									items)
+								</p>
+								<img src="images/bag.png" alt="" />
+								<div class="clearfix"></div>
+							</h4>
+						</a>
+					</div>
+					<p class="empty">
+						<a href="javascript:;" class="simpleCart_empty">Empty Cart</a>
+					</p>
+					<div class="clearfix"></div>
+				</div>
+				<div class="search">
+					<input type="text" name="s" class="textbox" value="Search"
+						onfocus="this.value = '';"
+						onblur="if (this.value == '') {this.value = 'Search';}" /><input
+						type="submit" value="Subscribe" id="submit" name="submit" />
+					<div id="response"></div>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+	</div>
+	<div class="banner">
+		<div class="container">
+			<div class="banner_desc">
+				<h1>Nueva Apertura</h1>
+				<h2>Te sorprendemos con nuestros precios</h2>
+				<div class="button">
+				<p:link outcome="categorias" class="hvr-shutter-out-horizontal">Ver Productos</p:link>
+				
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="content_top">
+		<h3 class="m_1">Formas De Pago</h3>
+		<div class="container">
+			<div class="box_1">
+				<div class="col-md-5">
+					<div class="section group">
+						<p:tabView value="#{formaPagoManaged.formasDePago}" var="fp">
+							<p:tab title="#{fp.nombre}">
+								<h:panelGrid columns="2" cellpadding="5">
+									<f:facet name="header">
+										<p:graphicImage value="#{formaPagoManaged.image}" width="100%"
+											height="150px">
+											<f:param name="imageID" value="#{fp.idformapago}" />
+										</p:graphicImage>
+									</f:facet>
+									<br />
+									<br />
+									<h:outputText value="Tipo de Pago: #{fp.nombre}"
+										style="font-weight: bold" />
+								</h:panelGrid>
+							</p:tab>
+						</p:tabView>
+						<div class="clearfix"></div>
+					</div>
+				</div>
+				<div class="col-md-5 row_3">
+					<div class="about-block-content">
+						<div class="border-add"></div>
+						<h4>About Us</h4>
+						<p>En AltairShop aceptamos varios medios de pago para los
+							pedidos</p>
+						<p>Elija el que mas le interese para completar sus compras</p>
+						<p></p>
+					</div>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+		</div>
+	</div>
+	<div class="footer">
+		<div class="container">
+			<div class="footer_top">
+				<div class="col-md-4 box_3">
+					<h3>Nuestra Tienda</h3>
+					<address class="address">
+						<p>Calle La Rosaleda 8</p>
+						<dl>
+							<dt></dt>
+							<dd>
+								Movil:<span> 658965420</span>
+							</dd>
+							<dd>
+								Fijo:<span> 958655986</span>
+							</dd>
+							<dd>
+								FAX: <span>958655986</span>
+							</dd>
+							<dd>
+								E-mail:&nbsp; <a href="enjutojose@hotmail.com">enjutojose@hotmail.com</a>
+							</dd>
+						</dl>
+					</address>
+					<ul class="footer_social">
+						<li><a
+							href="https://www.facebook.com/joseantonio.fernandezromero.146?ref=br_rs">
+								<i class="fb"> </i>
+						</a></li>
+						<li><a href="https://twitter.com/enjutojose?lang=es"><i
+								class="tw"> </i> </a></li>
+						<li><a href="https://plus.google.com/104587497418137814045"><i
+								class="google"> </i> </a></li>
+						<li><a href="https://www.instagram.com/enjutojose/"><i
+								class="instagram"> </i> </a></li>
+					</ul>
+				</div>
+				<div class="col-4 col-md-8 box_3">
+					<iframe
+						src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1585.3022360786913!2d-5.948408091737173!3d37.375534776440944!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd126ee40fe353ad%3A0xb6aa57c53acf7f1e!2sColegio+Concertado+Altair!5e0!3m2!1ses!2ses!4v1523144490235"
+						width="100%" height="250" frameborder="0" style="border: 0"></iframe>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+			<div class="footer_bottom">
+				<div class="copy">
+					<p>Copyright © 2018 Enjutojose. All Rights Reserved.</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
