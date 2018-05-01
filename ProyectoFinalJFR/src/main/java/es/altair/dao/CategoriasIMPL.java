@@ -22,8 +22,8 @@ public class CategoriasIMPL implements CategoriasDAO {
 			session.beginTransaction();
 			categorias = session.createQuery("FROM Categorias").list();
 			session.getTransaction().commit();
-		} catch (Exception e) {
-
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		} finally {
 			session.close();
 			sf.close();

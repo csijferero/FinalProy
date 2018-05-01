@@ -8,7 +8,8 @@
 	xmlns:cc="http://java.sun.com/jsf/composite">
 <h:head>
 	<title>AltShop</title>
-	<link rel="shortcut icon" href="https://pbs.twimg.com/profile_images/905769842254520320/SktRHT6V_400x400.jpg" />
+	<link rel="shortcut icon"
+		href="https://pbs.twimg.com/profile_images/905769842254520320/SktRHT6V_400x400.jpg" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="keywords"
@@ -31,11 +32,54 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		media="all" />
 	<script type="text/javascript" src="js/megamenu.js"></script>
 	<script>$(document).ready(function(){$(".megamenu").megamenu();});</script>
+	<link rel="stylesheet" href="css/etalage.css" />
+	<script src="js/jquery.etalage.min.js"></script>
+	<script>
+			jQuery(document).ready(function($){
+
+				$('#etalage').etalage({
+					thumb_image_width: 300,
+					thumb_image_height: 400,
+					source_image_width: 900,
+					source_image_height: 1200,
+					show_hint: true,
+					click_callback: function(image_anchor, instance_id){
+						alert('Callback example:\nYou clicked on an image with the anchor: "'+image_anchor+'"\n(in Etalage instance: "'+instance_id+'")');
+					}
+				});
+
+			});
+		</script>
+	<!--initiate accordion-->
+	<script type="text/javascript">
+	$(function() {
+	
+	    var menu_ul = $('.menu_drop > li > ul'),
+	           menu_a  = $('.menu_drop > li > a');
+	    
+	    menu_ul.hide();
+	
+	    menu_a.click(function(e) {
+	        e.preventDefault();
+	        if(!$(this).hasClass('active')) {
+	            menu_a.removeClass('active');
+	            menu_ul.filter(':visible').slideUp('normal');
+	            $(this).addClass('active').next().stop(true,true).slideDown('normal');
+	        } else {
+	            $(this).removeClass('active');
+	            $(this).next().stop(true,true).slideUp('normal');
+	        }
+	    });
+	
+	});
+</script>
 </h:head>
 <body>
+	<f:metadata>
+		<f:viewParam name="proID" value="#{productosManaged.productoId}" />
+	</f:metadata>
 	<div class="header_top">
 		<div class="container">
-			<div class="one-fifth column row_1"></div>
 			<div class="cssmenu">
 				<ul>
 					<li class="active"><p:link class="color1" outcome="log">Mi Cuenta</p:link></li>
@@ -43,13 +87,13 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			</div>
 		</div>
 	</div>
-	<div class="wrap-box"></div>
-	<div class="header_bottom">
+	<div class="header_bottom men_border">
 		<div class="container">
 			<div class="col-xs-8 header-bottom-left">
 				<div class="col-xs-2 logo">
 					<h1>
-						<p:link outcome="inicio"><span>Alt</span>shop</p:link>
+						<p:link outcome="inicio">
+							<span>Alt</span>shop</p:link>
 					</h1>
 				</div>
 				<div class="col-xs-6 menu">
@@ -60,17 +104,20 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 									<div class="col1">
 										<div class="h_nav">
 											<ul>
-												<c:forEach begin="0" end="#{categoriasManaged.categorias.size()-1}" var="cat">
+												<c:forEach begin="0"
+													end="#{categoriasManaged.categorias.size()-1}" var="cat">
 													<li value=""><p:link outcome="productos"
-												value="#{categoriasManaged.categorias.get(cat).nombre}">
-												<f:param name="catID" value="#{categoriasManaged.categorias.get(cat).idcategorias}" />
-											</p:link></li>
+															value="#{categoriasManaged.categorias.get(cat).nombre}">
+															<f:param name="catID"
+																value="#{categoriasManaged.categorias.get(cat).idcategorias}" />
+														</p:link></li>
 												</c:forEach>
 											</ul>
 										</div>
 									</div>
 								</div>
 							</div></li>
+
 						<li><p:link class="color4" outcome="about">About</p:link></li>
 					</ul>
 				</div>
@@ -98,7 +145,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				<div class="search">
 					<input type="text" name="s" class="textbox" value="Search"
 						onfocus="this.value = '';"
-						onblur="if (this.value == '') {this.value = 'Search';}" /><input
+						onblur="if (this.value == '') {this.value = 'Search';}" /> <input
 						type="submit" value="Subscribe" id="submit" name="submit" />
 					<div id="response"></div>
 				</div>
@@ -107,55 +154,89 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			<div class="clearfix"></div>
 		</div>
 	</div>
-	<div class="banner">
+	<div class="single_top">
 		<div class="container">
-			<div class="banner_desc">
-				<h1>Nueva Apertura</h1>
-				<h2>Te sorprendemos con nuestros precios</h2>
-				<div class="button">
-				<p:link outcome="categorias" class="hvr-shutter-out-horizontal">Ver Productos</p:link>
-				
+			<div class="single_grid">
+				<div class="grid images_3_of_2">
+					<ul id="etalage">
+						<li><a href="optionallink.html"><p:graphicImage
+									class="etalage_thumb_image" value="#{productosManaged.image}">
+									<f:param name="imageID"
+										value="#{productosManaged.producto.idproductos}" />
+								</p:graphicImage> <p:graphicImage class="etalage_source_image"
+									value="#{productosManaged.image}">
+									<f:param name="imageID"
+										value="#{productosManaged.producto.idproductos}" />
+								</p:graphicImage> </a></li>
+					</ul>
+					<div class="clearfix"></div>
 				</div>
-			</div>
-		</div>
-	</div>
-	<div class="content_top">
-		<h3 class="m_1">Formas De Pago</h3>
-		<div class="container">
-			<div class="box_1">
-				<div class="col-md-5">
-					<div class="section group">
-						<p:tabView value="#{formaPagoManaged.formasDePago}" var="fp">
-							<p:tab title="#{fp.nombre}">
-								<h:panelGrid columns="2" cellpadding="5">
-									<f:facet name="header">
-										<p:graphicImage value="#{formaPagoManaged.image}" width="100%"
-											height="150px">
-											<f:param name="imageID" value="#{fp.idformapago}" />
-										</p:graphicImage>
-									</f:facet>
-									<br />
-									<br />
-									<h:outputText value="Tipo de Pago: #{fp.nombre}"
-										style="font-weight: bold" />
-								</h:panelGrid>
-							</p:tab>
-						</p:tabView>
+				<div class="desc1 span_3_of_2">
+					<h1>#{productosManaged.producto.nombre}</h1>
+					<div class="dropdown_top">
+						<div class="dropdown_left">
+							<h:outputLabel for="cantidad" value="Cantidad:" />
+							<br />
+							<p:spinner id="cantidad" value="1" min="1" max="10" />
+						</div>
 						<div class="clearfix"></div>
 					</div>
-				</div>
-				<div class="col-md-5 row_3">
-					<div class="about-block-content">
-						<div class="border-add"></div>
-						<h4>About Us</h4>
-						<p>En AltairShop aceptamos varios medios de pago para los
-							pedidos</p>
-						<p>Elija el que mas le interese para completar sus compras</p>
-						<p></p>
+					<div class="simpleCart_shelfItem">
+						<div class="price_single">
+							<div class="head">
+								<h2>
+									<span class="amount item_price">#{productosManaged.producto.precio}€</span>
+								</h2>
+							</div>
+							<div class="head_desc">
+								<span style="color: green;">#{productosManaged.producto.garantia}
+									Años de Garantía</span><img src="images/garantie.png" alt=""
+									width="25px" height="25px" />
+							</div>
+							<div class="clearfix"></div>
+						</div>
+						<!--<div class="single_but"><a href="" class="item_add btn_3" value=""></a></div>-->
+						<div class="size_2-right">
+							<a href="#" class="item_add item_add1 btn_5" value="">Añadir
+								al Carrito</a>
+						</div>
+
 					</div>
 				</div>
 				<div class="clearfix"></div>
 			</div>
+			   <div class="single_social_top">
+			  <!--
+				<ul class="single_social">
+					<li><a href="#"> <i class="s_fb"> </i>
+							<div class="social_desc">Share on facebook</div>
+							<div class="clearfix"></div></a></li>
+					<li><a href="#"> <i class="s_twt"> </i>
+							<div class="social_desc">Tweet this product</div>
+							<div class="clearfix"></div></a></li>
+					<li><a href="#"> <i class="s_google"> </i>
+							<div class="social_desc">Google+ this product</div>
+							<div class="clearfix"></div></a></li>
+					<li class="last"><a href="#"> <i class="s_email"> </i>
+							<div class="social_desc">Email a Friend</div>
+							<div class="clearfix"></div></a></li>
+				</ul>
+				-->
+			</div>
+			<ul class="menu_drop">
+				<li class="item5"><a href="#"><img
+						src="images/product_arrow.png" />Información Adicional</a>
+					<ul style="padding: 2%;">
+						<li class="subitem1"><b>Marca:</b>
+							#{productosManaged.producto.marca}</li>
+						<br />
+						<li class="subitem2"><b>Modelo:</b>
+							#{productosManaged.producto.modelo}</li>
+						<br />
+						<li class="subitem3"><b>Año:</b>
+							#{productosManaged.producto.ano}</li>
+					</ul></li>
+			</ul>
 		</div>
 	</div>
 	<div class="footer">

@@ -33,13 +33,13 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 </h:head>
 <body>
 	<f:metadata>
-		<f:viewParam name="productId" value="#{productosManaged.categoriaId}" />
+		<f:viewParam name="catID" value="#{productosManaged.categoriaId}" />
 	</f:metadata>
 	<div class="header_top">
 		<div class="container">
 			<div class="cssmenu">
 				<ul>
-					<li class="active"><a href="login.html">My Account</a></li>
+					<li class="active"><p:link class="color1" outcome="log">Mi Cuenta</p:link></li>
 				</ul>
 			</div>
 		</div>
@@ -62,9 +62,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 									<div class="col1">
 										<div class="h_nav">
 											<ul>
-												<ui:repeat var="cat" value="#{categoriasManaged.categorias}">
-													<li value=""><a href="men.html">#{cat.nombre}</a></li>
-												</ui:repeat>
+												<c:forEach begin="0" end="#{categoriasManaged.categorias.size()-1}" var="cat">
+													<li value=""><p:link outcome="productos"
+												value="#{categoriasManaged.categorias.get(cat).nombre}">
+												<f:param name="catID" value="#{categoriasManaged.categorias.get(cat).idcategorias}" />
+											</p:link></li>
+												</c:forEach>
 											</ul>
 										</div>
 									</div>
@@ -112,7 +115,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			<div class="col-md-9 w_content">
 				<div class="women">
 					<a href="#"><h4>
-							Enthecwear - <span>4449 itemms</span>
+							Numero de Productos - <span>#{productosManaged.productos.size()}</span>
 						</h4></a>
 					<ul class="w_nav">
 						<li>Sort :</li>
@@ -125,30 +128,30 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					<div class="clearfix"></div>
 				</div>
 				<!-- grids_of_4 -->
-				<c:forEach begin="0" end="#{categoriasManaged.categorias.size()-1}"
-					var="cat4" varStatus="status" step="4">
+				<c:forEach begin="0" end="#{productosManaged.productos.size()-1}"
+					var="pro4" varStatus="status" step="4">
 					<div class="grids_of_4">
-						<c:forEach begin="#{cat4}" end="#{cat4+3}" var="cat"
+						<c:forEach begin="#{pro4}" end="#{pro4+3}" var="pro"
 							varStatus="status">
-							<c:if test="#{cat lt categoriasManaged.categorias.size()}">
+							<c:if test="#{pro lt productosManaged.productos.size()}">
 								<div class="grid1_of_4 simpleCart_shelfItem">
 									<div class="content_box">
 										<div class="view">
-											<p:link outcome="inicio">
-												<f:param name="catID"
-													value="#{categoriasManaged.categorias.get(cat).idcategorias}" />
-												<p:graphicImage value="#{categoriasManaged.image}"
+											<p:link outcome="single">
+												<f:param name="proID"
+													value="#{productosManaged.productos.get(pro).idproductos}" />
+												<p:graphicImage value="#{productosManaged.image}"
 													width="100%" height="150px">
 													<f:param name="imageID"
-														value="#{categoriasManaged.categorias.get(cat).idcategorias}" />
+														value="#{productosManaged.productos.get(pro).idproductos}" />
 												</p:graphicImage>
 											</p:link>
 										</div>
 										<h5>
-											<p:link outcome="inicio"
-												value="#{categoriasManaged.categorias.get(cat).nombre}">
+											<p:link outcome="single"
+												value="#{productosManaged.productos.get(pro).nombre}">
 												<f:param name="catID"
-													value="#{categoriasManaged.categorias.get(cat).idcategorias}" />
+													value="#{categoriasManaged.categorias.get(pro).idcategorias}" />
 											</p:link>
 										</h5>
 									</div>

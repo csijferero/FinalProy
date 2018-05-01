@@ -21,10 +21,13 @@ import es.altair.dao.CategoriasIMPL;
 @ManagedBean
 @SessionScoped
 public class CategoriasManaged {
+	
+	CategoriasDAO catDAO = new CategoriasIMPL();
 
 	private List<Categorias> categorias = new ArrayList<Categorias>();
 
 	public List<Categorias> getCategorias() {
+		categorias = catDAO.listado();
 		return categorias;
 	}
 
@@ -54,11 +57,5 @@ public class CategoriasManaged {
 	}
 
 	private StreamedContent image;
-
-	@PostConstruct
-	public void listadoo() {
-		CategoriasDAO catDAO = new CategoriasIMPL();
-		categorias = catDAO.listado();
-	}
 
 }

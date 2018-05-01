@@ -23,9 +23,12 @@ import es.altair.dao.FormaPagoIMPL;
 @SessionScoped
 public class FormaPagoManaged implements Serializable {
 
+	FormaPagoDAO fpDAO = new FormaPagoIMPL();
+
 	private List<FormaPago> formasDePago = new ArrayList<FormaPago>();
 
 	public List<FormaPago> getFormasDePago() {
+		formasDePago = fpDAO.listado();
 		return formasDePago;
 	}
 
@@ -54,12 +57,6 @@ public class FormaPagoManaged implements Serializable {
 
 	public void setImage(StreamedContent image) {
 		this.image = image;
-	}
-
-	@PostConstruct
-	public void listadoo() {
-		FormaPagoDAO fpDAO = new FormaPagoIMPL();
-		formasDePago = fpDAO.listado();
 	}
 
 }

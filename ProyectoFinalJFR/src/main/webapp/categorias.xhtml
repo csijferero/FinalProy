@@ -61,9 +61,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 									<div class="col1">
 										<div class="h_nav">
 											<ul>
-												<ui:repeat var="cat" value="#{categoriasManaged.categorias}">
-													<li value=""><a href="men.html">#{cat.nombre}</a></li>
-												</ui:repeat>
+												<c:forEach begin="0" end="#{categoriasManaged.categorias.size()-1}" var="cat">
+													<li value=""><p:link outcome="productos"
+												value="#{categoriasManaged.categorias.get(cat).nombre}">
+												<f:param name="catID" value="#{categoriasManaged.categorias.get(cat).idcategorias}" />
+											</p:link></li>
+												</c:forEach>
 											</ul>
 										</div>
 									</div>
@@ -133,7 +136,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 								<div class="grid1_of_4 simpleCart_shelfItem">
 									<div class="content_box">
 										<div class="view">
-										<p:link outcome="inicio">
+										<p:link outcome="productos">
 										<f:param name="catID" value="#{categoriasManaged.categorias.get(cat).idcategorias}" />
 											<p:graphicImage  value="#{categoriasManaged.image}"
 												width="100%" height="150px">
@@ -147,7 +150,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 										</div>
 										<h5>
-											<p:link outcome="inicio"
+											<p:link outcome="productos"
 												value="#{categoriasManaged.categorias.get(cat).nombre}">
 												<f:param name="catID" value="#{categoriasManaged.categorias.get(cat).idcategorias}" />
 											</p:link>

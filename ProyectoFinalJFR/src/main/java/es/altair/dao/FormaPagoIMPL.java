@@ -31,8 +31,8 @@ public class FormaPagoIMPL implements FormaPagoDAO {
 			session.beginTransaction();
 			formaPago = session.createQuery("FROM FormaPago").list();
 			session.getTransaction().commit();
-		} catch (Exception e) {
-
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		} finally {
 			session.close();
 			sf.close();

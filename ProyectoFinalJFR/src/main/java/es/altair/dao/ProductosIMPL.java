@@ -20,10 +20,11 @@ public class ProductosIMPL implements ProductosDAO {
 
 		try {
 			session.beginTransaction();
-			productos = session.createQuery("FROM Productos Where ").list();
+			productos = session.createQuery("FROM Productos Where categorias.idcategorias=:id").setParameter("id", idCategoria)
+					.list();
 			session.getTransaction().commit();
-		} catch (Exception e) {
-
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		} finally {
 			session.close();
 			sf.close();
@@ -45,6 +46,23 @@ public class ProductosIMPL implements ProductosDAO {
 		sf.close();
 
 		return prImage;
+	}
+
+	@Override
+	public Productos obtener(int idproductos) {
+		Productos aux = null;
+		SessionFactory sf = new Configuration().configure().buildSessionFactory();
+		Session sesion = sf.openSession();
+
+		try {
+			aux = sesion.get(Productos.class, idproductos);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			sesion.close();
+			sf.close();
+		}
+		return aux;
 	}
 
 }
