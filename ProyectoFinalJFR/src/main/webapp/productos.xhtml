@@ -30,16 +30,141 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		media="all" />
 	<script type="text/javascript" src="js/megamenu.js"></script>
 	<script>$(document).ready(function(){$(".megamenu").megamenu();});</script>
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 </h:head>
 <body>
 	<f:metadata>
 		<f:viewParam name="catID" value="#{productosManaged.categoriaId}" />
 	</f:metadata>
+	<p:growl id="growl" sticky="true" showDetail="false" />
 	<div class="header_top">
 		<div class="container">
+			<div class="cssmenu one-fifth column row_1">
+				<ul>
+					<c:if test="#{not empty usuario}">
+						<h:form enctype="multipart/form-data">
+							<li class="active"><p:commandLink class="color1"
+									onclick="PF('dlgg').show();#{usuariosManaged.cargaEdit()}">Bienvenido #{usuario.nick}</p:commandLink></li>
+							<p:dialog header="Editar Usuario" widgetVar="dlgg"
+								showEffect="explode" hideEffect="bounce" resizable="false"
+								modal="true">
+								<h:panelGrid columns="2" cellpadding="10">
+
+									<p:inputText type="hidden" value="#{usuariosManaged.correoOld}" />
+
+									<p:inputText type="hidden" value="#{usuariosManaged.nickOld}" />
+
+									<p:inputText type="hidden"
+										value="#{usuariosManaged.nivelAcceso}" />
+
+									<p:inputText type="hidden" value="#{usuariosManaged.idUsuario}" />
+
+									<h:outputLabel for="nombre" value="Nombre" />
+									<p:inputText id="nombre" maxlength="45"
+										value="#{usuariosManaged.nombre}" required="true"
+										validatorMessage="Nombre invalido"
+										requiredMessage="Nombre Obligatorio" size="45" />
+
+
+									<h:outputLabel for="apellidos" value="Apellidos" />
+									<p:inputText maxlength="45"
+										value="#{usuariosManaged.apellidos}" required="true"
+										validatorMessage="Apellidos invalido"
+										requiredMessage="Apellidos Obligatorio" size="45" />
+
+
+									<h:outputLabel for="correo" value="Correo" />
+									<p:inputText id="correo" maxlength="45" required="true"
+										value="#{usuariosManaged.correo}"
+										validatorMessage="Email Invalido"
+										requiredMessage="Email Obligatorio" size="45">
+										<f:validateRegex
+											pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}" />
+									</p:inputText>
+
+									<h:outputLabel for="nick" value="Nick" />
+									<p:inputText maxlength="15" id="nick"
+										value="#{usuariosManaged.nick}" required="true"
+										validatorMessage="Nick Invalido"
+										requiredMessage="Nick Obligatorio" />
+
+									<h:outputLabel for="dni" value="DNI" />
+									<p:inputText id="dni" maxlength="9"
+										value="#{usuariosManaged.dni}" required="true"
+										validatorMessage="DNI Invalido"
+										requiredMessage="DNI Obligatorio">
+										<f:validateRegex
+											pattern="^[0-9]{8}[TRWAGMYFPDXBNJZSQVHLCKET]{1}" />
+									</p:inputText>
+
+
+									<h:outputLabel for="direccion" value="Dirección" />
+									<p:inputText maxlength="45" id="direccion"
+										value="#{usuariosManaged.direccion}" required="true"
+										validatorMessage="Direccion Invalida"
+										requiredMessage="Direccion Obligatoria" size="45" />
+
+
+									<h:outputLabel for="contacto" value="Contacto" />
+									<p:inputText maxlength="9" id="contacto"
+										value="#{usuariosManaged.contacto}" required="true"
+										validatorMessage="Movil Invalido"
+										requiredMessage="Movil Obligatorio"
+										converterMessage="Teléfono Invalido">
+										<f:validateDoubleRange minimum="600000000" maximum="799999999" />
+									</p:inputText>
+
+									<h:outputLabel for="pwd" value="Contraseña Actual" />
+									<p:password id="pwd" required="true"
+										value="#{usuariosManaged.contrasena}"
+										validatorMessage="Contraseña Incorrecta"
+										requiredMessage="Contraseña Obligatoria" />
+
+									<h:outputLabel for="pwd1" value="Nueva Contraseña" />
+									<p:password id="pwd1"
+										value="#{usuariosManaged.nuevaContraseña}" match="pwd2"
+										label="Password 1"
+										validatorMessage="La contraseña no coincide con la de confirmación" />
+
+									<h:outputLabel for="pwd2" value="Confirmar Nueva Contraseña" />
+									<p:password id="pwd2" label="Password 2"
+										validatorMessage="Contraseña de confirmación Invalida"
+										requiredMessage="Contraseña de confirmación Obligatoria" />
+
+									<h:outputLabel for="img" value="Imagen Actual" />
+									<p:graphicImage id="img" value="#{usuariosManaged.image}"
+										width="100px" height="100px" cache="false">
+										<f:param name="imageeID" value="#{usuariosManaged.idUsuario}" />
+									</p:graphicImage>
+
+									<p:fileUpload value="#{usuariosManaged.file}" mode="simple"
+										skinSimple="true" validatorMessage="Imagen Invalida"
+										update="growl" />
+
+
+
+									<f:facet name="footer">
+										<p:commandButton ajax="false" value="Editar" update="growl"
+											actionListener="#{usuariosManaged.editarUsuario()}" />
+									</f:facet>
+								</h:panelGrid>
+							</p:dialog>
+						</h:form>
+					</c:if>
+					<c:if test="#{empty usuario}">
+						<li class="active"><p:link class="color1" outcome="log">Mi Cuenta</p:link></li>
+					</c:if>
+				</ul>
+			</div>
 			<div class="cssmenu">
 				<ul>
-					<li class="active"><p:link class="color1" outcome="log">Mi Cuenta</p:link></li>
+					<c:if test="#{not empty usuario}">
+						<h:form>
+							<li class="active"><p:commandLink class="color3"
+									update="growl" action="#{usuariosManaged.logout()}">Salir</p:commandLink></li>
+						</h:form>
+					</c:if>
 				</ul>
 			</div>
 		</div>
@@ -62,11 +187,13 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 									<div class="col1">
 										<div class="h_nav">
 											<ul>
-												<c:forEach begin="0" end="#{categoriasManaged.categorias.size()-1}" var="cat">
+												<c:forEach begin="0"
+													end="#{categoriasManaged.categorias.size()-1}" var="cat">
 													<li value=""><p:link outcome="productos"
-												value="#{categoriasManaged.categorias.get(cat).nombre}">
-												<f:param name="catID" value="#{categoriasManaged.categorias.get(cat).idcategorias}" />
-											</p:link></li>
+															value="#{categoriasManaged.categorias.get(cat).nombre}">
+															<f:param name="catID"
+																value="#{categoriasManaged.categorias.get(cat).idcategorias}" />
+														</p:link></li>
 												</c:forEach>
 											</ul>
 										</div>
@@ -114,9 +241,71 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		<div class="women_main">
 			<div class="col-md-9 w_content">
 				<div class="women">
-					<a href="#"><h4>
-							Numero de Productos - <span>#{productosManaged.productos.size()}</span>
-						</h4></a>
+					<c:if test="#{not empty usuario}">
+						<h:form enctype="multipart/form-data">
+							<p:commandButton value="Añadir Producto" id="addCat"
+								icon="ui-icon-disk" onclick="PF('dlg3').show();" />
+							<p:dialog header="Añadir Producto" widgetVar="dlg3"
+								showEffect="explode" hideEffect="bounce" resizable="false"
+								modal="true">
+								<h:panelGrid columns="2" cellpadding="10">
+
+									<h:outputLabel for="nombre" value="Nombre" />
+									<p:inputText id="nombre" maxlength="20"
+										value="#{productosManaged.nombre}" required="true"
+										validatorMessage="Nombre invalido"
+										requiredMessage="Nombre Obligatorio" size="20" />
+									<h:outputLabel for="marca" value="Marca" />
+									<p:inputText id="marca" maxlength="20"
+										value="#{productosManaged.marca}" required="true"
+										validatorMessage="Marca invalida"
+										requiredMessage="Marca Obligatoria" size="20" />
+									<h:outputLabel for="modelo" value="Modelo" />
+									<p:inputText id="modelo" maxlength="20"
+										value="#{productosManaged.modelo}" required="true"
+										validatorMessage="Modelo invalido"
+										requiredMessage="Modelo Obligatorio" size="20" />
+									<h:outputLabel for="precio" value="Precio" />
+									<p:inputText id="precio" maxlength="10"
+										value="#{productosManaged.precio}" required="true"
+										validatorMessage="Precio invalido [0.01-1999.99]"
+										requiredMessage="Precio Obligatorio" size="10"
+										converterMessage="Precio Invalido">
+										<f:validateDoubleRange minimum="0.01" maximum="1999.99" />
+									</p:inputText>
+									<h:outputLabel for="garantia" value="Garantia" />
+									<p:inputText id="garantia" maxlength="2"
+										value="#{productosManaged.garantia}" required="true"
+										validatorMessage="Garantia invalida [1-10]"
+										requiredMessage="Garantia Obligatoria"
+										converterMessage="Garantia Invalida" size="2">
+										<f:validateDoubleRange minimum="1" maximum="10" />
+									</p:inputText>
+									<h:outputLabel for="ano" value="Año" />
+									<p:inputText id="ano" maxlength="4"
+										value="#{productosManaged.ano}" required="true"
+										validatorMessage="Año invalido [2010-2018]"
+										requiredMessage="Año Obligatorio" size="4"
+										converterMessage="Año Invalido">
+										<f:validateDoubleRange minimum="2010" maximum="2018" />
+									</p:inputText>
+
+									<p:fileUpload value="#{productosManaged.file}" mode="simple"
+										skinSimple="true" validatorMessage="Imagen Invalida"
+										update="growl" />
+
+									<f:facet name="footer">
+										<p:commandButton ajax="false" value="Añadir" update="growl"
+											actionListener="#{productosManaged.registrarProducto()}" />
+									</f:facet>
+								</h:panelGrid>
+							</p:dialog>
+						</h:form>
+					</c:if>
+					<div class="clear"></div>
+					<h4>
+						Numero de Productos - <span>#{productosManaged.productos.size()}</span>
+					</h4>
 					<ul class="w_nav">
 						<li>Sort :</li>
 						<li><a class="active" href="#">popular</a></li> |
@@ -141,7 +330,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 												<f:param name="proID"
 													value="#{productosManaged.productos.get(pro).idproductos}" />
 												<p:graphicImage value="#{productosManaged.image}"
-													width="100%" height="150px">
+													width="100%" height="150px" cache="false">
 													<f:param name="imageID"
 														value="#{productosManaged.productos.get(pro).idproductos}" />
 												</p:graphicImage>
@@ -150,10 +339,18 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 										<h5>
 											<p:link outcome="single"
 												value="#{productosManaged.productos.get(pro).nombre}">
-												<f:param name="catID"
-													value="#{categoriasManaged.categorias.get(pro).idcategorias}" />
+												<f:param name="proID"
+													value="#{productosManaged.productos.get(pro).idproductos}" />
 											</p:link>
 										</h5>
+										<c:if test="#{not empty usuario}">
+											<h:form>
+												<p:commandButton
+													actionListener="#{productosManaged.borrarProducto(productosManaged.productos.get(pro).idproductos)}"
+													id="iconOnly" icon="ui-icon-close" update="growl"
+													ajax="false" />
+											</h:form>
+										</c:if>
 									</div>
 								</div>
 							</c:if>

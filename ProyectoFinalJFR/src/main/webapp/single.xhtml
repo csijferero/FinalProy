@@ -34,6 +34,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<script>$(document).ready(function(){$(".megamenu").megamenu();});</script>
 	<link rel="stylesheet" href="css/etalage.css" />
 	<script src="js/jquery.etalage.min.js"></script>
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 	<script>
 			jQuery(document).ready(function($){
 
@@ -78,11 +80,134 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<f:metadata>
 		<f:viewParam name="proID" value="#{productosManaged.productoId}" />
 	</f:metadata>
+	<p:growl id="growl" sticky="true" showDetail="false" />
 	<div class="header_top">
 		<div class="container">
+			<div class="cssmenu one-fifth column row_1">
+				<ul>
+					<c:if test="#{not empty usuario}">
+						<h:form enctype="multipart/form-data">
+							<li class="active"><p:commandLink class="color1"
+									onclick="PF('dlgg').show();#{usuariosManaged.cargaEdit()}">Bienvenido #{usuario.nick}</p:commandLink></li>
+							<p:dialog header="Editar Usuario" widgetVar="dlgg"
+								showEffect="explode" hideEffect="bounce" resizable="false"
+								modal="true">
+								<h:panelGrid columns="2" cellpadding="10">
+
+									<p:inputText type="hidden" value="#{usuariosManaged.correoOld}" />
+
+									<p:inputText type="hidden" value="#{usuariosManaged.nickOld}" />
+
+									<p:inputText type="hidden"
+										value="#{usuariosManaged.nivelAcceso}" />
+
+									<p:inputText type="hidden" value="#{usuariosManaged.idUsuario}" />
+
+									<h:outputLabel for="nombre" value="Nombre" />
+									<p:inputText id="nombre" maxlength="45"
+										value="#{usuariosManaged.nombre}" required="true"
+										validatorMessage="Nombre invalido"
+										requiredMessage="Nombre Obligatorio" size="45" />
+
+
+									<h:outputLabel for="apellidos" value="Apellidos" />
+									<p:inputText maxlength="45"
+										value="#{usuariosManaged.apellidos}" required="true"
+										validatorMessage="Apellidos invalido"
+										requiredMessage="Apellidos Obligatorio" size="45" />
+
+
+									<h:outputLabel for="correo" value="Correo" />
+									<p:inputText id="correo" maxlength="45" required="true"
+										value="#{usuariosManaged.correo}"
+										validatorMessage="Email Invalido"
+										requiredMessage="Email Obligatorio" size="45">
+										<f:validateRegex
+											pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}" />
+									</p:inputText>
+
+									<h:outputLabel for="nick" value="Nick" />
+									<p:inputText maxlength="15" id="nick"
+										value="#{usuariosManaged.nick}" required="true"
+										validatorMessage="Nick Invalido"
+										requiredMessage="Nick Obligatorio" />
+
+									<h:outputLabel for="dni" value="DNI" />
+									<p:inputText id="dni" maxlength="9"
+										value="#{usuariosManaged.dni}" required="true"
+										validatorMessage="DNI Invalido"
+										requiredMessage="DNI Obligatorio">
+										<f:validateRegex
+											pattern="^[0-9]{8}[TRWAGMYFPDXBNJZSQVHLCKET]{1}" />
+									</p:inputText>
+
+
+									<h:outputLabel for="direccion" value="Dirección" />
+									<p:inputText maxlength="45" id="direccion"
+										value="#{usuariosManaged.direccion}" required="true"
+										validatorMessage="Direccion Invalida"
+										requiredMessage="Direccion Obligatoria" size="45" />
+
+
+									<h:outputLabel for="contacto" value="Contacto" />
+									<p:inputText maxlength="9" id="contacto"
+										value="#{usuariosManaged.contacto}" required="true"
+										validatorMessage="Movil Invalido"
+										requiredMessage="Movil Obligatorio"
+										converterMessage="Teléfono Invalido">
+										<f:validateDoubleRange minimum="600000000" maximum="799999999" />
+									</p:inputText>
+
+									<h:outputLabel for="pwd" value="Contraseña Actual" />
+									<p:password id="pwd" required="true"
+										value="#{usuariosManaged.contrasena}"
+										validatorMessage="Contraseña Incorrecta"
+										requiredMessage="Contraseña Obligatoria" />
+
+									<h:outputLabel for="pwd1" value="Nueva Contraseña" />
+									<p:password id="pwd1"
+										value="#{usuariosManaged.nuevaContraseña}" match="pwd2"
+										label="Password 1"
+										validatorMessage="La contraseña no coincide con la de confirmación" />
+
+									<h:outputLabel for="pwd2" value="Confirmar Nueva Contraseña" />
+									<p:password id="pwd2" label="Password 2"
+										validatorMessage="Contraseña de confirmación Invalida"
+										requiredMessage="Contraseña de confirmación Obligatoria" />
+
+									<h:outputLabel for="img" value="Imagen Actual" />
+									<p:graphicImage id="img" value="#{usuariosManaged.image}"
+										width="100px" height="100px" cache="false">
+										<f:param name="imageeID" value="#{usuariosManaged.idUsuario}" />
+									</p:graphicImage>
+
+									<p:fileUpload value="#{usuariosManaged.file}" mode="simple"
+										skinSimple="true" validatorMessage="Imagen Invalida"
+										update="growl" />
+
+
+
+									<f:facet name="footer">
+										<p:commandButton ajax="false" value="Editar" update="growl"
+											actionListener="#{usuariosManaged.editarUsuario()}" />
+									</f:facet>
+								</h:panelGrid>
+							</p:dialog>
+						</h:form>
+					</c:if>
+					<c:if test="#{empty usuario}">
+						<li class="active"><p:link class="color1" outcome="log">Mi Cuenta</p:link></li>
+					</c:if>
+				</ul>
+			</div>
 			<div class="cssmenu">
 				<ul>
-					<li class="active"><p:link class="color1" outcome="log">Mi Cuenta</p:link></li>
+					<c:if test="#{not empty usuario}">
+						<h:form>
+							<li class="active"><p:commandLink class="color3"
+									update="growl" action="#{usuariosManaged.logout()}">Salir</p:commandLink></li>
+						</h:form>
+					</c:if>
 				</ul>
 			</div>
 		</div>
@@ -160,11 +285,11 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				<div class="grid images_3_of_2">
 					<ul id="etalage">
 						<li><a href="optionallink.html"><p:graphicImage
-									class="etalage_thumb_image" value="#{productosManaged.image}">
+									class="etalage_thumb_image" value="#{productosManaged.image}" cache="false">
 									<f:param name="imageID"
 										value="#{productosManaged.producto.idproductos}" />
 								</p:graphicImage> <p:graphicImage class="etalage_source_image"
-									value="#{productosManaged.image}">
+									value="#{productosManaged.image}" cache="false">
 									<f:param name="imageID"
 										value="#{productosManaged.producto.idproductos}" />
 								</p:graphicImage> </a></li>

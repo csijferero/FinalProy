@@ -5,24 +5,42 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
 
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
+import org.primefaces.model.UploadedFile;
 
 import es.altair.bean.Categorias;
 import es.altair.dao.CategoriasDAO;
 import es.altair.dao.CategoriasIMPL;
 
 @ManagedBean
-@SessionScoped
 public class CategoriasManaged {
-	
+
 	CategoriasDAO catDAO = new CategoriasIMPL();
+
+	private String nombre;
+	private UploadedFile file;
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public UploadedFile getFile() {
+		return file;
+	}
+
+	public void setFile(UploadedFile file) {
+		this.file = file;
+	}
 
 	private List<Categorias> categorias = new ArrayList<Categorias>();
 
@@ -57,5 +75,49 @@ public class CategoriasManaged {
 	}
 
 	private StreamedContent image;
+
+	public String registrarCategoria() {
+		FacesMessage message = null;
+
+		String redirect;
+		int respuesta = catDAO.validarRegistro(nombre);
+
+		if (file.getFileName().equals("")) {
+			message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Imagen Obligatoria", "Imagen Requerida");
+			redirect = "categorias";
+		} else if (!file.getFileName().endsWith("jpg") && !file.getFileName().endsWith("jpeg")
+				&& !file.getFileName().endsWith("png") && !file.getFileName().endsWith("gif")) {
+			message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Formato de imagen invalido", "Imagen Invalida");
+			redirect = "categorias";
+		} else if (respuesta == 0) {
+			catDAO.insertar(nombre, file.getContents());
+			message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Categoria Registrada", "Categoria Registrada");
+			redirect = "categorias";
+		} else {
+			message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Este nombre ya existe. Pruebe con otro",
+					"Nombre ya registrado");
+			redirect = "categorias";
+		}
+
+		FacesContext.getCurrentInstance().addMessage(null, message);
+		FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+
+		return redirect;
+	}
+
+	public String borrarCategoria(int c) {
+		FacesMessage message = null;
+
+		String redirect;
+
+		catDAO.borrar(c);
+		message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Categoria Borrada", "Categoria Borrada");
+		redirect = "categorias";
+
+		FacesContext.getCurrentInstance().addMessage(null, message);
+		FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+
+		return redirect;
+	}
 
 }

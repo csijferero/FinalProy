@@ -7,20 +7,19 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-import es.altair.bean.Categorias;
+import es.altair.bean.FormaEnvio;
 
-public class CategoriasIMPL implements CategoriasDAO {
+public class FormaEnvioIMPL implements FormaEnvioDAO {
 
-	@Override
-	public List<Categorias> listado() {
-		List<Categorias> categorias = new ArrayList<Categorias>();
+	public List<FormaEnvio> listado() {
+		List<FormaEnvio> formaEnvio = new ArrayList<FormaEnvio>();
 
 		SessionFactory sf = new Configuration().configure().buildSessionFactory();
 		Session session = sf.openSession();
 
 		try {
 			session.beginTransaction();
-			categorias = session.createQuery("FROM Categorias").list();
+			formaEnvio = session.createQuery("FROM FormaEnvio").list();
 			session.getTransaction().commit();
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -28,18 +27,17 @@ public class CategoriasIMPL implements CategoriasDAO {
 			session.close();
 			sf.close();
 		}
-		return categorias;
+		return formaEnvio;
 	}
 
-	@Override
-	public byte[] getfpImage(int idCategoria) {
+	public byte[] getfpImage(int idformaenvio) {
 		byte[] fpImage = null;
 
 		SessionFactory sf = new Configuration().configure().buildSessionFactory();
 		Session session = sf.openSession();
 
-		fpImage = (byte[]) session.createQuery("Select image From Categorias Where idcategorias=:id")
-				.setParameter("id", idCategoria).uniqueResult();
+		fpImage = (byte[]) session.createQuery("Select image From FormaEnvio Where idformaenvio=:id")
+				.setParameter("id", idformaenvio).uniqueResult();
 
 		session.close();
 		sf.close();
@@ -55,7 +53,7 @@ public class CategoriasIMPL implements CategoriasDAO {
 		try {
 			sesion.beginTransaction();
 
-			if ((Categorias) sesion.createQuery("FROM Categorias WHERE nombre=:n").setParameter("n", nombre)
+			if ((FormaEnvio) sesion.createQuery("FROM FormaEnvio WHERE nombre=:n").setParameter("n", nombre)
 					.uniqueResult() == null) {
 				valido = 0;
 			} else
@@ -77,8 +75,8 @@ public class CategoriasIMPL implements CategoriasDAO {
 		Session sesion = sf.openSession();
 		try {
 			sesion.beginTransaction();
-			sesion.createSQLQuery("INSERT INTO categorias (nombre, image)" + "values (:n, :i)")
-					.setParameter("n", nombre).setParameter("i", event).executeUpdate();
+			sesion.createSQLQuery("INSERT INTO FormaEnvio (nombre, image)" + "values (:n, :i)").setParameter("n", nombre)
+					.setParameter("i", event).executeUpdate();
 			sesion.getTransaction().commit();
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -87,14 +85,14 @@ public class CategoriasIMPL implements CategoriasDAO {
 			sf.close();
 		}
 	}
-
+	
 	public void borrar(int c) {
 		SessionFactory sf = new Configuration().configure().buildSessionFactory();
 		Session sesion = sf.openSession();
 		try {
 			sesion.beginTransaction();
 
-			sesion.createQuery("DELETE FROM Categorias WHERE idcategorias=:c").setParameter("c", c).executeUpdate();
+			sesion.createQuery("DELETE FROM FormaEnvio WHERE idformaenvio=:c").setParameter("c", c).executeUpdate();
 
 			sesion.getTransaction().commit();
 		} catch (Exception e) {

@@ -1,17 +1,7 @@
 package es.altair.dao;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -53,6 +43,64 @@ public class FormaPagoIMPL implements FormaPagoDAO {
 		sf.close();
 
 		return fpImage;
+	}
+
+	public int validarRegistro(String nombre) {
+		int valido = 0;
+
+		SessionFactory sf = new Configuration().configure().buildSessionFactory();
+		Session sesion = sf.openSession();
+		try {
+			sesion.beginTransaction();
+
+			if ((FormaPago) sesion.createQuery("FROM FormaPago WHERE nombre=:n").setParameter("n", nombre)
+					.uniqueResult() == null) {
+				valido = 0;
+			} else
+				valido = 1;
+
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			// TODO: handle exception
+		} finally {
+			sesion.close();
+			sf.close();
+		}
+		return valido;
+	}
+
+	public void insertar(String nombre, byte[] event) {
+
+		SessionFactory sf = new Configuration().configure().buildSessionFactory();
+		Session sesion = sf.openSession();
+		try {
+			sesion.beginTransaction();
+			sesion.createSQLQuery("INSERT INTO FormaPago (nombre, image)" + "values (:n, :i)").setParameter("n", nombre)
+					.setParameter("i", event).executeUpdate();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			// TODO: handle exception
+		} finally {
+			sesion.close();
+			sf.close();
+		}
+	}
+	
+	public void borrar(int c) {
+		SessionFactory sf = new Configuration().configure().buildSessionFactory();
+		Session sesion = sf.openSession();
+		try {
+			sesion.beginTransaction();
+
+			sesion.createQuery("DELETE FROM FormaPago WHERE idformapago=:c").setParameter("c", c).executeUpdate();
+
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			// TODO: handle exception
+		} finally {
+			sesion.close();
+			sf.close();
+		}
 	}
 
 }

@@ -7,6 +7,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+import es.altair.bean.Categorias;
 import es.altair.bean.Productos;
 
 public class ProductosIMPL implements ProductosDAO {
@@ -20,8 +21,8 @@ public class ProductosIMPL implements ProductosDAO {
 
 		try {
 			session.beginTransaction();
-			productos = session.createQuery("FROM Productos Where categorias.idcategorias=:id").setParameter("id", idCategoria)
-					.list();
+			productos = session.createQuery("FROM Productos Where categorias.idcategorias=:id")
+					.setParameter("id", idCategoria).list();
 			session.getTransaction().commit();
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -63,6 +64,71 @@ public class ProductosIMPL implements ProductosDAO {
 			sf.close();
 		}
 		return aux;
+	}
+
+	@Override
+	public void insertar(int idcategorias, String nombre, String marca, String modelo, double precio, int garantia,
+			int ano, byte[] event, String uuid) {
+		SessionFactory sf = new Configuration().configure().buildSessionFactory();
+		Session sesion = sf.openSession();
+		try {
+			sesion.beginTransaction();
+			sesion.createSQLQuery(
+					"INSERT INTO Productos (idcategorias, nombre, precio, marca, modelo, ano, garantia, image, uuid)"
+							+ "values (:id, :n, :p, :ma, :mo, :a, :g, :i, :u)")
+					.setParameter("id", idcategorias).setParameter("n", nombre).setParameter("p", precio)
+					.setParameter("ma", marca).setParameter("mo", modelo).setParameter("a", ano)
+					.setParameter("g", garantia).setParameter("i", event).setParameter("u", uuid).executeUpdate();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			// TODO: handle exception
+		} finally {
+			sesion.close();
+			sf.close();
+		}
+	}
+
+	@Override
+	public int validarRegistro(String nombre) {
+		int valido = 0;
+
+		SessionFactory sf = new Configuration().configure().buildSessionFactory();
+		Session sesion = sf.openSession();
+		try {
+			sesion.beginTransaction();
+
+			if ((Productos) sesion.createQuery("FROM Productos WHERE nombre=:n").setParameter("n", nombre)
+					.uniqueResult() == null) {
+				valido = 0;
+			} else
+				valido = 1;
+
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			// TODO: handle exception
+		} finally {
+			sesion.close();
+			sf.close();
+		}
+		return valido;
+	}
+
+	@Override
+	public void borrar(int c) {
+		SessionFactory sf = new Configuration().configure().buildSessionFactory();
+		Session sesion = sf.openSession();
+		try {
+			sesion.beginTransaction();
+
+			sesion.createQuery("DELETE FROM Productos WHERE idproductos=:c").setParameter("c", c).executeUpdate();
+
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			// TODO: handle exception
+		} finally {
+			sesion.close();
+			sf.close();
+		}
 	}
 
 }

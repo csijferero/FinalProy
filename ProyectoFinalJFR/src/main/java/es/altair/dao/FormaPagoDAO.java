@@ -8,4 +8,7 @@ public interface FormaPagoDAO {
 
 	public List<FormaPago> listado();
 	public byte[] getfpImage(int idformapago);
+	void insertar(String nombre, byte[] event);
+	int validarRegistro(String nombre);
+	public void borrar(int c);
 }

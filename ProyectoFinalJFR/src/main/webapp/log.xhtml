@@ -8,7 +8,8 @@
 	xmlns:cc="http://java.sun.com/jsf/composite">
 <h:head>
 	<title>AltShop</title>
-	<link rel="shortcut icon" href="https://pbs.twimg.com/profile_images/905769842254520320/SktRHT6V_400x400.jpg" />
+	<link rel="shortcut icon"
+		href="https://pbs.twimg.com/profile_images/905769842254520320/SktRHT6V_400x400.jpg" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="keywords"
@@ -34,8 +35,14 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<script src="https://use.fontawesome.com/releases/v5.0.9/js/all.js"></script>
 	<script src="http://maps.google.com/maps/api/js?sensor=false"
 		type="text/javascript"></script>
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 </h:head>
 <body>
+	<f:metadata>
+		<f:viewAction action="#{usuariosManaged.logout()}"
+			if="#{not empty usuario}" />
+	</f:metadata>
 	<div class="header_top">
 		<div class="container">
 			<div class="cssmenu">
@@ -62,11 +69,13 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 									<div class="col1">
 										<div class="h_nav">
 											<ul>
-												<c:forEach begin="0" end="#{categoriasManaged.categorias.size()-1}" var="cat">
+												<c:forEach begin="0"
+													end="#{categoriasManaged.categorias.size()-1}" var="cat">
 													<li value=""><p:link outcome="productos"
-												value="#{categoriasManaged.categorias.get(cat).nombre}">
-												<f:param name="catID" value="#{categoriasManaged.categorias.get(cat).idcategorias}" />
-											</p:link></li>
+															value="#{categoriasManaged.categorias.get(cat).nombre}">
+															<f:param name="catID"
+																value="#{categoriasManaged.categorias.get(cat).idcategorias}" />
+														</p:link></li>
 												</c:forEach>
 											</ul>
 										</div>
@@ -117,17 +126,27 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					<h3>USUARIOS REGISTRADOS</h3>
 					<p>Si tiene una cuenta con nosotros, por favor inicie sesión.</p>
 					<h:form>
+						<p:growl id="growl" sticky="true" showDetail="false" />
 						<div>
 							<span>Email<label>*</label></span>
-							<p:inputText />
+							<p:inputText maxlength="45" required="true"
+								value="#{usuariosManaged.correo}"
+								validatorMessage="Email Invalido"
+								requiredMessage="Email Obligatorio">
+								<f:validateRegex
+									pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}" />
+							</p:inputText>
 						</div>
 						<div>
 							<span>Password<label>*</label></span>
-							<p:password id="pwd1" value="#{passwordView.password5}"
-								match="pwd2" label="Password 1" required="true" />
+							<p:password id="pwd1" required="true"
+								value="#{usuariosManaged.contrasena}"
+								validatorMessage="Contraseña Incorrecta"
+								requiredMessage="Contraseña Obligatoria" />
 						</div>
 						<p:link outcome="inicio" value="Olvide mi contraseña" />
-						<p:commandButton value="Login" />
+						<p:commandButton value="Login" update="growl"
+							action="#{usuariosManaged.comprobarUsuario()}" />
 					</h:form>
 				</div>
 				<div class="col-md-6 login-left">

@@ -21,6 +21,8 @@ public class Usuarios implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public int idusuarios;
 	public String nick;
+	public String email;
+	public String contraseña;
 	public String nombre;
 	public String apellidos;
 	public String direccion;
@@ -40,10 +42,12 @@ public class Usuarios implements Serializable {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Usuarios(String nick, String nombre, String apellidos, String direccion, Double contacto, String dni,
+	public Usuarios(String nick, String email, String contraseña, String nombre, String apellidos, String direccion, Double contacto, String dni,
 			byte[] image, TipoUsuarios tipoUsuarios) {
 		super();
 		this.nick = nick;
+		this.email = email;
+		this.contraseña = contraseña;
 		this.nombre = nombre;
 		this.apellidos = apellidos;
 		this.direccion = direccion;
@@ -67,6 +71,22 @@ public class Usuarios implements Serializable {
 
 	public void setNick(String nick) {
 		this.nick = nick;
+	}
+	
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	
+	public String getContraseña() {
+		return contraseña;
+	}
+
+	public void setContraseña(String contraseña) {
+		this.contraseña = contraseña;
 	}
 
 	public String getNombre() {
