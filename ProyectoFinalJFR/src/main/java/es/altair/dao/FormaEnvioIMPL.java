@@ -75,7 +75,7 @@ public class FormaEnvioIMPL implements FormaEnvioDAO {
 		Session sesion = sf.openSession();
 		try {
 			sesion.beginTransaction();
-			sesion.createSQLQuery("INSERT INTO FormaEnvio (nombre, image)" + "values (:n, :i)").setParameter("n", nombre)
+			sesion.createSQLQuery("INSERT INTO formaenvio (nombre, image)" + "values (:n, :i)").setParameter("n", nombre)
 					.setParameter("i", event).executeUpdate();
 			sesion.getTransaction().commit();
 		} catch (Exception e) {

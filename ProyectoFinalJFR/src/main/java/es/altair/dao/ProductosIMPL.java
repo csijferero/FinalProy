@@ -74,7 +74,7 @@ public class ProductosIMPL implements ProductosDAO {
 		try {
 			sesion.beginTransaction();
 			sesion.createSQLQuery(
-					"INSERT INTO Productos (idcategorias, nombre, precio, marca, modelo, ano, garantia, image, uuid)"
+					"INSERT INTO productos (idcategorias, nombre, precio, marca, modelo, ano, garantia, image, uuid)"
 							+ "values (:id, :n, :p, :ma, :mo, :a, :g, :i, :u)")
 					.setParameter("id", idcategorias).setParameter("n", nombre).setParameter("p", precio)
 					.setParameter("ma", marca).setParameter("mo", modelo).setParameter("a", ano)

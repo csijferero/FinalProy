@@ -75,7 +75,7 @@ public class FormaPagoIMPL implements FormaPagoDAO {
 		Session sesion = sf.openSession();
 		try {
 			sesion.beginTransaction();
-			sesion.createSQLQuery("INSERT INTO FormaPago (nombre, image)" + "values (:n, :i)").setParameter("n", nombre)
+			sesion.createSQLQuery("INSERT INTO formapago (nombre, image)" + "values (:n, :i)").setParameter("n", nombre)
 					.setParameter("i", event).executeUpdate();
 			sesion.getTransaction().commit();
 		} catch (Exception e) {
