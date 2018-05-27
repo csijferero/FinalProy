@@ -131,4 +131,71 @@ public class ProductosIMPL implements ProductosDAO {
 		}
 	}
 
+	public int validarRegistro(String nombre, String nombreOld) {
+		int valido = 0;
+
+		SessionFactory sf = new Configuration().configure().buildSessionFactory();
+		Session sesion = sf.openSession();
+		try {
+			sesion.beginTransaction();
+
+			if ((Productos) sesion.createQuery("FROM Productos WHERE nombre=:n").setParameter("n", nombre)
+					.uniqueResult() == null || nombre.equals(nombreOld)) {
+				valido = 0;
+			} else
+				valido = 1;
+
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			// TODO: handle exception
+		} finally {
+			sesion.close();
+			sf.close();
+		}
+		return valido;
+	}
+
+	public void actualizar(Integer idProducto, String marca, String modelo, double precio, int garantia, int ano,
+			String nombre, byte[] event) {
+		SessionFactory sf = new Configuration().configure().buildSessionFactory();
+		Session sesion = sf.openSession();
+
+		try {
+			sesion.beginTransaction();
+			sesion.createQuery(
+					"UPDATE Productos SET nombre=:n, precio=:p, marca=:ma, modelo=:mo, ano=:a, garantia=:g, image=:im WHERE idproductos=:idPro")
+					.setParameter("n", nombre).setParameter("p", precio).setParameter("ma", marca)
+					.setParameter("mo", modelo).setParameter("a", ano).setParameter("g", garantia)
+					.setParameter("im", event).setParameter("idPro", idProducto).executeUpdate();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+
+		} finally {
+			sesion.close();
+			sf.close();
+		}
+	}
+
+	public void actualizarSinIMG(Integer idProducto, String marca, String modelo, double precio, int garantia, int ano,
+			String nombre) {
+		SessionFactory sf = new Configuration().configure().buildSessionFactory();
+		Session sesion = sf.openSession();
+
+		try {
+			sesion.beginTransaction();
+			sesion.createQuery(
+					"UPDATE Productos SET nombre=:n, precio=:p, marca=:ma, modelo=:mo, ano=:a, garantia=:g WHERE idproductos=:idPro")
+					.setParameter("n", nombre).setParameter("p", precio).setParameter("ma", marca)
+					.setParameter("mo", modelo).setParameter("a", ano).setParameter("g", garantia)
+					.setParameter("idPro", idProducto).executeUpdate();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+
+		} finally {
+			sesion.close();
+			sf.close();
+		
+	}
+	}
+
 }

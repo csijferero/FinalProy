@@ -19,14 +19,45 @@ import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
 import es.altair.bean.FormaPago;
+import es.altair.bean.Usuarios;
 import es.altair.dao.FormaPagoDAO;
 import es.altair.dao.FormaPagoIMPL;
 
 @ManagedBean
 public class FormaPagoManaged implements Serializable {
 
+	FormaPagoDAO fpDAO = new FormaPagoIMPL();
+	private Integer idFormaPago;
 	private String nombre;
+	private String nombreOld;
+	private StreamedContent image;
 	private UploadedFile file;
+	private List<FormaPago> formasDePago = new ArrayList<FormaPago>();
+	private Integer index;
+
+	public Integer getIndex() {
+		return index;
+	}
+
+	public void setIndex(Integer index) {
+		this.index = index;
+	}
+
+	public Integer getIdFormaPago() {
+		return idFormaPago;
+	}
+
+	public void setIdFormaPago(Integer idFormaPago) {
+		this.idFormaPago = idFormaPago;
+	}
+
+	public String getNombreOld() {
+		return nombreOld;
+	}
+
+	public void setNombreOld(String nombreOld) {
+		this.nombreOld = nombreOld;
+	}
 
 	public String getNombre() {
 		return nombre;
@@ -44,10 +75,6 @@ public class FormaPagoManaged implements Serializable {
 		this.file = file;
 	}
 
-	FormaPagoDAO fpDAO = new FormaPagoIMPL();
-
-	private List<FormaPago> formasDePago = new ArrayList<FormaPago>();
-
 	public List<FormaPago> getFormasDePago() {
 		formasDePago = fpDAO.listado();
 		return formasDePago;
@@ -56,8 +83,6 @@ public class FormaPagoManaged implements Serializable {
 	public void setFormasDePago(List<FormaPago> formasDePago) {
 		this.formasDePago = formasDePago;
 	}
-
-	private StreamedContent image;
 
 	public StreamedContent getImage() throws IOException {
 		FacesContext context = FacesContext.getCurrentInstance();
@@ -123,6 +148,48 @@ public class FormaPagoManaged implements Serializable {
 		FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
 
 		return redirect;
+	}
+
+	public String editarFormaPago(int id) {
+		FacesMessage message = null;
+
+		String redirect = "";
+
+		int respuesta = fpDAO.validarRegistro(nombre, nombreOld); // Comprobamos si es valido
+
+		if (respuesta == 0) { // Es valido
+			if (file.getFileName().equals("")) {
+				fpDAO.actualizarSinIMG(idFormaPago, nombre);
+				message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Pago Actualizado correctamente",
+						"Usuario Actualizado correctamente");
+				redirect = "inicio";
+			} else if (!file.getFileName().endsWith("jpg") && !file.getFileName().endsWith("jpeg")
+					&& !file.getFileName().endsWith("png") && !file.getFileName().endsWith("gif")) {
+				message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Formato de imagen invalido",
+						"Imagen Invalida");
+				redirect = "inicio";
+			} else {
+				fpDAO.actualizar(idFormaPago, nombre, file.getContents());
+				message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Pago Actualizado correctamente",
+						"Usuario Actualizado correctamente");
+				redirect = "inicio";
+				// Poner en sesion
+			}
+		} else if (respuesta == 1) {
+			message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Nombre ya registrado. Pruebe con otro",
+					"Email ya registrado");
+			redirect = "inicio";
+		}
+
+		FacesContext.getCurrentInstance().addMessage(null, message);
+		FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+		return redirect;
+	}
+
+	public void cargaEdit(FormaPago fp) {
+		idFormaPago = fp.getIdformapago();
+		nombre = fp.getNombre();
+		nombreOld = fp.getNombre();
 	}
 
 }

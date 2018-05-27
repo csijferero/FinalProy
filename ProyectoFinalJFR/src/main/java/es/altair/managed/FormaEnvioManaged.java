@@ -28,8 +28,29 @@ import es.altair.dao.FormaPagoIMPL;
 @ManagedBean
 public class FormaEnvioManaged implements Serializable {
 
+	private Integer idFormaEnvio;
+	private String nombreOld;
 	private String nombre;
 	private UploadedFile file;
+	private StreamedContent image;
+	private List<FormaEnvio> formasDeEnvio = new ArrayList<FormaEnvio>();
+	FormaEnvioDAO feDAO = new FormaEnvioIMPL();
+
+	public Integer getIdFormaEnvio() {
+		return idFormaEnvio;
+	}
+
+	public void setIdFormaEnvio(Integer idFormaEnvio) {
+		this.idFormaEnvio = idFormaEnvio;
+	}
+
+	public String getNombreOld() {
+		return nombreOld;
+	}
+
+	public void setNombreOld(String nombreOld) {
+		this.nombreOld = nombreOld;
+	}
 
 	public String getNombre() {
 		return nombre;
@@ -47,10 +68,6 @@ public class FormaEnvioManaged implements Serializable {
 		this.file = file;
 	}
 
-	FormaEnvioDAO feDAO = new FormaEnvioIMPL();
-
-	private List<FormaEnvio> formasDeEnvio = new ArrayList<FormaEnvio>();
-
 	public List<FormaEnvio> getFormasDeEnvio() {
 		formasDeEnvio = feDAO.listado();
 		return formasDeEnvio;
@@ -59,8 +76,6 @@ public class FormaEnvioManaged implements Serializable {
 	public void setFormasDeEnvio(List<FormaEnvio> formasDeEnvio) {
 		this.formasDeEnvio = formasDeEnvio;
 	}
-
-	private StreamedContent image;
 
 	public StreamedContent getImage() throws IOException {
 		FacesContext context = FacesContext.getCurrentInstance();
@@ -125,6 +140,48 @@ public class FormaEnvioManaged implements Serializable {
 		FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
 
 		return redirect;
+	}
+
+	public String editarFormaPago(int id) {
+		FacesMessage message = null;
+
+		String redirect = "";
+
+		int respuesta = feDAO.validarRegistro(nombre, nombreOld); // Comprobamos si es valido
+
+		if (respuesta == 0) { // Es valido
+			if (file.getFileName().equals("")) {
+				feDAO.actualizarSinIMG(idFormaEnvio, nombre);
+				message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Envio Actualizado correctamente",
+						"Usuario Actualizado correctamente");
+				redirect = "inicio";
+			} else if (!file.getFileName().endsWith("jpg") && !file.getFileName().endsWith("jpeg")
+					&& !file.getFileName().endsWith("png") && !file.getFileName().endsWith("gif")) {
+				message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Formato de imagen invalido",
+						"Imagen Invalida");
+				redirect = "inicio";
+			} else {
+				feDAO.actualizar(idFormaEnvio, nombre, file.getContents());
+				message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Envio Actualizado correctamente",
+						"Usuario Actualizado correctamente");
+				redirect = "inicio";
+				// Poner en sesion
+			}
+		} else if (respuesta == 1) {
+			message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Nombre ya registrado. Pruebe con otro",
+					"Email ya registrado");
+			redirect = "inicio";
+		}
+
+		FacesContext.getCurrentInstance().addMessage(null, message);
+		FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+		return redirect;
+	}
+
+	public void cargaEdit(FormaEnvio fe) {
+		idFormaEnvio = fe.getIdformaenvio();
+		nombre = fe.getNombre();
+		nombreOld = fe.getNombre();
 	}
 
 }

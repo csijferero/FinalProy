@@ -145,7 +145,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 									<f:facet name="footer">
 										<p:commandButton ajax="false" value="Editar" update="growl"
-											actionListener="#{usuariosManaged.editarUsuario()}" />
+											action="#{usuariosManaged.editarUsuario()}" />
 									</f:facet>
 								</h:panelGrid>
 							</p:dialog>
@@ -255,11 +255,15 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 										validatorMessage="Nombre invalido"
 										requiredMessage="Nombre Obligatorio" size="20" />
 
-									<p:fileUpload value="#{categoriasManaged.file}" mode="simple"
-										skinSimple="true" validatorMessage="Imagen Invalida"
-										update="growl" />
+
 
 									<f:facet name="footer">
+										<br />
+										<p:fileUpload value="#{categoriasManaged.file}" mode="simple"
+											skinSimple="true" validatorMessage="Imagen Invalida"
+											update="growl" />
+										<div class="clear"></div>
+
 										<p:commandButton ajax="false" value="Añadir" update="growl"
 											actionListener="#{categoriasManaged.registrarCategoria()}" />
 									</f:facet>
@@ -310,11 +314,58 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 											</p:link>
 										</h5>
 										<c:if test="#{not empty usuario}">
-											<h:form>
+											<h:form enctype="multipart/form-data">
 												<p:commandButton
 													actionListener="#{categoriasManaged.borrarCategoria(categoriasManaged.categorias.get(cat).idcategorias)}"
 													id="iconOnly" icon="ui-icon-close" update="growl"
 													ajax="false" />
+												<p:commandButton class="color1"
+													onclick="PF('dlg4#{categoriasManaged.categorias.get(cat).idcategorias}').show();#{categoriasManaged.cargaEdit(categoriasManaged.categorias.get(cat))}"
+													icon="ui-icon-wrench" />
+												<p:dialog header="Editar Categoria"
+													widgetVar="dlg4#{categoriasManaged.categorias.get(cat).idcategorias}"
+													showEffect="explode" hideEffect="bounce" resizable="false"
+													modal="true">
+													<h:panelGrid columns="2">
+
+														<p:inputText type="hidden"
+															value="#{categoriasManaged.nombreOld}" />
+
+														<p:inputText type="hidden"
+															value="#{categoriasManaged.idCategoria}" />
+
+														<h:outputLabel for="nombre" value="Nombre" />
+														<p:inputText id="nombre" maxlength="20"
+															value="#{categoriasManaged.nombre}" required="true"
+															validatorMessage="Nombre invalido"
+															requiredMessage="Nombre Obligatorio" size="20" />
+
+														<h:outputLabel for="img" value="Imagen" />
+														<p:graphicImage id="img"
+															value="#{categoriasManaged.image}" width="100px"
+															height="100px" cache="false">
+															<f:param name="imageID"
+																value="#{categoriasManaged.idCategoria}" />
+														</p:graphicImage>
+
+
+
+														<f:facet name="footer">
+															<br />
+															<div class="text-left">
+															<p:fileUpload value="#{categoriasManaged.file}"
+																mode="simple" skinSimple="true"
+																validatorMessage="Imagen Invalida" update="growl" />
+															<div class="clear"></div>
+
+															<p:commandButton ajax="false" value="Editar"
+																update="growl"
+																actionListener="#{categoriasManaged.editarCategoria(categoriasManaged.idCategoria)}" />
+																														</div>
+																
+														</f:facet>
+													</h:panelGrid>
+												</p:dialog>
 											</h:form>
 										</c:if>
 									</div>

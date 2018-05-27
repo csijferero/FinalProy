@@ -11,5 +11,7 @@ public interface CategoriasDAO {
 	void insertar(String nombre, byte[] event);
 	int validarRegistro(String nombre);
 	void borrar(int c);
-
+	void actualizarSinIMG(Integer idCategoria, String nombre);
+	void actualizar(Integer idCategoria, String nombre, byte[] event);
+	int validarRegistro(String nombre, String nombreOld);
 }

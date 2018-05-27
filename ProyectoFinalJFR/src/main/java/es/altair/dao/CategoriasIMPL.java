@@ -8,6 +8,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 import es.altair.bean.Categorias;
+import es.altair.bean.FormaPago;
 
 public class CategoriasIMPL implements CategoriasDAO {
 
@@ -99,6 +100,65 @@ public class CategoriasIMPL implements CategoriasDAO {
 			sesion.getTransaction().commit();
 		} catch (Exception e) {
 			// TODO: handle exception
+		} finally {
+			sesion.close();
+			sf.close();
+		}
+	}
+
+	public int validarRegistro(String nombre, String nombreOld) {
+		int valido = 0;
+
+		SessionFactory sf = new Configuration().configure().buildSessionFactory();
+		Session sesion = sf.openSession();
+		try {
+			sesion.beginTransaction();
+
+			if ((Categorias) sesion.createQuery("FROM Categorias WHERE nombre=:n").setParameter("n", nombre)
+					.uniqueResult() == null || nombre.equals(nombreOld)) {
+				valido = 0;
+			} else
+				valido = 1;
+
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			// TODO: handle exception
+		} finally {
+			sesion.close();
+			sf.close();
+		}
+		return valido;
+	}
+
+	public void actualizar(Integer idCategoria, String nombre, byte[] event) {
+		SessionFactory sf = new Configuration().configure().buildSessionFactory();
+		Session sesion = sf.openSession();
+
+		try {
+			sesion.beginTransaction();
+			sesion.createQuery("UPDATE Categorias SET nombre=:n, image=:im WHERE idcategorias=:idCat")
+					.setParameter("n", nombre).setParameter("im", event).setParameter("idCat", idCategoria)
+					.executeUpdate();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+
+		} finally {
+			sesion.close();
+			sf.close();
+		}
+	}
+
+	public void actualizarSinIMG(Integer idCategoria, String nombre) {
+		SessionFactory sf = new Configuration().configure().buildSessionFactory();
+		Session sesion = sf.openSession();
+
+		try {
+			sesion.beginTransaction();
+			sesion.createQuery("UPDATE Categorias SET nombre=:n WHERE idcategorias=:idCat").setParameter("n", nombre)
+					.setParameter("idCat", idCategoria).executeUpdate();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+
 		} finally {
 			sesion.close();
 			sf.close();

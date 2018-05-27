@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -17,6 +18,7 @@ import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
+import es.altair.bean.Categorias;
 import es.altair.bean.Productos;
 import es.altair.dao.ProductosDAO;
 import es.altair.dao.ProductosIMPL;
@@ -30,6 +32,7 @@ public class ProductosManaged implements Serializable {
 	private Integer categoriaId;
 	private Integer productoId;
 	private String nombre;
+	private String nombreOld;
 	private Double precio;
 	private String marca;
 	private String modelo;
@@ -40,6 +43,16 @@ public class ProductosManaged implements Serializable {
 	private StreamedContent image;
 	private Productos producto = new Productos();
 	private List<Productos> productos = new ArrayList<Productos>();
+	
+	
+
+	public String getNombreOld() {
+		return nombreOld;
+	}
+
+	public void setNombreOld(String nombreOld) {
+		this.nombreOld = nombreOld;
+	}
 
 	public String getNombre() {
 		return nombre;
@@ -168,20 +181,21 @@ public class ProductosManaged implements Serializable {
 
 		if (file.getFileName().equals("")) {
 			message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Imagen Obligatoria", "Imagen Requerida");
-			redirect = "productos";
+			redirect = "productos?faces-redirect=true";
 		} else if (!file.getFileName().endsWith("jpg") && !file.getFileName().endsWith("jpeg")
 				&& !file.getFileName().endsWith("png") && !file.getFileName().endsWith("gif")) {
 			message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Formato de imagen invalido", "Imagen Invalida");
-			redirect = "productos";
+			redirect = "productos?faces-redirect=true";
 		} else if (respuesta == 0) {
 			proDAO.insertar(categoriaId, nombre, marca, modelo, precio, garantia, ano, file.getContents(),
 					UUID.randomUUID().toString());
 			message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Producto Registrado", "Producto Registrado");
-			redirect = "productos";
+			redirect = "productos?faces-redirect=true";
+			clear();
 		} else {
 			message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Este nombre ya existe. Pruebe con otro",
 					"Nombre ya registrado");
-			redirect = "productos";
+			redirect = "productos?faces-redirect=true";
 		}
 
 		FacesContext.getCurrentInstance().addMessage(null, message);
@@ -197,12 +211,70 @@ public class ProductosManaged implements Serializable {
 
 		proDAO.borrar(c);
 		message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Producto Borrado", "Producto Borrado");
-		redirect = "inicio";
+		redirect = "productos?faces-redirect=true";
 
 		FacesContext.getCurrentInstance().addMessage(null, message);
 		FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
-
+		clear();
 		return redirect;
+	}
+	
+	public String editarProducto(int id) {
+		FacesMessage message = null;
+
+		String redirect = "";
+
+		int respuesta = proDAO.validarRegistro(nombre, nombreOld); // Comprobamos si es valido
+
+		if (respuesta == 0) { // Es valido
+			if (file.getFileName().equals("")) {
+				proDAO.actualizarSinIMG(productoId, marca, modelo, precio, garantia, ano, nombre);
+				message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Producto Actualizado correctamente",
+						"Producto Actualizado correctamente");
+				redirect = "productos";
+			} else if (!file.getFileName().endsWith("jpg") && !file.getFileName().endsWith("jpeg")
+					&& !file.getFileName().endsWith("png") && !file.getFileName().endsWith("gif")) {
+				message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Formato de imagen invalido",
+						"Imagen Invalida");
+				redirect = "productos";
+			} else {
+				proDAO.actualizar(productoId, marca, modelo, precio, garantia, ano, nombre, file.getContents());
+				message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Producto Actualizado correctamente",
+						"Producto Actualizado correctamente");
+				redirect = "productos";
+				// Poner en sesion
+			}
+		} else if (respuesta == 1) {
+			message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Nombre ya registrado. Pruebe con otro",
+					"Email ya registrado");
+			redirect = "productos";
+		}
+
+		FacesContext.getCurrentInstance().addMessage(null, message);
+		FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+		return redirect;
+	}
+
+	public void cargaEdit(Productos pro) {
+		productoId = pro.getIdproductos();
+		nombre = pro.getNombre();
+		nombreOld = pro.getNombre();
+		marca = pro.getMarca();
+		modelo = pro.getModelo();
+		precio = pro.getPrecio();
+		garantia = pro.getGarantia();
+		ano = pro.getAno();
+	}
+	
+	@PostConstruct
+	public void clear() {
+		setNombre(null);
+		setMarca(null);
+		setModelo(null);
+		setPrecio(null);
+		setGarantia(null);
+		setAno(null);
+		setFile(null);
 	}
 
 }

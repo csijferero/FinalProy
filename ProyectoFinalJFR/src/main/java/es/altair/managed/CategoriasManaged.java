@@ -15,6 +15,7 @@ import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
 import es.altair.bean.Categorias;
+import es.altair.bean.FormaPago;
 import es.altair.dao.CategoriasDAO;
 import es.altair.dao.CategoriasIMPL;
 
@@ -23,8 +24,26 @@ public class CategoriasManaged {
 
 	CategoriasDAO catDAO = new CategoriasIMPL();
 
+	private Integer idCategoria;
+	private String nombreOld;
 	private String nombre;
 	private UploadedFile file;
+
+	public Integer getIdCategoria() {
+		return idCategoria;
+	}
+
+	public void setIdCategoria(Integer idCategoria) {
+		this.idCategoria = idCategoria;
+	}
+
+	public String getNombreOld() {
+		return nombreOld;
+	}
+
+	public void setNombreOld(String nombreOld) {
+		this.nombreOld = nombreOld;
+	}
 
 	public String getNombre() {
 		return nombre;
@@ -118,6 +137,48 @@ public class CategoriasManaged {
 		FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
 
 		return redirect;
+	}
+
+	public String editarCategoria(int id) {
+		FacesMessage message = null;
+
+		String redirect = "";
+
+		int respuesta = catDAO.validarRegistro(nombre, nombreOld); // Comprobamos si es valido
+
+		if (respuesta == 0) { // Es valido
+			if (file.getFileName().equals("")) {
+				catDAO.actualizarSinIMG(idCategoria, nombre);
+				message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Categoria Actualizada correctamente",
+						"Usuario Actualizado correctamente");
+				redirect = "categorias";
+			} else if (!file.getFileName().endsWith("jpg") && !file.getFileName().endsWith("jpeg")
+					&& !file.getFileName().endsWith("png") && !file.getFileName().endsWith("gif")) {
+				message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Formato de imagen invalido",
+						"Imagen Invalida");
+				redirect = "categorias";
+			} else {
+				catDAO.actualizar(idCategoria, nombre, file.getContents());
+				message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Categoria Actualizada correctamente",
+						"Usuario Actualizado correctamente");
+				redirect = "categorias";
+				// Poner en sesion
+			}
+		} else if (respuesta == 1) {
+			message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Nombre ya registrado. Pruebe con otro",
+					"Email ya registrado");
+			redirect = "productos";
+		}
+
+		FacesContext.getCurrentInstance().addMessage(null, message);
+		FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+		return redirect;
+	}
+
+	public void cargaEdit(Categorias cat) {
+		idCategoria = cat.getIdcategorias();
+		nombre = cat.getNombre();
+		nombreOld = cat.getNombre();
 	}
 
 }

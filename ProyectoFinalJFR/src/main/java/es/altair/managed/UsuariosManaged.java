@@ -6,22 +6,15 @@ import java.io.Serializable;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
-import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
 
-import org.hibernate.validator.constraints.Email;
-import org.primefaces.component.fileupload.FileUpload;
-import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
 import es.altair.bean.TipoUsuarios;
 import es.altair.bean.Usuarios;
-import es.altair.dao.CategoriasDAO;
-import es.altair.dao.CategoriasIMPL;
 import es.altair.dao.TipoUsuarioDAO;
 import es.altair.dao.TipoUsuarioIMPL;
 import es.altair.dao.UsuariosDAO;
@@ -275,7 +268,7 @@ public class UsuariosManaged implements Serializable {
 					// Poner en sesion
 					if (((Usuarios) FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
 							.get("usuario")).getIdusuarios() == idUsuario) {
-						logout();
+						redirect = logout();
 					}
 				} else if (!file.getFileName().endsWith("jpg") && !file.getFileName().endsWith("jpeg")
 						&& !file.getFileName().endsWith("png") && !file.getFileName().endsWith("gif")) {
@@ -291,7 +284,7 @@ public class UsuariosManaged implements Serializable {
 					// Poner en sesion
 					if (((Usuarios) FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
 							.get("usuario")).getIdusuarios() == idUsuario) {
-						logout();
+						redirect = logout();
 					}
 				}
 			} else if (respuesta == 1) {

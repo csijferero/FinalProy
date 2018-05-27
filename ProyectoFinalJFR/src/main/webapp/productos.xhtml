@@ -137,16 +137,14 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 										width="100px" height="100px" cache="false">
 										<f:param name="imageeID" value="#{usuariosManaged.idUsuario}" />
 									</p:graphicImage>
-
-									<p:fileUpload value="#{usuariosManaged.file}" mode="simple"
-										skinSimple="true" validatorMessage="Imagen Invalida"
-										update="growl" />
-
-
-
 									<f:facet name="footer">
+										<br />
+										<p:fileUpload value="#{usuariosManaged.file}" mode="simple"
+											skinSimple="true" validatorMessage="Imagen Invalida"
+											update="growl" />
+										<div class="clear"></div>
 										<p:commandButton ajax="false" value="Editar" update="growl"
-											actionListener="#{usuariosManaged.editarUsuario()}" />
+											action="#{usuariosManaged.editarUsuario()}" />
 									</f:facet>
 								</h:panelGrid>
 							</p:dialog>
@@ -244,11 +242,11 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					<c:if test="#{not empty usuario}">
 						<h:form enctype="multipart/form-data">
 							<p:commandButton value="Añadir Producto" id="addCat"
-								icon="ui-icon-disk" onclick="PF('dlg3').show();" />
+								icon="ui-icon-disk" onclick="PF('dlg3').show();#{productosManaged.clear()}" />
 							<p:dialog header="Añadir Producto" widgetVar="dlg3"
 								showEffect="explode" hideEffect="bounce" resizable="false"
 								modal="true">
-								<h:panelGrid columns="2" cellpadding="10">
+								<h:panelGrid columns="2">
 
 									<h:outputLabel for="nombre" value="Nombre" />
 									<p:inputText id="nombre" maxlength="20"
@@ -290,13 +288,17 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 										<f:validateDoubleRange minimum="2010" maximum="2018" />
 									</p:inputText>
 
-									<p:fileUpload value="#{productosManaged.file}" mode="simple"
-										skinSimple="true" validatorMessage="Imagen Invalida"
-										update="growl" />
+
 
 									<f:facet name="footer">
+										<br />
+										<p:fileUpload value="#{productosManaged.file}" mode="simple"
+											skinSimple="true" validatorMessage="Imagen Invalida"
+											update="growl" />
+										<div class="clear"></div>
+
 										<p:commandButton ajax="false" value="Añadir" update="growl"
-											actionListener="#{productosManaged.registrarProducto()}" />
+											action="#{productosManaged.registrarProducto()}" />
 									</f:facet>
 								</h:panelGrid>
 							</p:dialog>
@@ -344,11 +346,91 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 											</p:link>
 										</h5>
 										<c:if test="#{not empty usuario}">
-											<h:form>
+											<h:form enctype="multipart/form-data">
 												<p:commandButton
 													actionListener="#{productosManaged.borrarProducto(productosManaged.productos.get(pro).idproductos)}"
 													id="iconOnly" icon="ui-icon-close" update="growl"
 													ajax="false" />
+												<p:commandButton class="color1"
+													onclick="PF('dlg4#{productosManaged.productos.get(pro).idproductos}').show();#{productosManaged.cargaEdit(productosManaged.productos.get(pro))}"
+													icon="ui-icon-wrench" />
+												<p:dialog header="Editar Productos"
+													widgetVar="dlg4#{productosManaged.productos.get(pro).idproductos}"
+													showEffect="explode" hideEffect="bounce" resizable="false"
+													modal="true">
+													<div class="text-left">
+
+														<h:panelGrid columns="2">
+
+															<p:inputText type="hidden"
+																value="#{productosManaged.nombreOld}" />
+
+															<p:inputText type="hidden"
+																value="#{productosManaged.productoId}" />
+
+															<h:outputLabel for="nombre" value="Nombre" />
+															<p:inputText id="nombre" maxlength="20"
+																value="#{productosManaged.nombre}" required="true"
+																validatorMessage="Nombre invalido"
+																requiredMessage="Nombre Obligatorio" size="20" />
+															<h:outputLabel for="marca" value="Marca" />
+															<p:inputText id="marca" maxlength="20"
+																value="#{productosManaged.marca}" required="true"
+																validatorMessage="Marca invalida"
+																requiredMessage="Marca Obligatoria" size="20" />
+															<h:outputLabel for="modelo" value="Modelo" />
+															<p:inputText id="modelo" maxlength="20"
+																value="#{productosManaged.modelo}" required="true"
+																validatorMessage="Modelo invalido"
+																requiredMessage="Modelo Obligatorio" size="20" />
+															<h:outputLabel for="precio" value="Precio" />
+															<p:inputText id="precio" maxlength="10"
+																value="#{productosManaged.precio}" required="true"
+																validatorMessage="Precio invalido [0.01-1999.99]"
+																requiredMessage="Precio Obligatorio" size="10"
+																converterMessage="Precio Invalido">
+																<f:validateDoubleRange minimum="0.01" maximum="1999.99" />
+															</p:inputText>
+															<h:outputLabel for="garantia" value="Garantia" />
+															<p:inputText id="garantia" maxlength="2"
+																value="#{productosManaged.garantia}" required="true"
+																validatorMessage="Garantia invalida [1-10]"
+																requiredMessage="Garantia Obligatoria"
+																converterMessage="Garantia Invalida" size="2">
+																<f:validateDoubleRange minimum="1" maximum="10" />
+															</p:inputText>
+															<h:outputLabel for="ano" value="Año" />
+															<p:inputText id="ano" maxlength="4"
+																value="#{productosManaged.ano}" required="true"
+																validatorMessage="Año invalido [2010-2018]"
+																requiredMessage="Año Obligatorio" size="4"
+																converterMessage="Año Invalido">
+																<f:validateDoubleRange minimum="2010" maximum="2018" />
+															</p:inputText>
+															<h:outputLabel for="img" value="Imagen" />
+														<p:graphicImage id="img"
+															value="#{productosManaged.image}" width="100px"
+															height="100px" cache="false">
+															<f:param name="imageID"
+																value="#{productosManaged.productoId}" />
+														</p:graphicImage>
+
+															<f:facet name="footer">
+																<br />
+																<div class="text-left">
+																	<p:fileUpload value="#{productosManaged.file}"
+																		mode="simple" skinSimple="true"
+																		validatorMessage="Imagen Invalida" update="growl" />
+																	<div class="clear"></div>
+
+																	<p:commandButton ajax="false" value="Añadir"
+																		update="growl"
+																		action="#{productosManaged.editarProducto(productosManaged.productoId)}" />
+																</div>
+															</f:facet>
+														</h:panelGrid>
+													</div>
+												</p:dialog>
 											</h:form>
 										</c:if>
 									</div>

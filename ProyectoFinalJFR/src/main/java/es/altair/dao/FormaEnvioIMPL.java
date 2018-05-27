@@ -8,6 +8,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 import es.altair.bean.FormaEnvio;
+import es.altair.bean.FormaPago;
 
 public class FormaEnvioIMPL implements FormaEnvioDAO {
 
@@ -75,8 +76,8 @@ public class FormaEnvioIMPL implements FormaEnvioDAO {
 		Session sesion = sf.openSession();
 		try {
 			sesion.beginTransaction();
-			sesion.createSQLQuery("INSERT INTO formaenvio (nombre, image)" + "values (:n, :i)").setParameter("n", nombre)
-					.setParameter("i", event).executeUpdate();
+			sesion.createSQLQuery("INSERT INTO formaenvio (nombre, image)" + "values (:n, :i)")
+					.setParameter("n", nombre).setParameter("i", event).executeUpdate();
 			sesion.getTransaction().commit();
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -85,7 +86,7 @@ public class FormaEnvioIMPL implements FormaEnvioDAO {
 			sf.close();
 		}
 	}
-	
+
 	public void borrar(int c) {
 		SessionFactory sf = new Configuration().configure().buildSessionFactory();
 		Session sesion = sf.openSession();
@@ -97,6 +98,65 @@ public class FormaEnvioIMPL implements FormaEnvioDAO {
 			sesion.getTransaction().commit();
 		} catch (Exception e) {
 			// TODO: handle exception
+		} finally {
+			sesion.close();
+			sf.close();
+		}
+	}
+
+	public int validarRegistro(String nombre, String nombreOld) {
+		int valido = 0;
+
+		SessionFactory sf = new Configuration().configure().buildSessionFactory();
+		Session sesion = sf.openSession();
+		try {
+			sesion.beginTransaction();
+
+			if ((FormaEnvio) sesion.createQuery("FROM FormaEnvio WHERE nombre=:n").setParameter("n", nombre)
+					.uniqueResult() == null || nombre.equals(nombreOld)) {
+				valido = 0;
+			} else
+				valido = 1;
+
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			// TODO: handle exception
+		} finally {
+			sesion.close();
+			sf.close();
+		}
+		return valido;
+	}
+
+	public void actualizar(Integer idFormaEnvio, String nombre, byte[] event) {
+		SessionFactory sf = new Configuration().configure().buildSessionFactory();
+		Session sesion = sf.openSession();
+
+		try {
+			sesion.beginTransaction();
+			sesion.createQuery("UPDATE FormaEnvio SET nombre=:n, image=:im WHERE idformaenvio=:idFe")
+					.setParameter("n", nombre).setParameter("im", event).setParameter("idFe", idFormaEnvio)
+					.executeUpdate();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+
+		} finally {
+			sesion.close();
+			sf.close();
+		}
+	}
+
+	public void actualizarSinIMG(Integer idFormaEnvio, String nombre) {
+		SessionFactory sf = new Configuration().configure().buildSessionFactory();
+		Session sesion = sf.openSession();
+
+		try {
+			sesion.beginTransaction();
+			sesion.createQuery("UPDATE FormaEnvio SET nombre=:n WHERE idformaenvio=:idFe").setParameter("n", nombre)
+					.setParameter("idFe", idFormaEnvio).executeUpdate();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+
 		} finally {
 			sesion.close();
 			sf.close();

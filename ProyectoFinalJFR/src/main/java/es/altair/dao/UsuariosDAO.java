@@ -17,10 +17,10 @@ public interface UsuariosDAO {
 
 	Usuarios obtenerUsuario(String login);
 
-	void actualizar(Integer idUsuario, String nick, String email, String contraseña, String nombre, String apellidos, String direccion,
-			Double contacto, String dni, byte[] event, Integer tipoUsu);
-	
-	void actualizarSinIMG(Integer idUsuario, String nick, String email, String contraseña, String nombre, String apellidos, String direccion,
-			Double contacto, String dni, Integer tipoUsu);
+	void actualizar(Integer idUsuario, String nick, String email, String contraseña, String nombre, String apellidos,
+			String direccion, Double contacto, String dni, byte[] event, Integer tipoUsu);
+
+	void actualizarSinIMG(Integer idUsuario, String nick, String email, String contraseña, String nombre,
+			String apellidos, String direccion, Double contacto, String dni, Integer tipoUsu);
 
 }
