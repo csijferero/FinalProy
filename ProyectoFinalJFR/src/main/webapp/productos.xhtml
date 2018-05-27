@@ -242,7 +242,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					<c:if test="#{not empty usuario}">
 						<h:form enctype="multipart/form-data">
 							<p:commandButton value="Añadir Producto" id="addCat"
-								icon="ui-icon-disk" onclick="PF('dlg3').show();#{productosManaged.clear()}" />
+								icon="ui-icon-disk" onclick="PF('dlg3').show()" />
 							<p:dialog header="Añadir Producto" widgetVar="dlg3"
 								showEffect="explode" hideEffect="bounce" resizable="false"
 								modal="true">
@@ -348,7 +348,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 										<c:if test="#{not empty usuario}">
 											<h:form enctype="multipart/form-data">
 												<p:commandButton
-													actionListener="#{productosManaged.borrarProducto(productosManaged.productos.get(pro).idproductos)}"
+													action="#{productosManaged.borrarProducto(productosManaged.productos.get(pro).idproductos)}"
 													id="iconOnly" icon="ui-icon-close" update="growl"
 													ajax="false" />
 												<p:commandButton class="color1"

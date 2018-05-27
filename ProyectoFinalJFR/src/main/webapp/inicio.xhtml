@@ -288,7 +288,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 										<div class="clear"></div>
 
 										<p:commandButton ajax="false" value="Añadir" update="growl"
-											actionListener="#{formaPagoManaged.registrarFormaPago()}" />
+											action="#{formaPagoManaged.registrarFormaPago()}" />
 									</f:facet>
 								</h:panelGrid>
 							</p:dialog>
@@ -318,7 +318,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 											<c:if test="#{not empty usuario}">
 												<h:form enctype="multipart/form-data">
 													<p:commandButton
-														actionListener="#{formaPagoManaged.borrarFormaPago(formaPagoManaged.formasDePago.get(cat).idformapago)}"
+														action="#{formaPagoManaged.borrarFormaPago(formaPagoManaged.formasDePago.get(cat).idformapago)}"
 														icon="ui-icon-close" update="growl" ajax="false" />
 													<p:commandButton class="color1"
 														onclick="PF('dlg4#{formaPagoManaged.formasDePago.get(cat).idformapago}').show();#{formaPagoManaged.cargaEdit(formaPagoManaged.formasDePago.get(cat))}"
@@ -360,7 +360,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 															
 																<p:commandButton ajax="false" value="Editar"
 																	update="growl"
-																	actionListener="#{formaPagoManaged.editarFormaPago(formaPagoManaged.idFormaPago)}" />
+																	action="#{formaPagoManaged.editarFormaPago(formaPagoManaged.idFormaPago)}" />
 																	</div>
 															</f:facet>
 														</h:panelGrid>
@@ -417,7 +417,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 									<div class="clear"></div>
 
 									<p:commandButton ajax="false" value="Añadir" update="growl"
-										actionListener="#{formaEnvioManaged.registrarFormaEnvio()}" />
+										action="#{formaEnvioManaged.registrarFormaEnvio()}" />
 								</f:facet>
 							</h:panelGrid>
 						</p:dialog>
@@ -446,7 +446,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 										<c:if test="#{not empty usuario}">
 											<h:form enctype="multipart/form-data">
 												<p:commandButton
-													actionListener="#{formaEnvioManaged.borrarFormaEnvio(formaEnvioManaged.formasDeEnvio.get(cat).idformaenvio)}"
+													action="#{formaEnvioManaged.borrarFormaEnvio(formaEnvioManaged.formasDeEnvio.get(cat).idformaenvio)}"
 													icon="ui-icon-close" update="growl" ajax="false" />
 												<p:commandButton class="color1"
 													onclick="PF('dlg5#{formaEnvioManaged.formasDeEnvio.get(cat).idformaenvio}').show();#{formaEnvioManaged.cargaEdit(formaEnvioManaged.formasDeEnvio.get(cat))}"
@@ -489,7 +489,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 															
 															<p:commandButton ajax="false" value="Editar"
 																update="growl"
-																actionListener="#{formaEnvioManaged.editarFormaPago(formaEnvioManaged.idFormaEnvio)}" />
+																action="#{formaEnvioManaged.editarFormaPago(formaEnvioManaged.idFormaEnvio)}" />
 																</div>
 														</f:facet>
 													</h:panelGrid>

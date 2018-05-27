@@ -181,21 +181,21 @@ public class ProductosManaged implements Serializable {
 
 		if (file.getFileName().equals("")) {
 			message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Imagen Obligatoria", "Imagen Requerida");
-			redirect = "productos?faces-redirect=true";
+			redirect = "productos?faces-redirect=true&includeViewParams=true";
 		} else if (!file.getFileName().endsWith("jpg") && !file.getFileName().endsWith("jpeg")
 				&& !file.getFileName().endsWith("png") && !file.getFileName().endsWith("gif")) {
 			message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Formato de imagen invalido", "Imagen Invalida");
-			redirect = "productos?faces-redirect=true";
+			redirect = "productos?faces-redirect=true&includeViewParams=true";
 		} else if (respuesta == 0) {
 			proDAO.insertar(categoriaId, nombre, marca, modelo, precio, garantia, ano, file.getContents(),
 					UUID.randomUUID().toString());
 			message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Producto Registrado", "Producto Registrado");
-			redirect = "productos?faces-redirect=true";
+			redirect = "productos?faces-redirect=true&includeViewParams=true";
 			clear();
 		} else {
 			message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Este nombre ya existe. Pruebe con otro",
 					"Nombre ya registrado");
-			redirect = "productos?faces-redirect=true";
+			redirect = "productos?faces-redirect=true&includeViewParams=true";
 		}
 
 		FacesContext.getCurrentInstance().addMessage(null, message);
@@ -211,7 +211,7 @@ public class ProductosManaged implements Serializable {
 
 		proDAO.borrar(c);
 		message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Producto Borrado", "Producto Borrado");
-		redirect = "productos?faces-redirect=true";
+		redirect = "productos?faces-redirect=true&includeViewParams=true";
 
 		FacesContext.getCurrentInstance().addMessage(null, message);
 		FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
@@ -231,23 +231,24 @@ public class ProductosManaged implements Serializable {
 				proDAO.actualizarSinIMG(productoId, marca, modelo, precio, garantia, ano, nombre);
 				message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Producto Actualizado correctamente",
 						"Producto Actualizado correctamente");
-				redirect = "productos";
+				redirect = "productos?faces-redirect=true&includeViewParams=true";
+				clear();
 			} else if (!file.getFileName().endsWith("jpg") && !file.getFileName().endsWith("jpeg")
 					&& !file.getFileName().endsWith("png") && !file.getFileName().endsWith("gif")) {
 				message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Formato de imagen invalido",
 						"Imagen Invalida");
-				redirect = "productos";
+				redirect = "productos?faces-redirect=true&includeViewParams=true";
 			} else {
 				proDAO.actualizar(productoId, marca, modelo, precio, garantia, ano, nombre, file.getContents());
 				message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Producto Actualizado correctamente",
 						"Producto Actualizado correctamente");
-				redirect = "productos";
-				// Poner en sesion
+				redirect = "productos?faces-redirect=true&includeViewParams=true";
+				clear();
 			}
 		} else if (respuesta == 1) {
 			message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Nombre ya registrado. Pruebe con otro",
 					"Email ya registrado");
-			redirect = "productos";
+			redirect = "productos?faces-redirect=true&includeViewParams=true";
 		}
 
 		FacesContext.getCurrentInstance().addMessage(null, message);

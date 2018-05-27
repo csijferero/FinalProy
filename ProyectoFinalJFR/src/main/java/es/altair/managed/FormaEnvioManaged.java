@@ -114,7 +114,7 @@ public class FormaEnvioManaged implements Serializable {
 			feDAO.insertar(nombre, file.getContents());
 			message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Forma de envio Registrada",
 					"Forma de envio Registrada");
-			redirect = "inicio";
+			redirect = "inicio?faces-redirect=true";
 		} else {
 			message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Este nombre ya existe. Pruebe con otro",
 					"Nombre ya registrado");
@@ -134,7 +134,7 @@ public class FormaEnvioManaged implements Serializable {
 
 		feDAO.borrar(c);
 		message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Forma de Envio Borrada", "Forma de Envio Borrada");
-		redirect = "inicio";
+		redirect = "inicio?faces-redirect=true";
 
 		FacesContext.getCurrentInstance().addMessage(null, message);
 		FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
@@ -154,7 +154,7 @@ public class FormaEnvioManaged implements Serializable {
 				feDAO.actualizarSinIMG(idFormaEnvio, nombre);
 				message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Envio Actualizado correctamente",
 						"Usuario Actualizado correctamente");
-				redirect = "inicio";
+				redirect = "inicio?faces-redirect=true";
 			} else if (!file.getFileName().endsWith("jpg") && !file.getFileName().endsWith("jpeg")
 					&& !file.getFileName().endsWith("png") && !file.getFileName().endsWith("gif")) {
 				message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Formato de imagen invalido",
@@ -164,7 +164,7 @@ public class FormaEnvioManaged implements Serializable {
 				feDAO.actualizar(idFormaEnvio, nombre, file.getContents());
 				message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Envio Actualizado correctamente",
 						"Usuario Actualizado correctamente");
-				redirect = "inicio";
+				redirect = "inicio?faces-redirect=true";
 				// Poner en sesion
 			}
 		} else if (respuesta == 1) {

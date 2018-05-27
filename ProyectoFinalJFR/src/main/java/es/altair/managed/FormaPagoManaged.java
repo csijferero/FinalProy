@@ -122,7 +122,7 @@ public class FormaPagoManaged implements Serializable {
 			fpDAO.insertar(nombre, file.getContents());
 			message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Forma de pago Registrada",
 					"Forma de Pago Registrada");
-			redirect = "inicio";
+			redirect = "inicio?faces-redirect=true";
 		} else {
 			message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Este nombre ya existe. Pruebe con otro",
 					"Nombre ya registrado");
@@ -142,7 +142,7 @@ public class FormaPagoManaged implements Serializable {
 
 		fpDAO.borrar(c);
 		message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Forma de Pago Borrada", "Forma de Pago Borrada");
-		redirect = "inicio";
+		redirect = "inicio?faces-redirect=true";
 
 		FacesContext.getCurrentInstance().addMessage(null, message);
 		FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
@@ -162,7 +162,7 @@ public class FormaPagoManaged implements Serializable {
 				fpDAO.actualizarSinIMG(idFormaPago, nombre);
 				message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Pago Actualizado correctamente",
 						"Usuario Actualizado correctamente");
-				redirect = "inicio";
+				redirect = "inicio?faces-redirect=true";
 			} else if (!file.getFileName().endsWith("jpg") && !file.getFileName().endsWith("jpeg")
 					&& !file.getFileName().endsWith("png") && !file.getFileName().endsWith("gif")) {
 				message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Formato de imagen invalido",
@@ -172,7 +172,7 @@ public class FormaPagoManaged implements Serializable {
 				fpDAO.actualizar(idFormaPago, nombre, file.getContents());
 				message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Pago Actualizado correctamente",
 						"Usuario Actualizado correctamente");
-				redirect = "inicio";
+				redirect = "inicio?faces-redirect=true";
 				// Poner en sesion
 			}
 		} else if (respuesta == 1) {

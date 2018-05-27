@@ -265,7 +265,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 										<div class="clear"></div>
 
 										<p:commandButton ajax="false" value="Añadir" update="growl"
-											actionListener="#{categoriasManaged.registrarCategoria()}" />
+											action="#{categoriasManaged.registrarCategoria()}" />
 									</f:facet>
 								</h:panelGrid>
 							</p:dialog>
@@ -316,7 +316,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 										<c:if test="#{not empty usuario}">
 											<h:form enctype="multipart/form-data">
 												<p:commandButton
-													actionListener="#{categoriasManaged.borrarCategoria(categoriasManaged.categorias.get(cat).idcategorias)}"
+													action="#{categoriasManaged.borrarCategoria(categoriasManaged.categorias.get(cat).idcategorias)}"
 													id="iconOnly" icon="ui-icon-close" update="growl"
 													ajax="false" />
 												<p:commandButton class="color1"
@@ -360,7 +360,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 															<p:commandButton ajax="false" value="Editar"
 																update="growl"
-																actionListener="#{categoriasManaged.editarCategoria(categoriasManaged.idCategoria)}" />
+																action="#{categoriasManaged.editarCategoria(categoriasManaged.idCategoria)}" />
 																														</div>
 																
 														</f:facet>
