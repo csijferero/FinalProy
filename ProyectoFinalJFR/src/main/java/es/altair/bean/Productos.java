@@ -1,6 +1,7 @@
 package es.altair.bean;
 
 import java.io.Serializable;
+import java.util.Comparator;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -142,6 +143,28 @@ public class Productos implements Serializable {
 
 	public void setComprasProductos(Set<Compras_Productos> comprasProductos) {
 		this.comprasProductos = comprasProductos;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + idproductos;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Productos other = (Productos) obj;
+		if (idproductos != other.idproductos)
+			return false;
+		return true;
 	}
 
 }

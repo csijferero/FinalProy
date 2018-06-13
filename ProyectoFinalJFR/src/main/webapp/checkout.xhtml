@@ -33,18 +33,20 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<script>$(document).ready(function(){$(".megamenu").megamenu();});</script>
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+	<script src="http://code.jquery.com/jquery-migrate-1.2.1.js"></script>
+
 </h:head>
 <body>
 	<p:growl id="growl" sticky="true" showDetail="false" />
 	<div class="header_top">
 		<div class="container">
-			<div class="cssmenu one-fifth column row_1">
+			<div class="cssmenu column row_1">
 				<ul>
 					<c:if test="#{not empty usuario}">
 						<h:form enctype="multipart/form-data">
 							<li class="active"><p:commandLink class="color1"
-									onclick="PF('dlgg').show();#{usuariosManaged.cargaEdit()}">Bienvenido #{usuario.nick}</p:commandLink></li>
-							<p:dialog header="Editar Usuario" widgetVar="dlgg"
+									onclick="PF('dlg3').show();#{usuariosManaged.cargaEdit()}">Bienvenido #{usuario.nick}</p:commandLink></li>
+							<p:dialog header="Editar Usuario" widgetVar="dlg3"
 								showEffect="explode" hideEffect="bounce" resizable="false"
 								modal="true">
 								<h:panelGrid columns="2" cellpadding="10">
@@ -167,7 +169,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			</div>
 		</div>
 	</div>
-	<div class="header_bottom men_border">
+	<div class="wrap-box"></div>
+	<div class="header_bottom">
 		<div class="container">
 			<div class="col-xs-8 header-bottom-left">
 				<div class="col-xs-2 logo">
@@ -178,8 +181,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				</div>
 				<div class="col-xs-6 menu">
 					<ul class="megamenu skyblue">
-						<li class="active grid"><p:link class="color1"
-								outcome="categorias">Categorias</p:link>
+						<li><p:link class="color1" outcome="categorias">Categorias</p:link>
 							<div class="megapanel">
 								<div class="row">
 									<div class="col1">
@@ -198,7 +200,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 									</div>
 								</div>
 							</div></li>
-
 						<li><p:link class="color4" outcome="about">About</p:link></li>
 					</ul>
 				</div>
@@ -221,174 +222,157 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						</div>
 						<p class="empty">
 							<p:commandLink action="#{productosManaged.deleteAllCarrito()}"
-								class="simpleCart_empty" update="growl carrito">Vaciar Carrito</p:commandLink>
+								class="simpleCart_empty"
+								update="precio growl total carrito @(.lista)">Vaciar Carrito</p:commandLink>
 						</p>
 						<div class="clearfix"></div>
 					</div>
-					<div class="clearfix"></div>
 				</div>
 			</h:form>
 			<div class="clearfix"></div>
 		</div>
 	</div>
 	<div class="container">
-		<div class="women_main">
-			<div class="col-md-12 w_content">
-				<div class="women">
-					<c:if test="#{not empty usuario}">
-					<p:commandButton value="Añadir Categoria" id="addCat"
-								icon="ui-icon-disk" onclick="PF('dlg3').show();" />
-						<h:form enctype="multipart/form-data">
-							<p:dialog header="Añadir Categoria" widgetVar="dlg3"
-								showEffect="explode" hideEffect="bounce" resizable="false"
-								modal="true">
-								<h:panelGrid columns="2" cellpadding="10">
-
-									<h:outputLabel for="nombre" value="Nombre" />
-									<p:inputText id="nombre" maxlength="20"
-										value="#{categoriasManaged.nombre}" required="true"
-										validatorMessage="Nombre invalido"
-										requiredMessage="Nombre Obligatorio" size="20" />
+		<div class="check">
+			<div class="col-md-9 cart-items">
+				<h1>
+					<h:outputText
+						value="Mi Carrito (#{productosManaged.productosCheckOut().size()})"
+						id="total" />
+				</h1>
+				<c:forEach begin="0"
+					end="#{productosManaged.productosCheckOut().size()-1}" var="pro">
 
 
+					<h:form class="lista">
+						<script>$(document).ready(function(c) {
+					$('.close#{pro+1}').on('click', function(c){
+						$('.cart-header#{pro+1}').fadeOut('slow', function(c){
+							$('.cart-header#{pro+1}').remove();							
+						});
+						});	
 
-									<f:facet name="footer">
-										<br />
-										<p:fileUpload value="#{categoriasManaged.file}" mode="simple"
-											skinSimple="true" validatorMessage="Imagen Invalida"
-											update="growl" />
-										<div class="clear"></div>
+					$('.simpleCart_empty').on('click', function(c){
+						$('.listado').fadeOut('slow', function(c){
+							$('.listado').remove();
+							
+						});
+						});	
+					  
+					});  
+					
+			   </script>
+						<div class="listado cart-header#{pro+1}">
+							<h:form>
+								<p:commandLink class='close#{pro+1}'
+									action="#{productosManaged.deleteCarrito(productosManaged.productosCheckOut().get(pro))}"
+									update="precio growl total carrito" />
+							</h:form>
+							<div class="cart-sec simpleCart_shelfItem">
+								<div class="cart-item cyc">
+									<p:graphicImage value="#{productosManaged.image}" width="100%"
+										height="150px" cache="false">
+										<f:param name="imageID"
+											value="#{productosManaged.productosCheckOut().get(pro).idproductos}" />
+									</p:graphicImage>
+								</div>
+								<div class="cart-item-info">
+									<h3>
+										<p:link outcome="single"
+											value="#{productosManaged.productosCheckOut().get(pro).nombre}">
+											<f:param name="proID"
+												value="#{productosManaged.productosCheckOut().get(pro).idproductos}" />
+										</p:link>
+										<span>Referencia:
+											#{productosManaged.productosCheckOut().get(pro).uuid}</span>
+									</h3>
+									<ul class="qty">
+										<li><p>Precio Unidad:
+												#{productosManaged.productosCheckOut().get(pro).precio} €</p></li>
+										<c:set var="var"
+											value="#{productosManaged.cantidadProductosCheckOut(productosManaged.productosCheckOut().get(pro))}"></c:set>
 
-										<p:commandButton ajax="false" value="Añadir" update="growl"
-											action="#{categoriasManaged.registrarCategoria()}" />
-									</f:facet>
-								</h:panelGrid>
-							</p:dialog>
-						</h:form>
-					</c:if>
-					<div class="clear"></div>
-					<h4>
-						Numero de Categorias - <span>#{categoriasManaged.categorias.size()}</span>
-					</h4>
-					<ul class="w_nav">
-						<li>Sort :</li>
-						<li><a class="active" href="#">popular</a></li> |
-						<li><a href="#">new </a></li> |
-						<li><a href="#">discount</a></li> |
-						<li><a href="#">price: Low High </a></li>
-						<div class="clear"></div>
-					</ul>
-					<div class="clearfix"></div>
-				</div>
-				<!-- grids_of_4 -->
-				<c:forEach begin="0" end="#{categoriasManaged.categorias.size()-1}"
-					var="cat4" varStatus="status" step="4">
-					<div class="grids_of_4">
-						<c:forEach begin="#{cat4}" end="#{cat4+3}" var="cat"
-							varStatus="status">
-							<c:if test="#{cat lt categoriasManaged.categorias.size()}">
-								<div class="grid1_of_4 simpleCart_shelfItem">
-									<div class="content_box">
-										<div class="view">
-											<p:link outcome="productos">
-												<f:param name="catID"
-													value="#{categoriasManaged.categorias.get(cat).idcategorias}" />
-												<p:graphicImage cache="false"
-													value="#{categoriasManaged.image}" width="100%"
-													height="150px">
-													<f:param name="imageID"
-														value="#{categoriasManaged.categorias.get(cat).idcategorias}" />
-												</p:graphicImage>
-											</p:link>
-										</div>
-										<h5>
-											<p:link outcome="productos"
-												value="#{categoriasManaged.categorias.get(cat).nombre}">
-												<f:param name="catID"
-													value="#{categoriasManaged.categorias.get(cat).idcategorias}" />
-											</p:link>
-										</h5>
-										<c:if test="#{not empty usuario}">
-											<div style="display: -webkit-inline-box">
-												<h:form>
-													<p:commandButton
-														action="#{categoriasManaged.borrarCategoria(categoriasManaged.categorias.get(cat).idcategorias)}"
-														update="growl" id="iconOnly" icon="ui-icon-close">
-														<p:confirm header="Confirmation" message="Are you sure?"
-															icon="ui-icon-alert" />
-													</p:commandButton>
-													<p:confirmDialog global="true" showEffect="fade"
-														hideEffect="fade">
-														<p:commandButton value="Yes" type="button"
-															styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-														<p:commandButton value="No" type="button"
-															styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-													</p:confirmDialog>
-												</h:form>
-												<p:commandButton class="color1"
-													onclick="PF('dlg4#{categoriasManaged.categorias.get(cat).idcategorias}').show();#{categoriasManaged.cargaEdit(categoriasManaged.categorias.get(cat))}"
-													icon="ui-icon-wrench" />
-												<h:form enctype="multipart/form-data">
-													<p:dialog header="Editar Categoria"
-														widgetVar="dlg4#{categoriasManaged.categorias.get(cat).idcategorias}"
-														showEffect="explode" hideEffect="bounce" resizable="false"
-														modal="true">
-														<h:panelGrid columns="2">
-
-															<p:inputText type="hidden"
-																value="#{categoriasManaged.nombreOld}" />
-
-															<p:inputText type="hidden"
-																value="#{categoriasManaged.idCategoria}" />
-
-															<h:outputLabel for="nombre" value="Nombre" />
-															<p:inputText id="nombre" maxlength="20"
-																value="#{categoriasManaged.nombre}" required="true"
-																validatorMessage="Nombre invalido"
-																requiredMessage="Nombre Obligatorio" size="20" />
-
-															<h:outputLabel for="img" value="Imagen" />
-															<p:graphicImage id="img"
-																value="#{categoriasManaged.image}" width="100px"
-																height="100px" cache="false">
-																<f:param name="imageID"
-																	value="#{categoriasManaged.idCategoria}" />
-															</p:graphicImage>
-
-
-
-															<f:facet name="footer">
-																<br />
-																<div class="text-left">
-																	<p:fileUpload value="#{categoriasManaged.file}"
-																		mode="simple" skinSimple="true"
-																		validatorMessage="Imagen Invalida" update="growl" />
-																	<div class="clear"></div>
-
-																	<p:commandButton ajax="false" value="Editar"
-																		update="growl"
-																		action="#{categoriasManaged.editarCategoria(categoriasManaged.idCategoria)}" />
-																</div>
-
-															</f:facet>
-														</h:panelGrid>
-													</p:dialog>
-												</h:form>
-											</div>
-										</c:if>
+										<li>
+											<p>
+												<c:if test="#{var gt 1}">
+													<p:commandLink class="glyphicon glyphicon-minus"
+														action="#{productosManaged.deletePro(productosManaged.productosCheckOut().get(pro))}"
+														update="precio growl total @(.lista) cantidad carrito" />
+												</c:if>
+												<h:outputText
+													value="Cantidad: #{productosManaged.cantidadProductosCheckOut(productosManaged.productosCheckOut().get(pro))}"
+													id="cantidad"></h:outputText>
+												<p:commandLink class="glyphicon glyphicon-plus"
+													action="#{productosManaged.anadirCarrito(productosManaged.productosCheckOut().get(pro), 1)}"
+													update="precio growl total @(.lista) cantidad carrito" />
+											</p>
+										</li>
+									</ul>
+									<div class="delivery">
+										<p>Garantia:
+											#{productosManaged.productosCheckOut().get(pro).garantia}
+											Años</p>
+										<span>Año de producción:
+											#{productosManaged.productosCheckOut().get(pro).ano}</span>
+										<div class="clearfix"></div>
 									</div>
 								</div>
-							</c:if>
+								<div class="clearfix"></div>
+
+							</div>
+						</div>
+					</h:form>
+				</c:forEach>
+			</div>
+			<h:form id="precio">
+				<div class="col-md-3 cart-total">
+					<!-- <a class="continue" href="#">Continue to basket</a>	 -->
+					<div class="price-details">
+						<h3>Detalles</h3>
+						<c:forEach begin="0"
+							end="#{productosManaged.productosCheckOut().size()-1}" var="pro">
+							<span>#{productosManaged.productosCheckOut().get(pro).nombre}</span>
+							<span class="total1">#{productosManaged.cantidadProductosCheckOut(productosManaged.productosCheckOut().get(pro))*productosManaged.productosCheckOut().get(pro).precio}€</span>
 						</c:forEach>
 						<div class="clearfix"></div>
 					</div>
-				</c:forEach>
-				<!-- end grids_of_4 -->
-			</div>
-			<!-- start sidebar -->
-			<!-- start content -->
-			<div class="clearfix"></div>
-			<!-- end content -->
+					<ul class="total_price">
+						<li class="last_price">
+							<h4>TOTAL</h4>
+						</li>
+						<li class="last_price"><h:outputText
+								value="#{productosManaged.totalCarrito()}€"></h:outputText></li>
+						<div class="clearfix"></div>
+					</ul>
+
+
+					<div class="clearfix"></div>
+					<a class="order" href="#">Comprar</a>
+					<div class="total-item">
+						<h3>Forma de Pago</h3>
+
+						<p:selectOneMenu value="" style="width:100%">
+							<f:selectItem itemLabel="Seleccione una opción" itemValue=""  />
+
+							<c:forEach var="fp" items="#{formaPagoManaged.formasDePago}">
+								<f:selectItem itemLabel="#{fp.nombre}"
+									itemValue="#{fp.idformapago}" />
+							</c:forEach>
+						</p:selectOneMenu>
+
+						<h3 style="margin-top: 10%;">Forma de Envio</h3>
+
+						<p:selectOneMenu value="" style="width:100%">
+							<f:selectItem itemLabel="Seleccione una opción" itemValue="" />
+
+							<c:forEach var="fe" items="#{formaEnvioManaged.formasDeEnvio}">
+								<f:selectItem itemLabel="#{fe.nombre}"
+									itemValue="#{fp.idformaenvio}" />
+							</c:forEach>
+						</p:selectOneMenu>
+					</div>
+				</div>
+			</h:form>
 		</div>
 	</div>
 	<div class="footer">

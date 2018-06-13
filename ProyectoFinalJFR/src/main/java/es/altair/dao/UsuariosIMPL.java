@@ -35,6 +35,35 @@ public class UsuariosIMPL implements UsuariosDAO {
 		return usu;
 	}
 
+	public int activarUsuario(String uuid) {
+		int valido = 0;
+
+		SessionFactory sf = new Configuration().configure().buildSessionFactory();
+		Session sesion = sf.openSession();
+		try {
+			sesion.beginTransaction();
+			if ((Usuarios) sesion.createQuery("FROM Usuarios WHERE uuid=:u").setParameter("u", uuid)
+					.uniqueResult() == null) {
+				valido = 0;
+			} else {
+				if ((Usuarios) sesion.createQuery("FROM Usuarios WHERE uuid=:u AND idtipousuarios != 3")
+						.setParameter("u", uuid).uniqueResult() != null) {
+					valido = 1;
+				} else {
+					sesion.createQuery("UPDATE Usuarios SET idtipousuarios=1 WHERE uuid=:u").setParameter("u", uuid).executeUpdate();
+					valido = 2;
+				}
+			}
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			// TODO: handle exception
+		} finally {
+			sesion.close();
+			sf.close();
+		}
+		return valido;
+	}
+
 	@Override
 	public byte[] getfpImage(int idUsuario) {
 		byte[] fpImage = null;
@@ -110,19 +139,19 @@ public class UsuariosIMPL implements UsuariosDAO {
 	}
 
 	public void insertar(String nick, String email, String contraseña, String nombre, String apellidos,
-			String direccion, Double contacto, String dni, byte[] event) {
+			String direccion, Double contacto, String dni, byte[] event, String uuid) {
 
 		SessionFactory sf = new Configuration().configure().buildSessionFactory();
 		Session sesion = sf.openSession();
 		try {
 			sesion.beginTransaction();
 			sesion.createSQLQuery(
-					"INSERT INTO usuarios (idtipousuarios, nick, email, contraseña, nombre, apellidos, direccion, contacto, dni, image)"
-							+ "values (3, :n, :e, AES_ENCRYPT(:p, :pass), :no, :a, :d, :c, :dni, :i)")
+					"INSERT INTO usuarios (idtipousuarios, nick, email, contraseña, nombre, apellidos, direccion, contacto, dni, image, uuid)"
+							+ "values (3, :n, :e, AES_ENCRYPT(:p, :pass), :no, :a, :d, :c, :dni, :i, :u)")
 					.setParameter("n", nick).setParameter("e", email).setParameter("no", nombre)
 					.setParameter("p", contraseña).setParameter("d", direccion).setParameter("c", contacto)
 					.setParameter("dni", dni).setParameter("pass", key).setParameter("a", apellidos)
-					.setParameter("i", event).executeUpdate();
+					.setParameter("i", event).setParameter("u", uuid).executeUpdate();
 
 			sesion.getTransaction().commit();
 		} catch (Exception e) {

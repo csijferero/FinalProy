@@ -20,7 +20,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 	<!-- Custom Theme files -->
 	<link href="css/style.css" rel='stylesheet' type='text/css' />
-	<script src="js/simpleCart.min.js"> </script>
 	<!-- Custom Theme files -->
 	<!--webfont-->
 	<link
@@ -39,7 +38,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<p:growl id="growl" sticky="true" showDetail="false" />
 	<div class="header_top">
 		<div class="container">
-			<div class="cssmenu one-fifth column row_1">
+			<div class="cssmenu column row_1">
 				<ul>
 					<c:if test="#{not empty usuario}">
 						<h:form enctype="multipart/form-data">
@@ -203,35 +202,31 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					</ul>
 				</div>
 			</div>
-			<div class="col-xs-4 header-bottom-right">
-				<div class="box_1-cart">
-					<div class="box_11">
-						<a href="checkout.html">
-							<h4>
-								<p>
-									Cart: <span class="simpleCart_total"></span> (<span
-										id="simpleCart_quantity" class="simpleCart_quantity"></span>
-									items)
-								</p>
-								<img src="images/bag.png" alt="" />
-								<div class="clearfix"></div>
-							</h4>
-						</a>
+				<h:form id="carrito">
+				<div class="col-xs-4 header-bottom-right">
+					<div class="box_1-cart">
+						<div class="box_11">
+							<p:link outcome="checkout">
+								<h4>
+									<p>
+										Cesta: <span class="simpleCart_total">#{productosManaged.totalCarrito()}€</span>
+										(<span id="simpleCart_quantity" class="simpleCart_quantity">#{productosManaged.productosCheckOut().size()}</span>
+										Articulos)
+									</p>
+									<img src="images/bag.png" alt="" />
+									<div class="clearfix"></div>
+								</h4>
+							</p:link>
+						</div>
+						<p class="empty">
+							<p:commandLink action="#{productosManaged.deleteAllCarrito()}"
+								class="simpleCart_empty" update="growl carrito">Vaciar Carrito</p:commandLink>
+						</p>
+						<div class="clearfix"></div>
 					</div>
-					<p class="empty">
-						<a href="javascript:;" class="simpleCart_empty">Empty Cart</a>
-					</p>
 					<div class="clearfix"></div>
 				</div>
-				<div class="search">
-					<input type="text" name="s" class="textbox" value="Search"
-						onfocus="this.value = '';"
-						onblur="if (this.value == '') {this.value = 'Search';}" /><input
-						type="submit" value="Subscribe" id="submit" name="submit" />
-					<div id="response"></div>
-				</div>
-				<div class="clearfix"></div>
-			</div>
+			</h:form>
 			<div class="clearfix"></div>
 		</div>
 	</div>
@@ -242,7 +237,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				<h2>Te sorprendemos con nuestros precios</h2>
 				<div class="button">
 					<p:link outcome="categorias" class="hvr-shutter-out-horizontal">Ver Productos</p:link>
-
 				</div>
 			</div>
 		</div>
@@ -264,9 +258,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				</div>
 				<div class="col-md-6 row_3">
 					<c:if test="#{not empty usuario}">
+						<p:commandButton value="Añadir Forma Pago" icon="ui-icon-disk"
+							onclick="PF('dlg1').show();" />
 						<h:form enctype="multipart/form-data">
-							<p:commandButton value="Añadir Forma Pago" icon="ui-icon-disk"
-								onclick="PF('dlg1').show();" />
 							<p:dialog header="Añadir Forma Pago" widgetVar="dlg1"
 								showEffect="explode" hideEffect="bounce" resizable="false"
 								modal="true">
@@ -316,56 +310,71 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 											</div>
 											<h5>#{formaPagoManaged.formasDePago.get(cat).nombre}</h5>
 											<c:if test="#{not empty usuario}">
-												<h:form enctype="multipart/form-data">
-													<p:commandButton
-														action="#{formaPagoManaged.borrarFormaPago(formaPagoManaged.formasDePago.get(cat).idformapago)}"
-														icon="ui-icon-close" update="growl" ajax="false" />
+												<div style="display: -webkit-inline-box">
+													<h:form>
+														<p:commandButton
+															action="#{formaPagoManaged.borrarFormaPago(formaPagoManaged.formasDePago.get(cat).idformapago)}"
+															update="growl" id="iconOnly" icon="ui-icon-close">
+															<p:confirm header="Confirmation" message="Are you sure?"
+																icon="ui-icon-alert" />
+														</p:commandButton>
+														<p:confirmDialog global="true" showEffect="fade"
+															hideEffect="fade">
+															<p:commandButton value="Yes" type="button"
+																styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+															<p:commandButton value="No" type="button"
+																styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+														</p:confirmDialog>
+													</h:form>
 													<p:commandButton class="color1"
 														onclick="PF('dlg4#{formaPagoManaged.formasDePago.get(cat).idformapago}').show();#{formaPagoManaged.cargaEdit(formaPagoManaged.formasDePago.get(cat))}"
 														icon="ui-icon-wrench" />
-													<p:dialog header="Editar Forma de Pago"
-														widgetVar="dlg4#{formaPagoManaged.formasDePago.get(cat).idformapago}"
-														showEffect="explode" hideEffect="bounce" resizable="false"
-														modal="true">
-														<h:panelGrid columns="2">
+													<h:form enctype="multipart/form-data">
 
-															<p:inputText type="hidden"
-																value="#{formaPagoManaged.nombreOld}" />
+														<p:dialog header="Editar Forma de Pago"
+															widgetVar="dlg4#{formaPagoManaged.formasDePago.get(cat).idformapago}"
+															showEffect="explode" hideEffect="bounce"
+															resizable="false" modal="true">
+															<h:panelGrid columns="2">
 
-															<p:inputText type="hidden"
-																value="#{formaPagoManaged.idFormaPago}" />
+																<p:inputText type="hidden"
+																	value="#{formaPagoManaged.nombreOld}" />
 
-															<h:outputLabel for="nombre" value="Nombre" />
-															<p:inputText id="nombre" maxlength="20"
-																value="#{formaPagoManaged.nombre}" required="true"
-																validatorMessage="Nombre invalido"
-																requiredMessage="Nombre Obligatorio" size="20" />
-
-															<h:outputLabel for="img" value="Imagen" />
-															<p:graphicImage id="img"
-																value="#{formaPagoManaged.image}" width="100px"
-																height="100px" cache="false">
-																<f:param name="imageID"
+																<p:inputText type="hidden"
 																	value="#{formaPagoManaged.idFormaPago}" />
-															</p:graphicImage>
 
-															
-															<f:facet name="footer">
-															<br />
-																														<div class="text-left">
-																														<p:fileUpload value="#{formaPagoManaged.file}"
-																mode="simple" skinSimple="true"
-																validatorMessage="Imagen Invalida" update="growl" />
-																						<div class="clear"></div>
-															
-																<p:commandButton ajax="false" value="Editar"
-																	update="growl"
-																	action="#{formaPagoManaged.editarFormaPago(formaPagoManaged.idFormaPago)}" />
+																<h:outputLabel for="nombre" value="Nombre" />
+																<p:inputText id="nombre" maxlength="20"
+																	value="#{formaPagoManaged.nombre}" required="true"
+																	validatorMessage="Nombre invalido"
+																	requiredMessage="Nombre Obligatorio" size="20" />
+
+																<h:outputLabel for="img" value="Imagen" />
+																<p:graphicImage id="img"
+																	value="#{formaPagoManaged.image}" width="100px"
+																	height="100px" cache="false">
+																	<f:param name="imageID"
+																		value="#{formaPagoManaged.idFormaPago}" />
+																</p:graphicImage>
+
+
+																<f:facet name="footer">
+																	<br />
+																	<div class="text-left">
+																		<p:fileUpload value="#{formaPagoManaged.file}"
+																			mode="simple" skinSimple="true"
+																			validatorMessage="Imagen Invalida" update="growl" />
+																		<div class="clear"></div>
+
+																		<p:commandButton ajax="false" value="Editar"
+																			update="growl"
+																			action="#{formaPagoManaged.editarFormaPago(formaPagoManaged.idFormaPago)}" />
 																	</div>
-															</f:facet>
-														</h:panelGrid>
-													</p:dialog>
-												</h:form>
+																</f:facet>
+															</h:panelGrid>
+														</p:dialog>
+													</h:form>
+												</div>
 											</c:if>
 										</div>
 									</div>
@@ -394,9 +403,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			</div>
 			<div class="col-md-6 row_3">
 				<c:if test="#{not empty usuario}">
+					<p:commandButton value="Añadir Forma de Envio" id="addEnv"
+						icon="ui-icon-disk" onclick="PF('dlg2').show();" />
 					<h:form enctype="multipart/form-data">
-						<p:commandButton value="Añadir Forma de Envio" id="addEnv"
-							icon="ui-icon-disk" onclick="PF('dlg2').show();" />
+
 						<p:dialog header="Añadir Forma Envio" widgetVar="dlg2"
 							showEffect="explode" hideEffect="bounce" resizable="false"
 							modal="true">
@@ -444,57 +454,73 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 										</div>
 										<h5>#{formaEnvioManaged.formasDeEnvio.get(cat).nombre}</h5>
 										<c:if test="#{not empty usuario}">
-											<h:form enctype="multipart/form-data">
-												<p:commandButton
-													action="#{formaEnvioManaged.borrarFormaEnvio(formaEnvioManaged.formasDeEnvio.get(cat).idformaenvio)}"
-													icon="ui-icon-close" update="growl" ajax="false" />
+											<div style="display: -webkit-inline-box">
+												<h:form>
+													<p:commandButton
+														action="#{formaEnvioManaged.borrarFormaEnvio(formaEnvioManaged.formasDeEnvio.get(cat).idformaenvio)}"
+														update="growl" id="iconOnly" icon="ui-icon-close">
+														<p:confirm header="Confirmation" message="Are you sure?"
+															icon="ui-icon-alert" />
+													</p:commandButton>
+													<p:confirmDialog global="true" showEffect="fade"
+														hideEffect="fade">
+														<p:commandButton value="Yes" type="button"
+															styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+														<p:commandButton value="No" type="button"
+															styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+													</p:confirmDialog>
+												</h:form>
 												<p:commandButton class="color1"
 													onclick="PF('dlg5#{formaEnvioManaged.formasDeEnvio.get(cat).idformaenvio}').show();#{formaEnvioManaged.cargaEdit(formaEnvioManaged.formasDeEnvio.get(cat))}"
 													icon="ui-icon-wrench" />
-												<p:dialog header="Editar Forma de Envio"
-													widgetVar="dlg5#{formaEnvioManaged.formasDeEnvio.get(cat).idformaenvio}"
-													showEffect="explode" hideEffect="bounce" resizable="false"
-													modal="true">
-													<h:panelGrid columns="2">
+												<h:form enctype="multipart/form-data">
 
-														<p:inputText type="hidden"
-															value="#{formaEnvioManaged.nombreOld}" />
 
-														<p:inputText type="hidden"
-															value="#{formaEnvioManaged.idFormaEnvio}" />
+													<p:dialog header="Editar Forma de Envio"
+														widgetVar="dlg5#{formaEnvioManaged.formasDeEnvio.get(cat).idformaenvio}"
+														showEffect="explode" hideEffect="bounce" resizable="false"
+														modal="true">
+														<h:panelGrid columns="2">
 
-														<h:outputLabel for="nombre" value="Nombre" />
-														<p:inputText id="nombre" maxlength="20"
-															value="#{formaEnvioManaged.nombre}" required="true"
-															validatorMessage="Nombre invalido"
-															requiredMessage="Nombre Obligatorio" size="20" />
+															<p:inputText type="hidden"
+																value="#{formaEnvioManaged.nombreOld}" />
 
-														<h:outputLabel for="img" value="Imagen" />
-														<p:graphicImage id="img"
-															value="#{formaEnvioManaged.image}" width="100px"
-															height="100px" cache="false">
-															<f:param name="imageID"
+															<p:inputText type="hidden"
 																value="#{formaEnvioManaged.idFormaEnvio}" />
-														</p:graphicImage>
 
-														
-														<f:facet name="footer">
-														<br/>
-																													<div class="text-left">
-														
-														<p:fileUpload value="#{formaEnvioManaged.file}"
-															mode="simple" skinSimple="true"
-															validatorMessage="Imagen Invalida" update="growl" />
-																					<div class="clear"></div>
-															
-															<p:commandButton ajax="false" value="Editar"
-																update="growl"
-																action="#{formaEnvioManaged.editarFormaPago(formaEnvioManaged.idFormaEnvio)}" />
+															<h:outputLabel for="nombre" value="Nombre" />
+															<p:inputText id="nombre" maxlength="20"
+																value="#{formaEnvioManaged.nombre}" required="true"
+																validatorMessage="Nombre invalido"
+																requiredMessage="Nombre Obligatorio" size="20" />
+
+															<h:outputLabel for="img" value="Imagen" />
+															<p:graphicImage id="img"
+																value="#{formaEnvioManaged.image}" width="100px"
+																height="100px" cache="false">
+																<f:param name="imageID"
+																	value="#{formaEnvioManaged.idFormaEnvio}" />
+															</p:graphicImage>
+
+
+															<f:facet name="footer">
+																<br />
+																<div class="text-left">
+
+																	<p:fileUpload value="#{formaEnvioManaged.file}"
+																		mode="simple" skinSimple="true"
+																		validatorMessage="Imagen Invalida" update="growl" />
+																	<div class="clear"></div>
+
+																	<p:commandButton ajax="false" value="Editar"
+																		update="growl"
+																		action="#{formaEnvioManaged.editarFormaPago(formaEnvioManaged.idFormaEnvio)}" />
 																</div>
-														</f:facet>
-													</h:panelGrid>
-												</p:dialog>
-											</h:form>
+															</f:facet>
+														</h:panelGrid>
+													</p:dialog>
+												</h:form>
+											</div>
 										</c:if>
 									</div>
 								</div>

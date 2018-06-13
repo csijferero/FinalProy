@@ -20,7 +20,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 	<!-- Custom Theme files -->
 	<link href="css/style.css" rel='stylesheet' type='text/css' />
-	<script src="js/simpleCart.min.js"> </script>
 	<!-- Custom Theme files -->
 	<!--webfont-->
 	<link
@@ -247,35 +246,31 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					</ul>
 				</div>
 			</div>
-			<div class="col-xs-4 header-bottom-right">
-				<div class="box_1-cart">
-					<div class="box_11">
-						<a href="checkout.html">
-							<h4>
-								<p>
-									Cart: <span class="simpleCart_total"></span> (<span
-										id="simpleCart_quantity" class="simpleCart_quantity"></span>
-									items)
-								</p>
-								<img src="images/bag.png" alt="" />
-								<div class="clearfix"></div>
-							</h4>
-						</a>
+			<h:form id="carrito">
+				<div class="col-xs-4 header-bottom-right">
+					<div class="box_1-cart">
+						<div class="box_11">
+							<p:link outcome="checkout">
+								<h4>
+									<p>
+										Cesta: <span class="simpleCart_total">#{productosManaged.totalCarrito()}€</span>
+										(<span id="simpleCart_quantity" class="simpleCart_quantity">#{productosManaged.productosCheckOut().size()}</span>
+										Articulos)
+									</p>
+									<img src="images/bag.png" alt="" />
+									<div class="clearfix"></div>
+								</h4>
+							</p:link>
+						</div>
+						<p class="empty">
+							<p:commandLink action="#{productosManaged.deleteAllCarrito()}"
+								class="simpleCart_empty" update="growl carrito">Vaciar Carrito</p:commandLink>
+						</p>
+						<div class="clearfix"></div>
 					</div>
-					<p class="empty">
-						<a href="javascript:;" class="simpleCart_empty">Empty Cart</a>
-					</p>
 					<div class="clearfix"></div>
 				</div>
-				<div class="search">
-					<input type="text" name="s" class="textbox" value="Search"
-						onfocus="this.value = '';"
-						onblur="if (this.value == '') {this.value = 'Search';}" /> <input
-						type="submit" value="Subscribe" id="submit" name="submit" />
-					<div id="response"></div>
-				</div>
-				<div class="clearfix"></div>
-			</div>
+			</h:form>
 			<div class="clearfix"></div>
 		</div>
 	</div>
@@ -284,54 +279,58 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			<div class="single_grid">
 				<div class="grid images_3_of_2">
 					<ul id="etalage">
-						<li><a href="optionallink.html"><p:graphicImage
-									class="etalage_thumb_image" value="#{productosManaged.image}" cache="false">
+						<li><a href="optionallink.html"> <p:graphicImage
+									class="etalage_source_image" value="#{productosManaged.image}"
+									cache="false">
 									<f:param name="imageID"
 										value="#{productosManaged.producto.idproductos}" />
-								</p:graphicImage> <p:graphicImage class="etalage_source_image"
-									value="#{productosManaged.image}" cache="false">
-									<f:param name="imageID"
-										value="#{productosManaged.producto.idproductos}" />
-								</p:graphicImage> </a></li>
+								</p:graphicImage>
+						</a></li>
 					</ul>
 					<div class="clearfix"></div>
 				</div>
-				<div class="desc1 span_3_of_2">
-					<h1>#{productosManaged.producto.nombre}</h1>
-					<div class="dropdown_top">
-						<div class="dropdown_left">
-							<h:outputLabel for="cantidad" value="Cantidad:" />
-							<br />
-							<p:spinner id="cantidad" value="1" min="1" max="10" />
-						</div>
-						<div class="clearfix"></div>
-					</div>
-					<div class="simpleCart_shelfItem">
-						<div class="price_single">
-							<div class="head">
-								<h2>
-									<span class="amount item_price">#{productosManaged.producto.precio}€</span>
-								</h2>
-							</div>
-							<div class="head_desc">
-								<span style="color: green;">#{productosManaged.producto.garantia}
-									Años de Garantía</span><img src="images/garantie.png" alt=""
-									width="25px" height="25px" />
+				<h:form>
+					<div class="desc1 span_3_of_2">
+						<h1>#{productosManaged.producto.nombre}</h1>
+						<div class="dropdown_top">
+
+							<div class="dropdown_left">
+								<h:outputLabel for="cantidad" value="Cantidad:" />
+								<br />
+								<p:spinner value="#{productosManaged.cantidad}" min="1" max="10" />
 							</div>
 							<div class="clearfix"></div>
 						</div>
-						<!--<div class="single_but"><a href="" class="item_add btn_3" value=""></a></div>-->
-						<div class="size_2-right">
-							<a href="#" class="item_add item_add1 btn_5" value="">Añadir
-								al Carrito</a>
-						</div>
+						<div class="simpleCart_shelfItem">
+							<div class="price_single">
+								<div class="head">
+									<h2>
+										<span class="amount item_price">#{productosManaged.producto.precio}€</span>
+									</h2>
+								</div>
+								<div class="head_desc">
+									<span style="color: green;">#{productosManaged.producto.garantia}
+										Años de Garantía</span><img src="images/garantie.png" alt=""
+										width="25px" height="25px" />
+								</div>
+								<div class="clearfix"></div>
+							</div>
+							<!--<div class="single_but"><a href="" class="item_add btn_3" value=""></a></div>-->
+							<div class="size_2-right">
 
+								<p:commandLink class="item_add item_add1 btn_5"
+									action="#{productosManaged.anadirCarrito(productosManaged.producto, productosManaged.cantidad)}"
+									update="growl carrito">Añadir al Carrito</p:commandLink>
+
+							</div>
+
+						</div>
 					</div>
-				</div>
+				</h:form>
 				<div class="clearfix"></div>
 			</div>
-			   <div class="single_social_top">
-			  <!--
+			<div class="single_social_top">
+				<!--
 				<ul class="single_social">
 					<li><a href="#"> <i class="s_fb"> </i>
 							<div class="social_desc">Share on facebook</div>

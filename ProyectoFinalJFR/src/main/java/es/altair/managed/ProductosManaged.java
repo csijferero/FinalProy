@@ -4,13 +4,15 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
 
@@ -18,17 +20,17 @@ import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
-import es.altair.bean.Categorias;
 import es.altair.bean.Productos;
 import es.altair.dao.ProductosDAO;
 import es.altair.dao.ProductosIMPL;
 
 @ManagedBean
-@SessionScoped
+@ApplicationScoped
 public class ProductosManaged implements Serializable {
 
 	ProductosDAO proDAO = new ProductosIMPL();
 
+	private Integer cantidad;
 	private Integer categoriaId;
 	private Integer productoId;
 	private String nombre;
@@ -43,8 +45,33 @@ public class ProductosManaged implements Serializable {
 	private StreamedContent image;
 	private Productos producto = new Productos();
 	private List<Productos> productos = new ArrayList<Productos>();
+	private List<Productos> carrito = new ArrayList<Productos>();
 	
-	
+	public Integer getCantidad() {
+		return cantidad;
+	}
+
+	public void setCantidad(Integer cantidad) {
+		this.cantidad = cantidad;
+	}
+
+	public List<Productos> getCarrito() {
+		return carrito;
+	}
+
+	public void setCarrito(List<Productos> carrito) {
+		this.carrito = carrito;
+	}
+
+	private boolean response;
+
+	public boolean isResponse() {
+		return response;
+	}
+
+	public void setResponse(boolean response) {
+		this.response = response;
+	}
 
 	public String getNombreOld() {
 		return nombreOld;
@@ -181,21 +208,25 @@ public class ProductosManaged implements Serializable {
 
 		if (file.getFileName().equals("")) {
 			message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Imagen Obligatoria", "Imagen Requerida");
-			redirect = "productos?faces-redirect=true&includeViewParams=true";
+			redirect = "productos?faces-redirect=false&includeViewParams=true";
+			response = true;
 		} else if (!file.getFileName().endsWith("jpg") && !file.getFileName().endsWith("jpeg")
 				&& !file.getFileName().endsWith("png") && !file.getFileName().endsWith("gif")) {
 			message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Formato de imagen invalido", "Imagen Invalida");
 			redirect = "productos?faces-redirect=true&includeViewParams=true";
+			response = true;
 		} else if (respuesta == 0) {
 			proDAO.insertar(categoriaId, nombre, marca, modelo, precio, garantia, ano, file.getContents(),
 					UUID.randomUUID().toString());
 			message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Producto Registrado", "Producto Registrado");
 			redirect = "productos?faces-redirect=true&includeViewParams=true";
+			response = false;
 			clear();
 		} else {
 			message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Este nombre ya existe. Pruebe con otro",
 					"Nombre ya registrado");
 			redirect = "productos?faces-redirect=true&includeViewParams=true";
+			response = true;
 		}
 
 		FacesContext.getCurrentInstance().addMessage(null, message);
@@ -212,6 +243,8 @@ public class ProductosManaged implements Serializable {
 		proDAO.borrar(c);
 		message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Producto Borrado", "Producto Borrado");
 		redirect = "productos?faces-redirect=true&includeViewParams=true";
+		response = false;
+
 
 		FacesContext.getCurrentInstance().addMessage(null, message);
 		FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
@@ -219,7 +252,91 @@ public class ProductosManaged implements Serializable {
 		return redirect;
 	}
 	
-	public String editarProducto(int id) {
+	public List<Productos> productosCheckOut(){ //Lista con productos no repetidos
+		List<Productos> auxiliar = new ArrayList<Productos>();
+		
+		for (Productos producto : carrito) {
+			if (!auxiliar.contains(producto))
+				auxiliar.add(producto);
+		}
+		
+		return auxiliar;
+	}
+	
+	public int cantidadProductosCheckOut(Productos pro) {
+		int cantidad = 0;
+		
+		for (Productos producto : carrito) {
+			if (producto.equals(pro))
+				cantidad++;
+		}
+		
+		return cantidad;
+	}
+	
+	public void anadirCarrito(Productos pro, int cantidad) {
+		FacesMessage message = null;
+		
+		for (int i = 0; i < cantidad; i++) {
+			carrito.add(pro);
+		}
+		
+		message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Producto Añadido correctamente",
+				"Producto Añadido correctamente");
+		
+		FacesContext.getCurrentInstance().addMessage(null, message);
+		FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+		clear();
+	}
+	
+	public void deleteCarrito(Productos pro) {
+		FacesMessage message = null;
+		
+		while (carrito.contains(pro)) {
+			carrito.remove(pro);
+		}
+		
+		message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Producto Borrado correctamente",
+				"Producto Borrado correctamente");
+		
+		FacesContext.getCurrentInstance().addMessage(null, message);
+		FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+	}
+	
+	public void deleteAllCarrito() {
+		FacesMessage message = null;
+		
+		carrito.clear();
+		
+		message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Carrito Vaciado correctamente",
+				"Carrito Vaciado correctamente");
+		
+		FacesContext.getCurrentInstance().addMessage(null, message);
+		FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+	}
+	
+	public void deletePro(Productos pro) {
+		FacesMessage message = null;
+		
+			carrito.remove(pro);
+		
+		message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Producto Borrado correctamente",
+				"Producto Borrado correctamente");
+		
+		FacesContext.getCurrentInstance().addMessage(null, message);
+		FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+	}
+	
+	public int totalCarrito() {
+		int total = 0;
+		
+		for (Productos producto : carrito) {
+			total += producto.getPrecio();
+		}
+		return total;
+	}
+	
+	public String editarProducto() {
 		FacesMessage message = null;
 
 		String redirect = "";
@@ -250,6 +367,8 @@ public class ProductosManaged implements Serializable {
 					"Email ya registrado");
 			redirect = "productos?faces-redirect=true&includeViewParams=true";
 		}
+		
+		response = false;
 
 		FacesContext.getCurrentInstance().addMessage(null, message);
 		FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
@@ -269,6 +388,7 @@ public class ProductosManaged implements Serializable {
 	
 	@PostConstruct
 	public void clear() {
+		if(response==false) {
 		setNombre(null);
 		setMarca(null);
 		setModelo(null);
@@ -276,6 +396,8 @@ public class ProductosManaged implements Serializable {
 		setGarantia(null);
 		setAno(null);
 		setFile(null);
+		setCantidad(null);
+		}
 	}
 
 }

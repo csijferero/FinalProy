@@ -9,7 +9,7 @@ public interface UsuariosDAO {
 	int validarRegistro(String email, String nick);
 
 	void insertar(String nick, String email, String contraseña, String nombre, String apellidos, String direccion,
-			Double contacto, String dni, byte[] event);
+			Double contacto, String dni, byte[] event, String uuid);
 
 	byte[] getfpImage(int idUsuario);
 
@@ -23,4 +23,5 @@ public interface UsuariosDAO {
 	void actualizarSinIMG(Integer idUsuario, String nick, String email, String contraseña, String nombre,
 			String apellidos, String direccion, Double contacto, String dni, Integer tipoUsu);
 
+	int activarUsuario(String uuid);
 }

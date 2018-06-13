@@ -3,16 +3,20 @@ package es.altair.managed;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.UUID;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
+import javax.servlet.http.HttpSession;
 
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
+import es.altair.bean.Mail;
+import es.altair.bean.PDF;
 import es.altair.bean.TipoUsuarios;
 import es.altair.bean.Usuarios;
 import es.altair.dao.TipoUsuarioDAO;
@@ -42,6 +46,15 @@ public class UsuariosManaged implements Serializable {
 	private String nuevaContraseña;
 	private Integer nivelAcceso;
 	private TipoUsuarios tipoUsuario;
+	private String uuid;
+
+	public String getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
 
 	public TipoUsuarios getTipoUsuario() {
 		return tipoUsuario;
@@ -191,16 +204,44 @@ public class UsuariosManaged implements Serializable {
 		this.contrasena = contrasena;
 	}
 
+	public String activarUsuario() {
+		FacesMessage message = null;
+		int respuesta = usuDAO.activarUsuario(uuid);
+		String redirect;
+
+		if (respuesta == 0) {
+			message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Link de activacion Invalido", "Link Invalido");
+		} else if (respuesta == 1) {
+			message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Cuenta ya activada", "Link Utilizado");
+		} else {
+			message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Cuenta activada correctamente. Inicie Sesion",
+					"Link Aceptado");
+		}
+
+		FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+		FacesContext.getCurrentInstance().addMessage(null, message);
+
+		return "inicio?faces-redirect=true";
+	}
+
 	public String comprobarUsuario() {
+		FacesContext facesContext = FacesContext.getCurrentInstance();
+		HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(true);
+		
 		FacesMessage message = null;
 		Usuarios usuario = usuDAO.comprobarUsuario(correo, contrasena);
 		String redirect;
 
-		if (usuario != null) {
+		if (usuario != null && usuario.getTipoUsuarios().getIdtipousuarios() != 3) {
 			message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Sesión Iniciada", "Sesión Iniciada");
-			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuario", usuario);
+			session.setAttribute("usuario", usuario);
 			redirect = "inicio?faces-redirect=true";
-		} else {
+		} else if (usuario != null && usuario.getTipoUsuarios().getIdtipousuarios() ==3) {
+			redirect = "log";
+			message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Cuenta no Activada. Revise su correo electronico",
+					"Invalid credentials");
+		}
+		else {
 			redirect = "log";
 			message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Usuario o Contraseña Invalidos",
 					"Invalid credentials");
@@ -226,10 +267,16 @@ public class UsuariosManaged implements Serializable {
 			message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Formato de imagen invalido", "Imagen Invalida");
 			redirect = "registro";
 		} else if (respuesta == 0) {
+			String uuid = UUID.randomUUID().toString();
 			usuDAO.insertar(nick, correo, contrasena, nombre, apellidos, direccion, Double.parseDouble(contacto), dni,
-					file.getContents());
-			message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuario Registrado", "Usuario Registrado");
+					file.getContents(), uuid);
+			String url = "http://enjutojose:8080/ProyectoFinalJFR/404.jsf?u=" + uuid;
+			 new Mail(correo, "Correo de Confirmación", "Active su cuenta haciendo click en la siguiente dirección " + url);
+			message = new FacesMessage(FacesMessage.SEVERITY_INFO,
+					"Usuario Registrado Correctamente. Active su cuenta con el correo electronico enviado.",
+					"Usuario Registrado");
 			redirect = "log?faces-redirect=true";
+
 		} else if (respuesta == 1) {
 			message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Email ya registrado. Pruebe con otro",
 					"Email ya registrado");
@@ -248,6 +295,8 @@ public class UsuariosManaged implements Serializable {
 
 	public String editarUsuario() {
 		FacesMessage message = null;
+		FacesContext facesContext = FacesContext.getCurrentInstance();
+		HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(true);
 
 		String redirect = "";
 
@@ -268,7 +317,7 @@ public class UsuariosManaged implements Serializable {
 					// Poner en sesion
 					if (((Usuarios) FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
 							.get("usuario")).getIdusuarios() == idUsuario) {
-						redirect = logout();
+						session.setAttribute("usuario", usuDAO.comprobarUsuario(correo, contrasena));
 					}
 				} else if (!file.getFileName().endsWith("jpg") && !file.getFileName().endsWith("jpeg")
 						&& !file.getFileName().endsWith("png") && !file.getFileName().endsWith("gif")) {
@@ -284,7 +333,7 @@ public class UsuariosManaged implements Serializable {
 					// Poner en sesion
 					if (((Usuarios) FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
 							.get("usuario")).getIdusuarios() == idUsuario) {
-						redirect = logout();
+						session.setAttribute("usuario", usuDAO.comprobarUsuario(correo, contrasena));
 					}
 				}
 			} else if (respuesta == 1) {
@@ -304,6 +353,7 @@ public class UsuariosManaged implements Serializable {
 	}
 
 	public String logout() {
+		//new PDF();
 		FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
 		FacesMessage message = null;
 		message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Sesion Cerrada", "Sesion Cerrada");

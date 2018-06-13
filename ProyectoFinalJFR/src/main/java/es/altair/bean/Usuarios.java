@@ -29,6 +29,7 @@ public class Usuarios implements Serializable {
 	public Double contacto;
 	public String dni;
 	public byte[] image;
+	public String uuid;
 
 	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "idtipousuarios")
@@ -43,7 +44,7 @@ public class Usuarios implements Serializable {
 	}
 
 	public Usuarios(String nick, String email, String contraseña, String nombre, String apellidos, String direccion, Double contacto, String dni,
-			byte[] image, TipoUsuarios tipoUsuarios) {
+			byte[] image, String uuid, TipoUsuarios tipoUsuarios) {
 		super();
 		this.nick = nick;
 		this.email = email;
@@ -55,6 +56,7 @@ public class Usuarios implements Serializable {
 		this.dni = dni;
 		this.image = image;
 		this.tipoUsuarios = tipoUsuarios;
+		this.uuid = uuid;
 	}
 
 	public int getIdusuarios() {
@@ -152,5 +154,15 @@ public class Usuarios implements Serializable {
 	public void setComprasUsuario(Set<Compras> comprasUsuario) {
 		this.comprasUsuario = comprasUsuario;
 	}
+
+	public String getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+	
+	
 
 }

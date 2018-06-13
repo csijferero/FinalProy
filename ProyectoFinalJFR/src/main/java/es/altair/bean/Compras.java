@@ -23,16 +23,11 @@ public class Compras implements Serializable {
 	private int idcompras;
 
 	private Date fecha;
-	private String nombre;
-	private String apellidos;
-	private Double contacto;
-	private String direccion;
-	private String dni;
 	private String uuid;
 
 	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "idformaenvio")
-	private FormaPago formaEnvio;
+	private FormaEnvio formaEnvio;
 
 	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "idformapago")
@@ -40,7 +35,7 @@ public class Compras implements Serializable {
 
 	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "idusuarios")
-	private FormaPago usuario;
+	private Usuarios usuario;
 
 	@OneToMany(mappedBy = "compra")
 	private Set<Compras_Productos> comprasProductos;
@@ -50,33 +45,15 @@ public class Compras implements Serializable {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Compras(Date fecha, String nombre, String apellidos, Double contacto, String direccion, String dni,
-			String uuid, FormaPago formaEnvio, FormaPago formaPago, FormaPago usuario) {
+	public Compras(int idcompras, Date fecha, String uuid, FormaEnvio formaEnvio, FormaPago formaPago,
+			Usuarios usuario) {
 		super();
+		this.idcompras = idcompras;
 		this.fecha = fecha;
-		this.nombre = nombre;
-		this.apellidos = apellidos;
-		this.contacto = contacto;
-		this.direccion = direccion;
-		this.dni = dni;
 		this.uuid = uuid;
 		this.formaEnvio = formaEnvio;
 		this.formaPago = formaPago;
 		this.usuario = usuario;
-	}
-
-	public Compras(Date fecha, String nombre, String apellidos, Double contacto, String direccion, String dni,
-			String uuid, FormaPago formaEnvio, FormaPago formaPago) {
-		super();
-		this.fecha = fecha;
-		this.nombre = nombre;
-		this.apellidos = apellidos;
-		this.contacto = contacto;
-		this.direccion = direccion;
-		this.dni = dni;
-		this.uuid = uuid;
-		this.formaEnvio = formaEnvio;
-		this.formaPago = formaPago;
 	}
 
 	public int getIdcompras() {
@@ -95,46 +72,6 @@ public class Compras implements Serializable {
 		this.fecha = fecha;
 	}
 
-	public String getNombre() {
-		return nombre;
-	}
-
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
-
-	public String getApellidos() {
-		return apellidos;
-	}
-
-	public void setApellidos(String apellidos) {
-		this.apellidos = apellidos;
-	}
-
-	public Double getContacto() {
-		return contacto;
-	}
-
-	public void setContacto(Double contacto) {
-		this.contacto = contacto;
-	}
-
-	public String getDireccion() {
-		return direccion;
-	}
-
-	public void setDireccion(String direccion) {
-		this.direccion = direccion;
-	}
-
-	public String getDni() {
-		return dni;
-	}
-
-	public void setDni(String dni) {
-		this.dni = dni;
-	}
-
 	public String getUuid() {
 		return uuid;
 	}
@@ -143,11 +80,11 @@ public class Compras implements Serializable {
 		this.uuid = uuid;
 	}
 
-	public FormaPago getFormaEnvio() {
+	public FormaEnvio getFormaEnvio() {
 		return formaEnvio;
 	}
 
-	public void setFormaEnvio(FormaPago formaEnvio) {
+	public void setFormaEnvio(FormaEnvio formaEnvio) {
 		this.formaEnvio = formaEnvio;
 	}
 
@@ -159,11 +96,11 @@ public class Compras implements Serializable {
 		this.formaPago = formaPago;
 	}
 
-	public FormaPago getUsuario() {
+	public Usuarios getUsuario() {
 		return usuario;
 	}
 
-	public void setUsuario(FormaPago usuario) {
+	public void setUsuario(Usuarios usuario) {
 		this.usuario = usuario;
 	}
 
@@ -174,5 +111,5 @@ public class Compras implements Serializable {
 	public void setComprasProductos(Set<Compras_Productos> comprasProductos) {
 		this.comprasProductos = comprasProductos;
 	}
-
+	
 }

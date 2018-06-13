@@ -35,16 +35,20 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 </h:head>
 <body>
+	<f:metadata>
+		<f:viewParam name="u" value="#{usuariosManaged.uuid}" />
+		<f:viewAction action="#{usuariosManaged.activarUsuario()}" />
+	</f:metadata>
 	<p:growl id="growl" sticky="true" showDetail="false" />
 	<div class="header_top">
 		<div class="container">
-			<div class="cssmenu one-fifth column row_1">
+			<div class="cssmenu column row_1">
 				<ul>
 					<c:if test="#{not empty usuario}">
 						<h:form enctype="multipart/form-data">
 							<li class="active"><p:commandLink class="color1"
-									onclick="PF('dlgg').show();#{usuariosManaged.cargaEdit()}">Bienvenido #{usuario.nick}</p:commandLink></li>
-							<p:dialog header="Editar Usuario" widgetVar="dlgg"
+									onclick="PF('dlg3').show();#{usuariosManaged.cargaEdit()}">Bienvenido #{usuario.nick}</p:commandLink></li>
+							<p:dialog header="Editar Usuario" widgetVar="dlg3"
 								showEffect="explode" hideEffect="bounce" resizable="false"
 								modal="true">
 								<h:panelGrid columns="2" cellpadding="10">
@@ -167,7 +171,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			</div>
 		</div>
 	</div>
-	<div class="header_bottom men_border">
+	<div class="wrap-box"></div>
+	<div class="header_bottom">
 		<div class="container">
 			<div class="col-xs-8 header-bottom-left">
 				<div class="col-xs-2 logo">
@@ -178,8 +183,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				</div>
 				<div class="col-xs-6 menu">
 					<ul class="megamenu skyblue">
-						<li class="active grid"><p:link class="color1"
-								outcome="categorias">Categorias</p:link>
+						<li><p:link class="color1" outcome="categorias">Categorias</p:link>
 							<div class="megapanel">
 								<div class="row">
 									<div class="col1">
@@ -198,7 +202,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 									</div>
 								</div>
 							</div></li>
-
 						<li><p:link class="color4" outcome="about">About</p:link></li>
 					</ul>
 				</div>
@@ -231,164 +234,13 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			<div class="clearfix"></div>
 		</div>
 	</div>
-	<div class="container">
-		<div class="women_main">
-			<div class="col-md-12 w_content">
-				<div class="women">
-					<c:if test="#{not empty usuario}">
-					<p:commandButton value="Añadir Categoria" id="addCat"
-								icon="ui-icon-disk" onclick="PF('dlg3').show();" />
-						<h:form enctype="multipart/form-data">
-							<p:dialog header="Añadir Categoria" widgetVar="dlg3"
-								showEffect="explode" hideEffect="bounce" resizable="false"
-								modal="true">
-								<h:panelGrid columns="2" cellpadding="10">
-
-									<h:outputLabel for="nombre" value="Nombre" />
-									<p:inputText id="nombre" maxlength="20"
-										value="#{categoriasManaged.nombre}" required="true"
-										validatorMessage="Nombre invalido"
-										requiredMessage="Nombre Obligatorio" size="20" />
-
-
-
-									<f:facet name="footer">
-										<br />
-										<p:fileUpload value="#{categoriasManaged.file}" mode="simple"
-											skinSimple="true" validatorMessage="Imagen Invalida"
-											update="growl" />
-										<div class="clear"></div>
-
-										<p:commandButton ajax="false" value="Añadir" update="growl"
-											action="#{categoriasManaged.registrarCategoria()}" />
-									</f:facet>
-								</h:panelGrid>
-							</p:dialog>
-						</h:form>
-					</c:if>
-					<div class="clear"></div>
-					<h4>
-						Numero de Categorias - <span>#{categoriasManaged.categorias.size()}</span>
-					</h4>
-					<ul class="w_nav">
-						<li>Sort :</li>
-						<li><a class="active" href="#">popular</a></li> |
-						<li><a href="#">new </a></li> |
-						<li><a href="#">discount</a></li> |
-						<li><a href="#">price: Low High </a></li>
-						<div class="clear"></div>
-					</ul>
-					<div class="clearfix"></div>
-				</div>
-				<!-- grids_of_4 -->
-				<c:forEach begin="0" end="#{categoriasManaged.categorias.size()-1}"
-					var="cat4" varStatus="status" step="4">
-					<div class="grids_of_4">
-						<c:forEach begin="#{cat4}" end="#{cat4+3}" var="cat"
-							varStatus="status">
-							<c:if test="#{cat lt categoriasManaged.categorias.size()}">
-								<div class="grid1_of_4 simpleCart_shelfItem">
-									<div class="content_box">
-										<div class="view">
-											<p:link outcome="productos">
-												<f:param name="catID"
-													value="#{categoriasManaged.categorias.get(cat).idcategorias}" />
-												<p:graphicImage cache="false"
-													value="#{categoriasManaged.image}" width="100%"
-													height="150px">
-													<f:param name="imageID"
-														value="#{categoriasManaged.categorias.get(cat).idcategorias}" />
-												</p:graphicImage>
-											</p:link>
-										</div>
-										<h5>
-											<p:link outcome="productos"
-												value="#{categoriasManaged.categorias.get(cat).nombre}">
-												<f:param name="catID"
-													value="#{categoriasManaged.categorias.get(cat).idcategorias}" />
-											</p:link>
-										</h5>
-										<c:if test="#{not empty usuario}">
-											<div style="display: -webkit-inline-box">
-												<h:form>
-													<p:commandButton
-														action="#{categoriasManaged.borrarCategoria(categoriasManaged.categorias.get(cat).idcategorias)}"
-														update="growl" id="iconOnly" icon="ui-icon-close">
-														<p:confirm header="Confirmation" message="Are you sure?"
-															icon="ui-icon-alert" />
-													</p:commandButton>
-													<p:confirmDialog global="true" showEffect="fade"
-														hideEffect="fade">
-														<p:commandButton value="Yes" type="button"
-															styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-														<p:commandButton value="No" type="button"
-															styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-													</p:confirmDialog>
-												</h:form>
-												<p:commandButton class="color1"
-													onclick="PF('dlg4#{categoriasManaged.categorias.get(cat).idcategorias}').show();#{categoriasManaged.cargaEdit(categoriasManaged.categorias.get(cat))}"
-													icon="ui-icon-wrench" />
-												<h:form enctype="multipart/form-data">
-													<p:dialog header="Editar Categoria"
-														widgetVar="dlg4#{categoriasManaged.categorias.get(cat).idcategorias}"
-														showEffect="explode" hideEffect="bounce" resizable="false"
-														modal="true">
-														<h:panelGrid columns="2">
-
-															<p:inputText type="hidden"
-																value="#{categoriasManaged.nombreOld}" />
-
-															<p:inputText type="hidden"
-																value="#{categoriasManaged.idCategoria}" />
-
-															<h:outputLabel for="nombre" value="Nombre" />
-															<p:inputText id="nombre" maxlength="20"
-																value="#{categoriasManaged.nombre}" required="true"
-																validatorMessage="Nombre invalido"
-																requiredMessage="Nombre Obligatorio" size="20" />
-
-															<h:outputLabel for="img" value="Imagen" />
-															<p:graphicImage id="img"
-																value="#{categoriasManaged.image}" width="100px"
-																height="100px" cache="false">
-																<f:param name="imageID"
-																	value="#{categoriasManaged.idCategoria}" />
-															</p:graphicImage>
-
-
-
-															<f:facet name="footer">
-																<br />
-																<div class="text-left">
-																	<p:fileUpload value="#{categoriasManaged.file}"
-																		mode="simple" skinSimple="true"
-																		validatorMessage="Imagen Invalida" update="growl" />
-																	<div class="clear"></div>
-
-																	<p:commandButton ajax="false" value="Editar"
-																		update="growl"
-																		action="#{categoriasManaged.editarCategoria(categoriasManaged.idCategoria)}" />
-																</div>
-
-															</f:facet>
-														</h:panelGrid>
-													</p:dialog>
-												</h:form>
-											</div>
-										</c:if>
-									</div>
-								</div>
-							</c:if>
-						</c:forEach>
-						<div class="clearfix"></div>
-					</div>
-				</c:forEach>
-				<!-- end grids_of_4 -->
+	<div class="single_top">
+		<div class="container">
+			<div class="error-404 text-center">
+				<h1>404</h1>
+				<p>You ' ve Failed</p>
+				<a class="b-home" href="inicio.jsf">Back to Home</a>
 			</div>
-			<!-- start sidebar -->
-			<!-- start content -->
-			<div class="clearfix"></div>
-			<!-- end content -->
 		</div>
 	</div>
 	<div class="footer">
