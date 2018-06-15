@@ -270,7 +270,7 @@ public class UsuariosManaged implements Serializable {
 			String uuid = UUID.randomUUID().toString();
 			usuDAO.insertar(nick, correo, contrasena, nombre, apellidos, direccion, Double.parseDouble(contacto), dni,
 					file.getContents(), uuid);
-			String url = "http://enjutojose:8080/ProyectoFinalJFR/404.jsf?u=" + uuid;
+			String url = "http://enjutojose.es:8080/ProyectoFinalJFR/404.jsf?u=" + uuid;
 			 new Mail(correo, "Correo de Confirmación", "Active su cuenta haciendo click en la siguiente dirección " + url);
 			message = new FacesMessage(FacesMessage.SEVERITY_INFO,
 					"Usuario Registrado Correctamente. Active su cuenta con el correo electronico enviado.",
