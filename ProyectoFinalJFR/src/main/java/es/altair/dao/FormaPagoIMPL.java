@@ -7,6 +7,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+import es.altair.bean.FormaEnvio;
 import es.altair.bean.FormaPago;
 import es.altair.bean.Usuarios;
 
@@ -44,6 +45,25 @@ public class FormaPagoIMPL implements FormaPagoDAO {
 		sf.close();
 
 		return fpImage;
+	}
+	
+	public FormaPago getFormaPagoById(int id) {
+		FormaPago formaEnvio = null;
+
+		SessionFactory sf = new Configuration().configure().buildSessionFactory();
+		Session session = sf.openSession();
+
+		try {
+			session.beginTransaction();
+			formaEnvio = (FormaPago) session.createQuery("FROM FormaPago where idformapago=:id").setParameter("id", id).uniqueResult();
+			session.getTransaction().commit();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			session.close();
+			sf.close();
+		}
+		return formaEnvio;
 	}
 
 	public int validarRegistro(String nombre) {

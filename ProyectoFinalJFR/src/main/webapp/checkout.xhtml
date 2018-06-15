@@ -211,8 +211,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							<p:link outcome="checkout">
 								<h4>
 									<p>
-										Cesta: <span class="simpleCart_total">#{productosManaged.totalCarrito()}€</span>
-										(<span id="simpleCart_quantity" class="simpleCart_quantity">#{productosManaged.productosCheckOut().size()}</span>
+										Cesta: <span class="simpleCart_total">#{comprasManaged.totalCarrito()}€</span>
+										(<span id="simpleCart_quantity" class="simpleCart_quantity">#{comprasManaged.productosCheckOut().size()}</span>
 										Articulos)
 									</p>
 									<img src="images/bag.png" alt="" />
@@ -221,7 +221,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							</p:link>
 						</div>
 						<p class="empty">
-							<p:commandLink action="#{productosManaged.deleteAllCarrito()}"
+							<p:commandLink action="#{comprasManaged.deleteAllCarrito()}"
 								class="simpleCart_empty"
 								update="precio growl total carrito @(.lista)">Vaciar Carrito</p:commandLink>
 						</p>
@@ -237,11 +237,11 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			<div class="col-md-9 cart-items">
 				<h1>
 					<h:outputText
-						value="Mi Carrito (#{productosManaged.productosCheckOut().size()})"
+						value="Mi Carrito (#{comprasManaged.productosCheckOut().size()})"
 						id="total" />
 				</h1>
 				<c:forEach begin="0"
-					end="#{productosManaged.productosCheckOut().size()-1}" var="pro">
+					end="#{comprasManaged.productosCheckOut().size()-1}" var="pro">
 
 
 					<h:form class="lista">
@@ -265,7 +265,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						<div class="listado cart-header#{pro+1}">
 							<h:form>
 								<p:commandLink class='close#{pro+1}'
-									action="#{productosManaged.deleteCarrito(productosManaged.productosCheckOut().get(pro))}"
+									action="#{comprasManaged.deleteCarrito(comprasManaged.productosCheckOut().get(pro))}"
 									update="precio growl total carrito" />
 							</h:form>
 							<div class="cart-sec simpleCart_shelfItem">
@@ -273,47 +273,46 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 									<p:graphicImage value="#{productosManaged.image}" width="100%"
 										height="150px" cache="false">
 										<f:param name="imageID"
-											value="#{productosManaged.productosCheckOut().get(pro).idproductos}" />
+											value="#{comprasManaged.productosCheckOut().get(pro).idproductos}" />
 									</p:graphicImage>
 								</div>
 								<div class="cart-item-info">
 									<h3>
 										<p:link outcome="single"
-											value="#{productosManaged.productosCheckOut().get(pro).nombre}">
+											value="#{comprasManaged.productosCheckOut().get(pro).nombre}">
 											<f:param name="proID"
-												value="#{productosManaged.productosCheckOut().get(pro).idproductos}" />
+												value="#{comprasManaged.productosCheckOut().get(pro).idproductos}" />
 										</p:link>
 										<span>Referencia:
-											#{productosManaged.productosCheckOut().get(pro).uuid}</span>
+											#{comprasManaged.productosCheckOut().get(pro).uuid}</span>
 									</h3>
 									<ul class="qty">
 										<li><p>Precio Unidad:
-												#{productosManaged.productosCheckOut().get(pro).precio} €</p></li>
+												#{comprasManaged.productosCheckOut().get(pro).precio} €</p></li>
 										<c:set var="var"
-											value="#{productosManaged.cantidadProductosCheckOut(productosManaged.productosCheckOut().get(pro))}"></c:set>
+											value="#{comprasManaged.cantidadProductosCheckOut(comprasManaged.productosCheckOut().get(pro))}"></c:set>
 
 										<li>
 											<p>
 												<c:if test="#{var gt 1}">
 													<p:commandLink class="glyphicon glyphicon-minus"
-														action="#{productosManaged.deletePro(productosManaged.productosCheckOut().get(pro))}"
+														action="#{comprasManaged.deletePro(comprasManaged.productosCheckOut().get(pro))}"
 														update="precio growl total @(.lista) cantidad carrito" />
 												</c:if>
 												<h:outputText
-													value="Cantidad: #{productosManaged.cantidadProductosCheckOut(productosManaged.productosCheckOut().get(pro))}"
+													value="Cantidad: #{comprasManaged.cantidadProductosCheckOut(comprasManaged.productosCheckOut().get(pro))}"
 													id="cantidad"></h:outputText>
 												<p:commandLink class="glyphicon glyphicon-plus"
-													action="#{productosManaged.anadirCarrito(productosManaged.productosCheckOut().get(pro), 1)}"
+													action="#{comprasManaged.anadirCarrito(comprasManaged.productosCheckOut().get(pro), 1)}"
 													update="precio growl total @(.lista) cantidad carrito" />
 											</p>
 										</li>
 									</ul>
 									<div class="delivery">
 										<p>Garantia:
-											#{productosManaged.productosCheckOut().get(pro).garantia}
-											Años</p>
+											#{comprasManaged.productosCheckOut().get(pro).garantia} Años</p>
 										<span>Año de producción:
-											#{productosManaged.productosCheckOut().get(pro).ano}</span>
+											#{comprasManaged.productosCheckOut().get(pro).ano}</span>
 										<div class="clearfix"></div>
 									</div>
 								</div>
@@ -330,9 +329,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					<div class="price-details">
 						<h3>Detalles</h3>
 						<c:forEach begin="0"
-							end="#{productosManaged.productosCheckOut().size()-1}" var="pro">
-							<span>#{productosManaged.productosCheckOut().get(pro).nombre}</span>
-							<span class="total1">#{productosManaged.cantidadProductosCheckOut(productosManaged.productosCheckOut().get(pro))*productosManaged.productosCheckOut().get(pro).precio}€</span>
+							end="#{comprasManaged.productosCheckOut().size()-1}" var="pro">
+							<span>#{comprasManaged.productosCheckOut().get(pro).nombre}</span>
+							<span class="total1">#{comprasManaged.cantidadProductosCheckOut(comprasManaged.productosCheckOut().get(pro))*comprasManaged.productosCheckOut().get(pro).precio}€</span>
 						</c:forEach>
 						<div class="clearfix"></div>
 					</div>
@@ -341,38 +340,47 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							<h4>TOTAL</h4>
 						</li>
 						<li class="last_price"><h:outputText
-								value="#{productosManaged.totalCarrito()}€"></h:outputText></li>
+								value="#{comprasManaged.totalCarrito()}€"></h:outputText></li>
 						<div class="clearfix"></div>
 					</ul>
 
 
 					<div class="clearfix"></div>
-					<a class="order" href="#">Comprar</a>
-					<div class="total-item">
-						<h3>Forma de Pago</h3>
+					<c:if test="#{not empty usuario}">
 
-						<p:selectOneMenu value="" style="width:100%">
-							<f:selectItem itemLabel="Seleccione una opción" itemValue=""  />
+						<p:commandLink class="order"
+							action="#{comprasManaged.crearCompra()}" update="growl">Comprar</p:commandLink>
+						<div class="total-item">
+							<h3>Forma de Pago</h3>
 
-							<c:forEach var="fp" items="#{formaPagoManaged.formasDePago}">
-								<f:selectItem itemLabel="#{fp.nombre}"
-									itemValue="#{fp.idformapago}" />
-							</c:forEach>
-						</p:selectOneMenu>
+							<p:selectOneMenu value="#{comprasManaged.idFormaPago}"
+								style="width:100%" required="true"
+								requiredMessage="Forma Pago Obligatoria">
+								<f:selectItem itemLabel="Seleccione una opción" itemValue="" />
 
-						<h3 style="margin-top: 10%;">Forma de Envio</h3>
+								<c:forEach var="fp" items="#{formaPagoManaged.formasDePago}">
+									<f:selectItem itemLabel="#{fp.nombre}"
+										itemValue="#{fp.idformapago}" />
+								</c:forEach>
+							</p:selectOneMenu>
 
-						<p:selectOneMenu value="" style="width:100%">
-							<f:selectItem itemLabel="Seleccione una opción" itemValue="" />
+							<h3 style="margin-top: 10%;">Forma de Envio</h3>
 
-							<c:forEach var="fe" items="#{formaEnvioManaged.formasDeEnvio}">
-								<f:selectItem itemLabel="#{fe.nombre}"
-									itemValue="#{fp.idformaenvio}" />
-							</c:forEach>
-						</p:selectOneMenu>
-					</div>
+							<p:selectOneMenu value="#{comprasManaged.idFormaEnvio}"
+								style="width:100%" required="true"
+								requiredMessage="Forma Envio Obligatoria">
+								<f:selectItem itemLabel="Seleccione una opción" itemValue="" />
+
+								<c:forEach var="fe" items="#{formaEnvioManaged.formasDeEnvio}">
+									<f:selectItem itemLabel="#{fe.nombre}"
+										itemValue="#{fe.idformaenvio}" />
+								</c:forEach>
+							</p:selectOneMenu>
+						</div>
+					</c:if>
 				</div>
 			</h:form>
+			<div class="clearfix"></div>
 		</div>
 	</div>
 	<div class="footer">

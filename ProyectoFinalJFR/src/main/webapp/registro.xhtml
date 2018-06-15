@@ -92,8 +92,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							<p:link outcome="checkout">
 								<h4>
 									<p>
-										Cesta: <span class="simpleCart_total">#{productosManaged.totalCarrito()}€</span>
-										(<span id="simpleCart_quantity" class="simpleCart_quantity">#{productosManaged.productosCheckOut().size()}</span>
+										Cesta: <span class="simpleCart_total">#{comprasManaged.totalCarrito()}€</span>
+										(<span id="simpleCart_quantity" class="simpleCart_quantity">#{comprasManaged.productosCheckOut().size()}</span>
 										Articulos)
 									</p>
 									<img src="images/bag.png" alt="" />
@@ -102,7 +102,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							</p:link>
 						</div>
 						<p class="empty">
-							<p:commandLink action="#{productosManaged.deleteAllCarrito()}"
+							<p:commandLink action="#{comprasManaged.deleteAllCarrito()}"
 								class="simpleCart_empty" update="growl carrito">Vaciar Carrito</p:commandLink>
 						</p>
 						<div class="clearfix"></div>

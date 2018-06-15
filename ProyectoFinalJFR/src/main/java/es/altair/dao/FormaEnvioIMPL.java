@@ -30,6 +30,25 @@ public class FormaEnvioIMPL implements FormaEnvioDAO {
 		}
 		return formaEnvio;
 	}
+	
+	public FormaEnvio getFormaEnvioById(int id) {
+		FormaEnvio formaEnvio = null;
+
+		SessionFactory sf = new Configuration().configure().buildSessionFactory();
+		Session session = sf.openSession();
+
+		try {
+			session.beginTransaction();
+			formaEnvio = (FormaEnvio) session.createQuery("FROM FormaEnvio where idformaenvio=:id").setParameter("id", id).uniqueResult();
+			session.getTransaction().commit();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			session.close();
+			sf.close();
+		}
+		return formaEnvio;
+	}
 
 	public byte[] getfpImage(int idformaenvio) {
 		byte[] fpImage = null;

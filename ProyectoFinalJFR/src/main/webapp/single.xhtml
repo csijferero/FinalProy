@@ -253,8 +253,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							<p:link outcome="checkout">
 								<h4>
 									<p>
-										Cesta: <span class="simpleCart_total">#{productosManaged.totalCarrito()}€</span>
-										(<span id="simpleCart_quantity" class="simpleCart_quantity">#{productosManaged.productosCheckOut().size()}</span>
+										Cesta: <span class="simpleCart_total">#{comprasManaged.totalCarrito()}€</span>
+										(<span id="simpleCart_quantity" class="simpleCart_quantity">#{comprasManaged.productosCheckOut().size()}</span>
 										Articulos)
 									</p>
 									<img src="images/bag.png" alt="" />
@@ -263,7 +263,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							</p:link>
 						</div>
 						<p class="empty">
-							<p:commandLink action="#{productosManaged.deleteAllCarrito()}"
+							<p:commandLink action="#{comprasManaged.deleteAllCarrito()}"
 								class="simpleCart_empty" update="growl carrito">Vaciar Carrito</p:commandLink>
 						</p>
 						<div class="clearfix"></div>
@@ -319,7 +319,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							<div class="size_2-right">
 
 								<p:commandLink class="item_add item_add1 btn_5"
-									action="#{productosManaged.anadirCarrito(productosManaged.producto, productosManaged.cantidad)}"
+									action="#{comprasManaged.anadirCarrito(productosManaged.producto, productosManaged.cantidad)}"
 									update="growl carrito">Añadir al Carrito</p:commandLink>
 
 							</div>

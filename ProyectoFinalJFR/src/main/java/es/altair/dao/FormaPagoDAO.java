@@ -21,4 +21,6 @@ public interface FormaPagoDAO {
 	void actualizarSinIMG(Integer idFormaPago, String nombre);
 
 	void actualizar(Integer idFormaPago, String nombre, byte[] event);
+	
+	FormaPago getFormaPagoById(int id);
 }

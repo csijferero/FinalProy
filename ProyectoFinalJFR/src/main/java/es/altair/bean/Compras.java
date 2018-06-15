@@ -45,10 +45,8 @@ public class Compras implements Serializable {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Compras(int idcompras, Date fecha, String uuid, FormaEnvio formaEnvio, FormaPago formaPago,
-			Usuarios usuario) {
+	public Compras(Date fecha, String uuid, FormaEnvio formaEnvio, FormaPago formaPago, Usuarios usuario) {
 		super();
-		this.idcompras = idcompras;
 		this.fecha = fecha;
 		this.uuid = uuid;
 		this.formaEnvio = formaEnvio;

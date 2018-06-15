@@ -21,4 +21,7 @@ public interface FormaEnvioDAO {
 	void actualizar(Integer idFormaEnvio, String nombre, byte[] event);
 
 	void actualizarSinIMG(Integer idFormaEnvio, String nombre);
+	
+	FormaEnvio getFormaEnvioById(int id); 
+
 }

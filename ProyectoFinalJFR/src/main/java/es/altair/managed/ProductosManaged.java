@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,7 +21,13 @@ import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
+import es.altair.bean.Compras;
 import es.altair.bean.Productos;
+import es.altair.bean.Usuarios;
+import es.altair.dao.FormaEnvioDAO;
+import es.altair.dao.FormaEnvioIMPL;
+import es.altair.dao.FormaPagoDAO;
+import es.altair.dao.FormaPagoIMPL;
 import es.altair.dao.ProductosDAO;
 import es.altair.dao.ProductosIMPL;
 
@@ -45,7 +52,6 @@ public class ProductosManaged implements Serializable {
 	private StreamedContent image;
 	private Productos producto = new Productos();
 	private List<Productos> productos = new ArrayList<Productos>();
-	private List<Productos> carrito = new ArrayList<Productos>();
 	
 	public Integer getCantidad() {
 		return cantidad;
@@ -55,13 +61,7 @@ public class ProductosManaged implements Serializable {
 		this.cantidad = cantidad;
 	}
 
-	public List<Productos> getCarrito() {
-		return carrito;
-	}
-
-	public void setCarrito(List<Productos> carrito) {
-		this.carrito = carrito;
-	}
+	
 
 	private boolean response;
 
@@ -252,89 +252,7 @@ public class ProductosManaged implements Serializable {
 		return redirect;
 	}
 	
-	public List<Productos> productosCheckOut(){ //Lista con productos no repetidos
-		List<Productos> auxiliar = new ArrayList<Productos>();
-		
-		for (Productos producto : carrito) {
-			if (!auxiliar.contains(producto))
-				auxiliar.add(producto);
-		}
-		
-		return auxiliar;
-	}
 	
-	public int cantidadProductosCheckOut(Productos pro) {
-		int cantidad = 0;
-		
-		for (Productos producto : carrito) {
-			if (producto.equals(pro))
-				cantidad++;
-		}
-		
-		return cantidad;
-	}
-	
-	public void anadirCarrito(Productos pro, int cantidad) {
-		FacesMessage message = null;
-		
-		for (int i = 0; i < cantidad; i++) {
-			carrito.add(pro);
-		}
-		
-		message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Producto Añadido correctamente",
-				"Producto Añadido correctamente");
-		
-		FacesContext.getCurrentInstance().addMessage(null, message);
-		FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
-		clear();
-	}
-	
-	public void deleteCarrito(Productos pro) {
-		FacesMessage message = null;
-		
-		while (carrito.contains(pro)) {
-			carrito.remove(pro);
-		}
-		
-		message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Producto Borrado correctamente",
-				"Producto Borrado correctamente");
-		
-		FacesContext.getCurrentInstance().addMessage(null, message);
-		FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
-	}
-	
-	public void deleteAllCarrito() {
-		FacesMessage message = null;
-		
-		carrito.clear();
-		
-		message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Carrito Vaciado correctamente",
-				"Carrito Vaciado correctamente");
-		
-		FacesContext.getCurrentInstance().addMessage(null, message);
-		FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
-	}
-	
-	public void deletePro(Productos pro) {
-		FacesMessage message = null;
-		
-			carrito.remove(pro);
-		
-		message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Producto Borrado correctamente",
-				"Producto Borrado correctamente");
-		
-		FacesContext.getCurrentInstance().addMessage(null, message);
-		FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
-	}
-	
-	public int totalCarrito() {
-		int total = 0;
-		
-		for (Productos producto : carrito) {
-			total += producto.getPrecio();
-		}
-		return total;
-	}
 	
 	public String editarProducto() {
 		FacesMessage message = null;
