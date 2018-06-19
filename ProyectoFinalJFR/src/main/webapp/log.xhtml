@@ -144,10 +144,28 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 								validatorMessage="Contraseña Incorrecta"
 								requiredMessage="Contraseña Obligatoria" />
 						</div>
-						<p:link outcome="inicio" value="Olvide mi contraseña" />
 						<p:commandButton value="Login" update="growl"
 							action="#{usuariosManaged.comprobarUsuario()}" />
 					</h:form>
+					<h:form>
+
+						<div>
+							<span>Email<label>*</label></span>
+							<p:inputText maxlength="45" required="true"
+								value="#{usuariosManaged.correo}"
+								validatorMessage="Email Invalido"
+								requiredMessage="Email Obligatorio">
+								<f:validateRegex
+									pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}" />
+							</p:inputText>
+						</div>
+
+						<p:commandButton value="Olvide mi contraseña" action="#{usuariosManaged.recuperarContraseña()}"
+							update="growl"/>
+					</h:form>
+
+
+
 				</div>
 				<div class="col-md-6 login-left">
 					<h3>NUEVA CUENTA</h3>

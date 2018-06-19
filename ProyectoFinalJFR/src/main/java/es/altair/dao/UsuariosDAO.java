@@ -36,4 +36,6 @@ public interface UsuariosDAO {
 	int activarUsuario(String uuid);
 
 	void borrar(int c);
+	
+	String recuperarContraseña(String email);
 }

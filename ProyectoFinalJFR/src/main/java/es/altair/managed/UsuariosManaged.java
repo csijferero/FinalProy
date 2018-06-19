@@ -235,6 +235,26 @@ public class UsuariosManaged implements Serializable {
 		return "inicio?faces-redirect=true";
 	}
 
+	public String recuperarContraseña() {
+		FacesMessage message = null;
+		String recuperada = usuDAO.recuperarContraseña(correo);
+
+		if (recuperada == null) {
+			message = new FacesMessage(FacesMessage.SEVERITY_INFO, "El correo electronico no se encuentra registrado",
+					"Correo Invalido");
+		} else {
+			new Mail(correo, "Recuperacion de contraseña",
+					"La contraseña para el correo " + correo + " es: '" + recuperada + "'");
+			message = new FacesMessage(FacesMessage.SEVERITY_INFO,
+					"Se ha enviado un correo a su email con su contraseña", "Contraseña Recuperada");
+		}
+
+		FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+		FacesContext.getCurrentInstance().addMessage(null, message);
+
+		return "log";
+	}
+
 	public String comprobarUsuario() {
 		FacesContext facesContext = FacesContext.getCurrentInstance();
 		HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(true);

@@ -57,7 +57,7 @@ public class UsuariosIMPL implements UsuariosDAO {
 
 		return usu;
 	}
-	
+
 	public void borrar(int c) {
 		SessionFactory sf = new Configuration().configure().buildSessionFactory();
 		Session sesion = sf.openSession();
@@ -124,6 +124,26 @@ public class UsuariosIMPL implements UsuariosDAO {
 			sf.close();
 		}
 		return valido;
+	}
+
+	public String recuperarContraseña(String email) {
+		String clave = "";
+
+		SessionFactory sf = new Configuration().configure().buildSessionFactory();
+		Session sesion = sf.openSession();
+		try {
+			sesion.beginTransaction();
+			clave = (String) sesion.createSQLQuery("SELECT CAST(AES_DECRYPT(contraseña, :pass) AS CHAR(50)) FROM usuarios WHERE email=:e")
+					.setParameter("e", email).setParameter("pass", key).uniqueResult();
+			sesion.getTransaction().commit();
+
+		} catch (Exception e) {
+			// TODO: handle exception
+		} finally {
+			sesion.close();
+			sf.close();
+		}
+		return clave;
 	}
 
 	@Override
@@ -278,9 +298,9 @@ public class UsuariosIMPL implements UsuariosDAO {
 			sesion.createQuery(
 					"UPDATE Usuarios SET nombre=:n, apellidos=:a, email=:c, nick=:l, idtipousuarios=:tu, direccion=:dir, contacto=:con, dni=:dni, image=:im WHERE idusuarios=:idUsu")
 					.setParameter("n", nombre).setParameter("c", email).setParameter("l", nick)
-					.setParameter("idUsu", idUsuario).setParameter("tu", tipoUsu)
-					.setParameter("a", apellidos).setParameter("con", contacto).setParameter("dir", direccion)
-					.setParameter("dni", dni).setParameter("im", event).executeUpdate();
+					.setParameter("idUsu", idUsuario).setParameter("tu", tipoUsu).setParameter("a", apellidos)
+					.setParameter("con", contacto).setParameter("dir", direccion).setParameter("dni", dni)
+					.setParameter("im", event).executeUpdate();
 			sesion.getTransaction().commit();
 		} catch (Exception e) {
 
@@ -300,9 +320,9 @@ public class UsuariosIMPL implements UsuariosDAO {
 			sesion.createQuery(
 					"UPDATE Usuarios SET nombre=:n, apellidos=:a, email=:c, nick=:l, idtipousuarios=:tu, direccion=:dir, contacto=:con, dni=:dni WHERE idusuarios=:idUsu")
 					.setParameter("n", nombre).setParameter("c", email).setParameter("l", nick)
-					.setParameter("idUsu", idUsuario).setParameter("tu", tipoUsu)
-					.setParameter("a", apellidos).setParameter("con", contacto).setParameter("dir", direccion)
-					.setParameter("dni", dni).executeUpdate();
+					.setParameter("idUsu", idUsuario).setParameter("tu", tipoUsu).setParameter("a", apellidos)
+					.setParameter("con", contacto).setParameter("dir", direccion).setParameter("dni", dni)
+					.executeUpdate();
 			sesion.getTransaction().commit();
 		} catch (Exception e) {
 
