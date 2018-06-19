@@ -10,6 +10,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
 import es.altair.bean.Compras;
@@ -26,7 +27,7 @@ import es.altair.dao.ProductosDAO;
 import es.altair.dao.ProductosIMPL;
 
 @ManagedBean
-@ApplicationScoped
+@SessionScoped
 public class ComprasManaged implements Serializable {
 
 	@ManagedProperty(value = "#{productosManaged}")
@@ -46,8 +47,17 @@ public class ComprasManaged implements Serializable {
 	ComprasDAO cpDAO = new ComprasIMPL();
 
 	private List<Productos> carrito = new ArrayList<Productos>();
+	private List<Compras> compras = new ArrayList<Compras>();
 	private Integer idFormaPago;
 	private Integer idFormaEnvio;
+
+	public List<Compras> getCompras() {
+		return compras;
+	}
+
+	public void setCompras(List<Compras> compras) {
+		this.compras = compras;
+	}
 
 	public Integer getIdFormaPago() {
 		return idFormaPago;
@@ -102,7 +112,7 @@ public class ComprasManaged implements Serializable {
 		if (carrito.size() == 0) {
 			message = new FacesMessage(FacesMessage.SEVERITY_FATAL,
 					"Carrito Vacio, añada productos para realizar compras", "Compra realizada con Exito");
-			destino= "checkout";
+			destino = "checkout";
 		} else {
 
 			Compras compra = new Compras(new Date(), UUID.randomUUID().toString(),
@@ -132,12 +142,17 @@ public class ComprasManaged implements Serializable {
 	public void anadirCarrito(Productos pro, int cantidad) {
 		FacesMessage message = null;
 
-		for (int i = 0; i < cantidad; i++) {
-			carrito.add(pro);
-		}
+		if (productosCheckOut().size() < 10 || carrito.contains(pro)) {
+			for (int i = 0; i < cantidad; i++) {
+				carrito.add(pro);
+			}
 
-		message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Producto Añadido correctamente",
-				"Producto Añadido correctamente");
+			message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Producto Añadido correctamente",
+					"Producto Añadido correctamente");
+		} else {
+			message = new FacesMessage(FacesMessage.SEVERITY_WARN,
+					"Se ha llegado al límite de productos para añadir a la cesta", "Producto no añadido");
+		}
 
 		FacesContext.getCurrentInstance().addMessage(null, message);
 		FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
@@ -189,6 +204,10 @@ public class ComprasManaged implements Serializable {
 			total += producto.getPrecio();
 		}
 		return total;
+	}
+
+	public List<Compras> listaCompraByUser(int id) {
+		return cpDAO.list(id);
 	}
 
 }

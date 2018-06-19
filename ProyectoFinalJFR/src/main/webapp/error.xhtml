@@ -38,13 +38,13 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<p:growl id="growl" sticky="true" showDetail="false" />
 	<div class="header_top">
 		<div class="container">
-			<div class="cssmenu one-fifth column row_1">
+			<div class="cssmenu column row_1">
 				<ul>
 					<c:if test="#{not empty usuario}">
 						<h:form enctype="multipart/form-data">
 							<li class="active"><p:commandLink class="color1"
-									onclick="PF('dlgg').show();#{usuariosManaged.cargaEdit(usuario)}">Bienvenido #{usuario.nick}</p:commandLink></li>
-							<p:dialog header="Editar Usuario" widgetVar="dlgg"
+									onclick="PF('dlg3').show();#{usuariosManaged.cargaEdit(usuario)}">Bienvenido #{usuario.nick}</p:commandLink></li>
+							<p:dialog header="Editar Usuario" widgetVar="dlg3"
 								showEffect="explode" hideEffect="explode" resizable="false"
 								modal="true">
 								<h:panelGrid columns="2" cellpadding="10">
@@ -198,8 +198,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 									</div>
 								</div>
 							</div></li>
-						<li class="active grid"><p:link class="color4"
-								outcome="about">About</p:link></li>
+						<li><p:link class="color4" outcome="about">About</p:link></li>
 						<c:if
 							test="#{not empty usuario and usuario.tipoUsuarios.idtipousuarios eq 1}">
 							<li><p:link class="color6" outcome="usuarios">Administrar Usuarios</p:link></li>
@@ -237,47 +236,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	</div>
 	<div class="single_top">
 		<div class="container">
-			<div class="box_4">
-				<div class="col-md-12 about_left">
-					<h1>Proyecto Final José Antonio Fernández</h1>
-					<p:graphicImage
-						value="https://camo.githubusercontent.com/d0b0de8a73445ddd5737c1fafb3134bac803e8d4/68747470733a2f2f7777772e7072696d6566616365732e6f72672f77702d636f6e74656e742f75706c6f6164732f323031362f31302f7072696d655f6c6f676f2e706e67" />
-					<p>JSF 2.2</p>
-					<p>PrimeFace 6.2</p>
-					<p>Hibernate</p>
-					<p>Bootstrap 4</p>
-					<div class="faqs">
-						<h2>Desarrollo del Proyecto</h2>
-						<div class="questions">
-							<h3>1.Primera Revisión</h3>
-							<li>Búsqueda de información sobre el funcionamiento y puesta
-								en marcha de JSF y PrimeFace</li>
-							<li>Adaptación para que Bootstrap funcione en conjunto con
-								PrimeFace (Se puede utilizar unicamente primeface, pero habría
-								que construir la plantilla de la web desde 0, ya que todas las
-								plantillas disponibles son de pago)</li>
-							<li>Visualización del contenido de la base de datos así como
-								las imagenes</li> <br /> <br />
-							<h3>2.Segunda Revisión</h3>
-							<li>Login</li>
-							<li>Creacion y Edición de usuarios</li>
-							<li>Creación, Edición y eliminacion de categorias,
-								productos, formas de envio y formas de pago para usuarios
-								logeados</li>
-							<li>Control de elementos con el mismo nombre o usuarios con
-								el mismo correo o nick ya registrados</li> <br /> <br />
-							<h3>3.Tercera Revisión</h3>
-							<li>El usuario logeado ya se puede modificar sin necesidad
-								de cerrar la sesion</li>
-							<li>Creacion y edicion de productos del carrito</li>
-							<li>Posibilidad de realizar compras de los productos de la
-								cesta</li>
-							<li>Confirmación de correo electronico para activar nuevos
-								usuarios</li>
-						</div>
-					</div>
-				</div>
-				<div class="clearfix"></div>
+			<div class="error-404 text-center">
+				<h1>404</h1>
+				<p>Pagina no encontrada</p>
+				<p:link outcome="inicio" class="b-home">Volver Atras</p:link>
 			</div>
 		</div>
 	</div>

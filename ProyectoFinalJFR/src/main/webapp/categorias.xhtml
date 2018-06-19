@@ -43,9 +43,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					<c:if test="#{not empty usuario}">
 						<h:form enctype="multipart/form-data">
 							<li class="active"><p:commandLink class="color1"
-									onclick="PF('dlgg').show();#{usuariosManaged.cargaEdit()}">Bienvenido #{usuario.nick}</p:commandLink></li>
+									onclick="PF('dlgg').show();#{usuariosManaged.cargaEdit(usuario)}">Bienvenido #{usuario.nick}</p:commandLink></li>
 							<p:dialog header="Editar Usuario" widgetVar="dlgg"
-								showEffect="explode" hideEffect="bounce" resizable="false"
+								showEffect="explode" hideEffect="explode" resizable="false"
 								modal="true">
 								<h:panelGrid columns="2" cellpadding="10">
 
@@ -200,6 +200,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							</div></li>
 
 						<li><p:link class="color4" outcome="about">About</p:link></li>
+						<c:if
+							test="#{not empty usuario and usuario.tipoUsuarios.idtipousuarios eq 1}">
+							<li><p:link class="color6" outcome="usuarios">Administrar Usuarios</p:link></li>
+						</c:if>
 					</ul>
 				</div>
 			</div>
@@ -235,12 +239,13 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		<div class="women_main">
 			<div class="col-md-12 w_content">
 				<div class="women">
-					<c:if test="#{not empty usuario}">
-					<p:commandButton value="Añadir Categoria" id="addCat"
-								icon="ui-icon-disk" onclick="PF('dlg3').show();" />
+					<c:if
+						test="#{not empty usuario and usuario.tipoUsuarios.idtipousuarios eq 1}">
+						<p:commandButton value="Añadir Categoria" id="addCat"
+							icon="ui-icon-disk" onclick="PF('dlg3').show();" />
 						<h:form enctype="multipart/form-data">
 							<p:dialog header="Añadir Categoria" widgetVar="dlg3"
-								showEffect="explode" hideEffect="bounce" resizable="false"
+								showEffect="explode" hideEffect="explode" resizable="false"
 								modal="true">
 								<h:panelGrid columns="2" cellpadding="10">
 
@@ -300,7 +305,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 													value="#{categoriasManaged.categorias.get(cat).idcategorias}" />
 											</p:link>
 										</h5>
-										<c:if test="#{not empty usuario}">
+										<c:if
+											test="#{not empty usuario and usuario.tipoUsuarios.idtipousuarios eq 1}">
 											<div style="display: -webkit-inline-box">
 												<h:form>
 													<p:commandButton
@@ -323,8 +329,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 												<h:form enctype="multipart/form-data">
 													<p:dialog header="Editar Categoria"
 														widgetVar="dlg4#{categoriasManaged.categorias.get(cat).idcategorias}"
-														showEffect="explode" hideEffect="bounce" resizable="false"
-														modal="true">
+														showEffect="explode" hideEffect="explode"
+														resizable="false" modal="true">
 														<h:panelGrid columns="2">
 
 															<p:inputText type="hidden"

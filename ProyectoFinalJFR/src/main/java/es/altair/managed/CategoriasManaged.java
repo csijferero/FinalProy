@@ -2,6 +2,7 @@ package es.altair.managed;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +21,7 @@ import es.altair.dao.CategoriasDAO;
 import es.altair.dao.CategoriasIMPL;
 
 @ManagedBean
-public class CategoriasManaged {
+public class CategoriasManaged implements Serializable {
 
 	CategoriasDAO catDAO = new CategoriasIMPL();
 
@@ -103,11 +104,11 @@ public class CategoriasManaged {
 
 		if (file.getFileName().equals("")) {
 			message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Imagen Obligatoria", "Imagen Requerida");
-			redirect = "categorias";
+			redirect = "categorias?faces-redirect=true";
 		} else if (!file.getFileName().endsWith("jpg") && !file.getFileName().endsWith("jpeg")
 				&& !file.getFileName().endsWith("png") && !file.getFileName().endsWith("gif")) {
 			message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Formato de imagen invalido", "Imagen Invalida");
-			redirect = "categorias";
+			redirect = "categorias?faces-redirect=true";
 		} else if (respuesta == 0) {
 			catDAO.insertar(nombre, file.getContents());
 			message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Categoria Registrada", "Categoria Registrada");
@@ -115,7 +116,7 @@ public class CategoriasManaged {
 		} else {
 			message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Este nombre ya existe. Pruebe con otro",
 					"Nombre ya registrado");
-			redirect = "categorias";
+			redirect = "categorias?faces-redirect=true";
 		}
 
 		FacesContext.getCurrentInstance().addMessage(null, message);
@@ -156,7 +157,7 @@ public class CategoriasManaged {
 					&& !file.getFileName().endsWith("png") && !file.getFileName().endsWith("gif")) {
 				message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Formato de imagen invalido",
 						"Imagen Invalida");
-				redirect = "categorias";
+				redirect = "categorias?faces-redirect=true";
 			} else {
 				catDAO.actualizar(idCategoria, nombre, file.getContents());
 				message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Categoria Actualizada correctamente",
@@ -167,7 +168,7 @@ public class CategoriasManaged {
 		} else if (respuesta == 1) {
 			message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Nombre ya registrado. Pruebe con otro",
 					"Email ya registrado");
-			redirect = "categorias";
+			redirect = "categorias?faces-redirect=true";
 		}
 
 		FacesContext.getCurrentInstance().addMessage(null, message);

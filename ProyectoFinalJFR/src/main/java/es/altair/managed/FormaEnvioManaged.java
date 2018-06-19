@@ -105,11 +105,11 @@ public class FormaEnvioManaged implements Serializable {
 
 		if (file.getFileName().equals("")) {
 			message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Imagen Obligatoria", "Imagen Requerida");
-			redirect = "inicio";
+			redirect = "inicio?faces-redirect=true";
 		} else if (!file.getFileName().endsWith("jpg") && !file.getFileName().endsWith("jpeg")
 				&& !file.getFileName().endsWith("png") && !file.getFileName().endsWith("gif")) {
 			message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Formato de imagen invalido", "Imagen Invalida");
-			redirect = "inicio";
+			redirect = "inicio?faces-redirect=true";
 		} else if (respuesta == 0) {
 			feDAO.insertar(nombre, file.getContents());
 			message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Forma de envio Registrada",
@@ -118,7 +118,7 @@ public class FormaEnvioManaged implements Serializable {
 		} else {
 			message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Este nombre ya existe. Pruebe con otro",
 					"Nombre ya registrado");
-			redirect = "inicio";
+			redirect = "inicio?faces-redirect=true";
 		}
 
 		FacesContext.getCurrentInstance().addMessage(null, message);
@@ -159,7 +159,7 @@ public class FormaEnvioManaged implements Serializable {
 					&& !file.getFileName().endsWith("png") && !file.getFileName().endsWith("gif")) {
 				message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Formato de imagen invalido",
 						"Imagen Invalida");
-				redirect = "inicio";
+				redirect = "inicio?faces-redirect=true";
 			} else {
 				feDAO.actualizar(idFormaEnvio, nombre, file.getContents());
 				message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Envio Actualizado correctamente",
@@ -170,7 +170,7 @@ public class FormaEnvioManaged implements Serializable {
 		} else if (respuesta == 1) {
 			message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Nombre ya registrado. Pruebe con otro",
 					"Email ya registrado");
-			redirect = "inicio";
+			redirect = "inicio?faces-redirect=true";
 		}
 
 		FacesContext.getCurrentInstance().addMessage(null, message);

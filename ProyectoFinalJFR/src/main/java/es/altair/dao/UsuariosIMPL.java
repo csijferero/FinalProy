@@ -1,5 +1,8 @@
 package es.altair.dao;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -7,12 +10,32 @@ import org.hibernate.cfg.Configuration;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
 
+import es.altair.bean.FormaEnvio;
 import es.altair.bean.TipoUsuarios;
 import es.altair.bean.Usuarios;
 
 public class UsuariosIMPL implements UsuariosDAO {
 
 	private String key = "Libros123$%";
+
+	public List<Usuarios> listado() {
+		List<Usuarios> usuarios = new ArrayList<Usuarios>();
+
+		SessionFactory sf = new Configuration().configure().buildSessionFactory();
+		Session session = sf.openSession();
+
+		try {
+			session.beginTransaction();
+			usuarios = session.createQuery("FROM Usuarios").list();
+			session.getTransaction().commit();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			session.close();
+			sf.close();
+		}
+		return usuarios;
+	}
 
 	public Usuarios comprobarUsuario(String login, String password) {
 		Usuarios usu = null;
@@ -23,6 +46,44 @@ public class UsuariosIMPL implements UsuariosDAO {
 			sesion.beginTransaction();
 			usu = (Usuarios) sesion.createQuery("FROM Usuarios WHERE email=:e AND contraseña=AES_ENCRYPT(:p, :pass)")
 					.setParameter("e", login).setParameter("pass", key).setParameter("p", password).uniqueResult();
+
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			// TODO: handle exception
+		} finally {
+			sesion.close();
+			sf.close();
+		}
+
+		return usu;
+	}
+	
+	public void borrar(int c) {
+		SessionFactory sf = new Configuration().configure().buildSessionFactory();
+		Session sesion = sf.openSession();
+		try {
+			sesion.beginTransaction();
+
+			sesion.createQuery("DELETE FROM Usuarios WHERE idusuarios=:c").setParameter("c", c).executeUpdate();
+
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+			// TODO: handle exception
+		} finally {
+			sesion.close();
+			sf.close();
+		}
+	}
+
+	public Usuarios obtenerUsuarioById(int id) {
+		Usuarios usu = null;
+
+		SessionFactory sf = new Configuration().configure().buildSessionFactory();
+		Session sesion = sf.openSession();
+		try {
+			sesion.beginTransaction();
+			usu = (Usuarios) sesion.createQuery("FROM Usuarios WHERE idusuarios=:id").setParameter("id", id)
+					.uniqueResult();
 
 			sesion.getTransaction().commit();
 		} catch (Exception e) {
@@ -50,7 +111,8 @@ public class UsuariosIMPL implements UsuariosDAO {
 						.setParameter("u", uuid).uniqueResult() != null) {
 					valido = 1;
 				} else {
-					sesion.createQuery("UPDATE Usuarios SET idtipousuarios=1 WHERE uuid=:u").setParameter("u", uuid).executeUpdate();
+					sesion.createQuery("UPDATE Usuarios SET idtipousuarios=1 WHERE uuid=:u").setParameter("u", uuid)
+							.executeUpdate();
 					valido = 2;
 				}
 			}
@@ -162,26 +224,6 @@ public class UsuariosIMPL implements UsuariosDAO {
 		}
 	}
 
-	public Usuarios obtenerUsuario(String login) {
-		Usuarios usu = null;
-
-		SessionFactory sf = new Configuration().configure().buildSessionFactory();
-		Session sesion = sf.openSession();
-		try {
-			sesion.beginTransaction();
-
-			usu = (Usuarios) sesion.createQuery("FROM Usuarios WHERE nick=:l").setParameter("l", login).uniqueResult();
-
-			sesion.getTransaction().commit();
-		} catch (Exception e) {
-			// TODO: handle exception
-		} finally {
-			sesion.close();
-			sf.close();
-		}
-		return usu;
-	}
-
 	public void actualizar(Integer idUsuario, String nick, String email, String contraseña, String nombre,
 			String apellidos, String direccion, Double contacto, String dni, byte[] event, Integer tipoUsu) {
 		SessionFactory sf = new Configuration().configure().buildSessionFactory();
@@ -217,6 +259,50 @@ public class UsuariosIMPL implements UsuariosDAO {
 					.setParameter("p", contraseña).setParameter("pass", key).setParameter("idUsu", idUsuario)
 					.setParameter("tu", tipoUsu).setParameter("a", apellidos).setParameter("con", contacto)
 					.setParameter("dir", direccion).setParameter("dni", dni).executeUpdate();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+
+		} finally {
+			sesion.close();
+			sf.close();
+		}
+	}
+
+	public void actualizar(Integer idUsuario, String nick, String email, String nombre, String apellidos,
+			String direccion, Double contacto, String dni, byte[] event, Integer tipoUsu) {
+		SessionFactory sf = new Configuration().configure().buildSessionFactory();
+		Session sesion = sf.openSession();
+
+		try {
+			sesion.beginTransaction();
+			sesion.createQuery(
+					"UPDATE Usuarios SET nombre=:n, apellidos=:a, email=:c, nick=:l, idtipousuarios=:tu, direccion=:dir, contacto=:con, dni=:dni, image=:im WHERE idusuarios=:idUsu")
+					.setParameter("n", nombre).setParameter("c", email).setParameter("l", nick)
+					.setParameter("idUsu", idUsuario).setParameter("tu", tipoUsu)
+					.setParameter("a", apellidos).setParameter("con", contacto).setParameter("dir", direccion)
+					.setParameter("dni", dni).setParameter("im", event).executeUpdate();
+			sesion.getTransaction().commit();
+		} catch (Exception e) {
+
+		} finally {
+			sesion.close();
+			sf.close();
+		}
+	}
+
+	public void actualizarSinIMG(Integer idUsuario, String nick, String email, String nombre, String apellidos,
+			String direccion, Double contacto, String dni, Integer tipoUsu) {
+		SessionFactory sf = new Configuration().configure().buildSessionFactory();
+		Session sesion = sf.openSession();
+
+		try {
+			sesion.beginTransaction();
+			sesion.createQuery(
+					"UPDATE Usuarios SET nombre=:n, apellidos=:a, email=:c, nick=:l, idtipousuarios=:tu, direccion=:dir, contacto=:con, dni=:dni WHERE idusuarios=:idUsu")
+					.setParameter("n", nombre).setParameter("c", email).setParameter("l", nick)
+					.setParameter("idUsu", idUsuario).setParameter("tu", tipoUsu)
+					.setParameter("a", apellidos).setParameter("con", contacto).setParameter("dir", direccion)
+					.setParameter("dni", dni).executeUpdate();
 			sesion.getTransaction().commit();
 		} catch (Exception e) {
 

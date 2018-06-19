@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -37,7 +38,7 @@ public class Compras implements Serializable {
 	@JoinColumn(name = "idusuarios")
 	private Usuarios usuario;
 
-	@OneToMany(mappedBy = "compra")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "compra")
 	private Set<Compras_Productos> comprasProductos;
 
 	public Compras() {
@@ -109,5 +110,7 @@ public class Compras implements Serializable {
 	public void setComprasProductos(Set<Compras_Productos> comprasProductos) {
 		this.comprasProductos = comprasProductos;
 	}
+	
+	
 	
 }

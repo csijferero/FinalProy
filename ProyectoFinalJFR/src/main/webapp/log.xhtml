@@ -42,8 +42,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		<f:viewAction action="#{usuariosManaged.logout()}"
 			if="#{not empty usuario}" />
 	</f:metadata>
-						<p:growl id="growl" sticky="true" showDetail="false" />
-	
+	<p:growl id="growl" sticky="true" showDetail="false" />
+
 	<div class="header_top">
 		<div class="container">
 			<div class="cssmenu">
@@ -85,6 +85,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							</div></li>
 
 						<li><p:link class="color4" outcome="about">About</p:link></li>
+						<c:if
+							test="#{not empty usuario and usuario.tipoUsuarios.idtipousuarios eq 1}">
+							<li><p:link class="color6" outcome="usuarios">Administrar Usuarios</p:link></li>
+						</c:if>
 					</ul>
 				</div>
 			</div>

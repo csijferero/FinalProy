@@ -14,6 +14,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseId;
 
@@ -32,7 +33,7 @@ import es.altair.dao.ProductosDAO;
 import es.altair.dao.ProductosIMPL;
 
 @ManagedBean
-@ApplicationScoped
+@SessionScoped
 public class ProductosManaged implements Serializable {
 
 	ProductosDAO proDAO = new ProductosIMPL();

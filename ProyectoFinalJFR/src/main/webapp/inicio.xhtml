@@ -43,9 +43,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					<c:if test="#{not empty usuario}">
 						<h:form enctype="multipart/form-data">
 							<li class="active"><p:commandLink class="color1"
-									onclick="PF('dlg3').show();#{usuariosManaged.cargaEdit()}">Bienvenido #{usuario.nick}</p:commandLink></li>
+									onclick="PF('dlg3').show();#{usuariosManaged.cargaEdit(usuario)}">Bienvenido #{usuario.nick}</p:commandLink></li>
 							<p:dialog header="Editar Usuario" widgetVar="dlg3"
-								showEffect="explode" hideEffect="bounce" resizable="false"
+								showEffect="explode" hideEffect="explode" resizable="false"
 								modal="true">
 								<h:panelGrid columns="2" cellpadding="10">
 
@@ -199,10 +199,14 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 								</div>
 							</div></li>
 						<li><p:link class="color4" outcome="about">About</p:link></li>
+						<c:if
+							test="#{not empty usuario and usuario.tipoUsuarios.idtipousuarios eq 1}">
+							<li><p:link class="color6" outcome="usuarios">Administrar Usuarios</p:link></li>
+						</c:if>
 					</ul>
 				</div>
 			</div>
-				<h:form id="carrito">
+			<h:form id="carrito">
 				<div class="col-xs-4 header-bottom-right">
 					<div class="box_1-cart">
 						<div class="box_11">
@@ -241,6 +245,47 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			</div>
 		</div>
 	</div>
+	<c:if test="#{not empty usuario and comprasManaged.listaCompraByUser(usuario.idusuarios).size()>=1}">
+		<div class="content_top">
+			<h3 class="m_1">Historico de Compras</h3>
+			<div class="container">
+				<div class="box_1">
+					<div class="col-md-12">
+						<c:forEach begin="0"
+							end="#{comprasManaged.listaCompraByUser(usuario.idusuarios).size()-1}"
+							var="cat4" varStatus="status" step="4">
+							<div class="grids_of_4">
+								<c:forEach begin="#{cat4}" end="#{cat4+3}" var="cat"
+									varStatus="status">
+									<c:if
+										test="#{cat lt comprasManaged.listaCompraByUser(usuario.idusuarios).size()}">
+										<div class="grid1_of_4 simpleCart_shelfItem"
+											style="background-color: lavender;">
+											<div class="content_box">
+												<h:form>
+													<p:commandLink class="simpleCart_empty"
+														value="#{comprasManaged.listaCompraByUser(usuario.idusuarios).get(cat).uuid}"
+														ajax="false">
+														<p:fileDownload
+															value="#{fileDownloadManaged.DownloadPDF(comprasManaged.listaCompraByUser(usuario.idusuarios).get(cat).uuid)}" />
+													</p:commandLink>
+												</h:form>
+												<h5>Enviado por:
+													#{comprasManaged.listaCompraByUser(usuario.idusuarios).get(cat).formaEnvio.nombre}</h5>
+												<h5>Pagado por:
+													#{comprasManaged.listaCompraByUser(usuario.idusuarios).get(cat).formaPago.nombre}</h5>
+												<h6>#{comprasManaged.listaCompraByUser(usuario.idusuarios).get(cat).fecha.date}/#{comprasManaged.listaCompraByUser(usuario.idusuarios).get(cat).fecha.month+1}/#{comprasManaged.listaCompraByUser(usuario.idusuarios).get(cat).fecha.year+1900}</h6>
+											</div>
+										</div>
+									</c:if>
+								</c:forEach>
+							</div>
+						</c:forEach>
+					</div>
+				</div>
+			</div>
+		</div>
+	</c:if>
 	<div class="content_top">
 		<h3 class="m_1">Formas De Pago</h3>
 		<div class="container">
@@ -257,12 +302,13 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 				</div>
 				<div class="col-md-6 row_3">
-					<c:if test="#{not empty usuario}">
+					<c:if
+						test="#{not empty usuario and usuario.tipoUsuarios.idtipousuarios eq 1}">
 						<p:commandButton value="Añadir Forma Pago" icon="ui-icon-disk"
 							onclick="PF('dlg1').show();" />
 						<h:form enctype="multipart/form-data">
 							<p:dialog header="Añadir Forma Pago" widgetVar="dlg1"
-								showEffect="explode" hideEffect="bounce" resizable="false"
+								showEffect="explode" hideEffect="explode" resizable="false"
 								modal="true">
 								<h:panelGrid columns="2" cellpadding="10">
 
@@ -309,7 +355,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 												</p:graphicImage>
 											</div>
 											<h5>#{formaPagoManaged.formasDePago.get(cat).nombre}</h5>
-											<c:if test="#{not empty usuario}">
+											<c:if
+												test="#{not empty usuario and usuario.tipoUsuarios.idtipousuarios eq 1}">
 												<div style="display: -webkit-inline-box">
 													<h:form>
 														<p:commandButton
@@ -333,7 +380,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 														<p:dialog header="Editar Forma de Pago"
 															widgetVar="dlg4#{formaPagoManaged.formasDePago.get(cat).idformapago}"
-															showEffect="explode" hideEffect="bounce"
+															showEffect="explode" hideEffect="explode"
 															resizable="false" modal="true">
 															<h:panelGrid columns="2">
 
@@ -380,7 +427,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 									</div>
 								</c:if>
 							</c:forEach>
-							<div class="clearfix"></div>
 						</div>
 					</c:forEach>
 				</div>
@@ -402,13 +448,14 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				</div>
 			</div>
 			<div class="col-md-6 row_3">
-				<c:if test="#{not empty usuario}">
+				<c:if
+					test="#{not empty usuario and usuario.tipoUsuarios.idtipousuarios eq 1}">
 					<p:commandButton value="Añadir Forma de Envio" id="addEnv"
 						icon="ui-icon-disk" onclick="PF('dlg2').show();" />
 					<h:form enctype="multipart/form-data">
 
 						<p:dialog header="Añadir Forma Envio" widgetVar="dlg2"
-							showEffect="explode" hideEffect="bounce" resizable="false"
+							showEffect="explode" hideEffect="explode" resizable="false"
 							modal="true">
 							<h:panelGrid columns="2" cellpadding="10">
 
@@ -453,7 +500,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 											</p:graphicImage>
 										</div>
 										<h5>#{formaEnvioManaged.formasDeEnvio.get(cat).nombre}</h5>
-										<c:if test="#{not empty usuario}">
+										<c:if
+											test="#{not empty usuario and usuario.tipoUsuarios.idtipousuarios eq 1}">
 											<div style="display: -webkit-inline-box">
 												<h:form>
 													<p:commandButton
@@ -478,8 +526,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 													<p:dialog header="Editar Forma de Envio"
 														widgetVar="dlg5#{formaEnvioManaged.formasDeEnvio.get(cat).idformaenvio}"
-														showEffect="explode" hideEffect="bounce" resizable="false"
-														modal="true">
+														showEffect="explode" hideEffect="explode"
+														resizable="false" modal="true">
 														<h:panelGrid columns="2">
 
 															<p:inputText type="hidden"
