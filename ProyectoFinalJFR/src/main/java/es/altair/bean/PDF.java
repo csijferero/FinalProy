@@ -41,9 +41,8 @@ public class PDF {
 			Compras compras = cpDAO.getComprasByUuid(uuid);
 			PdfReader reader;
 			reader = new PdfReader("/resources/PDF.pdf");
-			// PdfStamper stamper = new PdfStamper(reader, new
-			// FileOutputStream("/opt/tomcat/webapps/ProyectoFinalJFR/resources/certificate.pdf"));
-			PdfStamper stamper = new PdfStamper(reader, new FileOutputStream("certificate.pdf"));
+			PdfStamper stamper = new PdfStamper(reader, new FileOutputStream("/opt/tomcat/webapps/ProyectoFinalJFR/resources/certificate.pdf"));
+			//PdfStamper stamper = new PdfStamper(reader, new FileOutputStream("certificate.pdf"));
 			AcroFields form = stamper.getAcroFields();
 			form.setField("NombreEmisor", "José Antonio FR");
 			form.setField("DNIEmisor", "25458458R");
@@ -69,7 +68,7 @@ public class PDF {
 				form.setField("d" + count, compra.getProducto().getNombre());
 				form.setField("p" + count, String.valueOf(compra.getProducto().getPrecio()) + "€");
 				total += compra.getProducto().getPrecio() * compra.getCantidad();
-				form.setField("t" + count, String.valueOf(total) + "€");
+				form.setField("t" + count, String.valueOf(compra.getProducto().getPrecio() * compra.getCantidad()) + "€");
 			}
 			form.setField("PrecioTotal", String.valueOf(total)+"€");
 			stamper.setFormFlattening(true);

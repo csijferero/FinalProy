@@ -63,24 +63,24 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 									<p:inputText type="hidden" value="#{usuariosManaged.idUsuario}" />
 
 									<h:outputLabel for="nombre" value="Nombre" />
-									<p:inputText id="nombre" maxlength="45"
+									<p:inputText id="nombre" maxlength="30"
 										value="#{usuariosManaged.nombre}" required="true"
 										validatorMessage="Nombre invalido"
-										requiredMessage="Nombre Obligatorio" size="45" />
+										requiredMessage="Nombre Obligatorio" size="30" />
 
 
 									<h:outputLabel for="apellidos" value="Apellidos" />
-									<p:inputText maxlength="45"
+									<p:inputText maxlength="30"
 										value="#{usuariosManaged.apellidos}" required="true"
 										validatorMessage="Apellidos invalido"
-										requiredMessage="Apellidos Obligatorio" size="45" />
+										requiredMessage="Apellidos Obligatorio" size="30" />
 
 
 									<h:outputLabel for="correo" value="Correo" />
-									<p:inputText id="correo" maxlength="45" required="true"
+									<p:inputText id="correo" maxlength="30" required="true"
 										value="#{usuariosManaged.correo}"
 										validatorMessage="Email Invalido"
-										requiredMessage="Email Obligatorio" size="45">
+										requiredMessage="Email Obligatorio" size="30">
 										<f:validateRegex
 											pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}" />
 									</p:inputText>
@@ -102,10 +102,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 
 									<h:outputLabel for="direccion" value="Dirección" />
-									<p:inputText maxlength="45" id="direccion"
+									<p:inputText maxlength="30" id="direccion"
 										value="#{usuariosManaged.direccion}" required="true"
 										validatorMessage="Direccion Invalida"
-										requiredMessage="Direccion Obligatoria" size="45" />
+										requiredMessage="Direccion Obligatoria" size="30" />
 
 
 									<h:outputLabel for="contacto" value="Contacto" />

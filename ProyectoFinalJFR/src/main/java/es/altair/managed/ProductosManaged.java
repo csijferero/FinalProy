@@ -209,7 +209,7 @@ public class ProductosManaged implements Serializable {
 
 		if (file.getFileName().equals("")) {
 			message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Imagen Obligatoria", "Imagen Requerida");
-			redirect = "productos?faces-redirect=false&includeViewParams=true";
+			redirect = "productos?faces-redirect=true&includeViewParams=true";
 			response = true;
 		} else if (!file.getFileName().endsWith("jpg") && !file.getFileName().endsWith("jpeg")
 				&& !file.getFileName().endsWith("png") && !file.getFileName().endsWith("gif")) {
@@ -306,6 +306,12 @@ public class ProductosManaged implements Serializable {
 	}
 	
 	@PostConstruct
+	public void init() {
+		response = false;
+		clear();
+	}
+	
+	
 	public void clear() {
 		if(response==false) {
 		setNombre(null);

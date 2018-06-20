@@ -111,7 +111,7 @@ public class UsuariosIMPL implements UsuariosDAO {
 						.setParameter("u", uuid).uniqueResult() != null) {
 					valido = 1;
 				} else {
-					sesion.createQuery("UPDATE Usuarios SET idtipousuarios=1 WHERE uuid=:u").setParameter("u", uuid)
+					sesion.createQuery("UPDATE Usuarios SET idtipousuarios=2 WHERE uuid=:u").setParameter("u", uuid)
 							.executeUpdate();
 					valido = 2;
 				}

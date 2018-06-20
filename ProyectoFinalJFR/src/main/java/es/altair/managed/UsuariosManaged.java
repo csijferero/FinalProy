@@ -291,16 +291,16 @@ public class UsuariosManaged implements Serializable {
 
 		if (file.getFileName().equals("")) {
 			message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Imagen Obligatoria", "Imagen Requerida");
-			redirect = "registro?faces-redirect=true";
+			redirect = "registro";
 		} else if (!file.getFileName().endsWith("jpg") && !file.getFileName().endsWith("jpeg")
 				&& !file.getFileName().endsWith("png") && !file.getFileName().endsWith("gif")) {
 			message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Formato de imagen invalido", "Imagen Invalida");
-			redirect = "registro?faces-redirect=true";
+			redirect = "registro";
 		} else if (respuesta == 0) {
 			String uuid = UUID.randomUUID().toString();
 			usuDAO.insertar(nick, correo, contrasena, nombre, apellidos, direccion, Double.parseDouble(contacto), dni,
 					file.getContents(), uuid);
-			String url = "http://enjutojose.es:8080/ProyectoFinalJFR/404.jsf?u=" + uuid;
+			String url = "http://enjutojose.es:8080/ProyectoFinalJFR/404.xhtml?u=" + uuid;
 			new Mail(correo, "Correo de Confirmación",
 					"Active su cuenta haciendo click en la siguiente dirección " + url);
 			message = new FacesMessage(FacesMessage.SEVERITY_INFO,
@@ -311,11 +311,11 @@ public class UsuariosManaged implements Serializable {
 		} else if (respuesta == 1) {
 			message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Email ya registrado. Pruebe con otro",
 					"Email ya registrado");
-			redirect = "registro?faces-redirect=true";
+			redirect = "registro";
 		} else {
 			message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Nick ya registrado. Pruebe con otro",
 					"Nick ya registrado");
-			redirect = "registro?faces-redirect=true";
+			redirect = "registro";
 		}
 
 		FacesContext.getCurrentInstance().addMessage(null, message);
@@ -384,7 +384,7 @@ public class UsuariosManaged implements Serializable {
 		} else {
 			message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Nick ya registrado. Pruebe con otro",
 					"Nick ya registrado");
-			redirect = "inicio?faces-redirect=true";
+			redirect = "usuarios?faces-redirect=true";
 		}
 
 		FacesContext.getCurrentInstance().addMessage(null, message);
